@@ -26,11 +26,12 @@ const Login = () => {
 
                 // Almacenar datos del usuario en localStorage
                 localStorage.setItem('user', JSON.stringify(data));
+                console.log('Stored user data:', localStorage.getItem('user'));
 
                 // Redirigir según el tipo de usuario
-                if (data.tipoUsuario === 1) {
+                if (data.tipo_usuario === 1) {
                     navigate('/admin');
-                } else if (data.tipoUsuario === 2) {
+                } else if (data.tipo_usuario === 2) {
                     navigate('/empleado');
                 } else {
                     navigate('/cliente');
@@ -65,6 +66,10 @@ const Login = () => {
 };
 
 export default Login;
+
+
+
+
 
 
 

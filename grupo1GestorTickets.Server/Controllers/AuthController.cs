@@ -24,7 +24,7 @@ namespace grupo1GestorTickets.Server.Controllers
                 return BadRequest("Correo y contraseña son requeridos.");
             }
 
-            var user = await _context.Usuarios
+            var user = await _context.Usuario
                 .FirstOrDefaultAsync(u => u.Correo == model.Correo && u.Password == model.Password);
 
             if (user == null)
@@ -32,8 +32,19 @@ namespace grupo1GestorTickets.Server.Controllers
                 return Unauthorized("Usuario no existe.");
             }
 
-            return Ok(new { user.Id, user.Nombre, user.TipoUsuario });
+            return Ok(new
+            {
+                Id = user.Id,
+                Nombre = user.Nombre,
+                Correo = user.Correo,
+                tipo_usuario = user.tipo_usuario,
+                Telefono = user.Telefono,
+                Cargo = user.Cargo,
+                estado_cuenta = user.estado_cuenta,
+                FechaCreacion = user.FechaCreacion
+            });
         }
+
     }
 
     public class LoginModel

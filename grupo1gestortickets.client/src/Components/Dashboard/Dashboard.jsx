@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
@@ -6,6 +6,7 @@ const Dashboard = () => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
+            console.log('Retrieved user data:', storedUser);
             setUser(JSON.parse(storedUser));
         }
     }, []);
@@ -16,12 +17,22 @@ const Dashboard = () => {
 
     return (
         <div>
-            <h1>Welcome, {user.nombre}</h1>
-            <p>Correo: {user.correo}</p>
-            <p>Tipo de Usuario: {user.tipoUsuario}</p>
-            {/* Otros datos del usuario */}
+            <h1>Welcome, {user.nombre || 'Usuario'}</h1>
+            <p>Correo: {user.correo || 'No disponible'}</p>
+            <p>Tipo de Usuario: {user.tipo_usuario || 'No disponible'}</p>
+            <p>Telefono: {user.telefono || 'No disponible'}</p>
+            <p>Cargo: {user.cargo || 'No disponible'}</p>
+            <p>Estado de la Cuenta: {user.estado_cuenta || 'No disponible'}</p>
+            <p>Fecha de Creacion: {user.fechaCreacion ? new Date(user.fechaCreacion).toLocaleDateString() : 'No disponible'}</p>
         </div>
     );
 };
 
 export default Dashboard;
+
+
+
+
+
+
+
