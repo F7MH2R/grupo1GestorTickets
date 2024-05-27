@@ -1,3 +1,5 @@
+// src/App.jsx
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
@@ -8,6 +10,8 @@ import Cliente from './Components/Cliente';
 import Dashboard from './Components/Dashboard/Dashboard';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import Navbar from './Components/Navbars/Navbar';
+import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
+import TicketsTableClient from './Components/PantallaCliente/InicioCliente/TicketsTable';
 
 const App = () => {
     return (
@@ -23,6 +27,8 @@ const App = () => {
                         <Dashboard />
                     </ProtectedRoute>
                 } />
+                <Route path="/ticketsTableClient" element={<TicketsTableClient />} />
+                <Route path="/create" element={<CreateTicket />} />
                 <Route path="/" element={<Login />} />
             </Routes>
         </Router>

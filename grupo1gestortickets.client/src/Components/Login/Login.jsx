@@ -33,7 +33,7 @@ const Login = () => {
                     navigate('/admin');
                 } else if (data.tipo_usuario === 2) {
                     navigate('/empleado');
-                } else {
+                } else if (data.tipo_usuario === 3) {
                     navigate('/cliente');
                 }
             } else {
