@@ -8,6 +8,7 @@ import Cliente from './Components/Cliente';
 import Dashboard from './Components/Dashboard/Dashboard';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import Navbar from './Components/Navbars/Navbar';
+import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
 
 const App = () => {
     return (
@@ -23,6 +24,7 @@ const App = () => {
                         <Dashboard />
                     </ProtectedRoute>
                 } />
+                <Route path="CrearTicket" element={<CreateTicket />}/>
                 <Route path="/" element={<Login />} />
             </Routes>
         </Router>
