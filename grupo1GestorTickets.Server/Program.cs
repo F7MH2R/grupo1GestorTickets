@@ -39,7 +39,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors(builder =>
+      builder.AllowAnyOrigin()
+             .AllowAnyMethod()
+             .AllowAnyHeader());
 
 app.UseAuthorization();
 
@@ -48,4 +51,3 @@ app.MapControllers();
 app.MapFallbackToFile("/index.html");
 
 app.Run();
-
