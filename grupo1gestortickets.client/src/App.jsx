@@ -24,7 +24,7 @@ const App = () => {
                         <Dashboard />
                     </ProtectedRoute>
                 } />
-                <Route path="crearticket" element={<CreateTicket />}/>
+                <Route path="/crearticket" element={<CreateTicket />}/>
                 <Route path="/" element={<Login />} />
             </Routes>
         </Router>
