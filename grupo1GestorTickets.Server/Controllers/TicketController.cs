@@ -1,8 +1,6 @@
 ﻿using grupo1GestorTickets.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MailKit.Net.Smtp;
-using MimeKit;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -41,13 +39,6 @@ namespace grupo1GestorTickets.Server.Controllers
             ticket.FechaCreacion = DateTime.Now;
             _context.Ticket.Add(ticket);
             await _context.SaveChangesAsync();
-
-            // Enviar notificación por correo
-            var user = await _context.Usuario.FindAsync(ticket.IdUsuario);
-            if (user != null)
-            {
-                await SendNotification(user.Correo, ticket.Id);
-            }
 
             return Ok(ticket);
         }
