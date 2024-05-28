@@ -10,6 +10,7 @@ import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import Navbar from "./Components/Navbars/Navbar";
 import Usuario from "./Components/Usuario/Usuario";
 import Ticket from "./Components/Ticket/Ticket";
+import InicioAdmin from "./Components/InicioAdmin/InicioAdmin";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/usuario/:id" element={<Usuario />} />
         <Route path="/ticket/:id" element={<Ticket />} />
+        <Route path="/inicioAdmin" element={<InicioAdmin />} />
       </Routes>
     </Router>
   );

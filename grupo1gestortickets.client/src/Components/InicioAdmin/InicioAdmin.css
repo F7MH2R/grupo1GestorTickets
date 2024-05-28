@@ -1,0 +1,54 @@
+:root {
+  --tamanio-margen: 25px;
+  --altura-minima: 50px;
+}
+
+.tickets-abiertos {
+  background-color: var(--color-verde);
+  color: white;
+  text-align: center;
+  margin-right: var(--tamanio-margen);
+  font-weight: bold;
+  min-height: var(--altura-minima);
+}
+.tickets-proceso {
+  background-color: var(--color-primario);
+  color: white;
+  text-align: center;
+  margin-right: var(--tamanio-margen);
+  font-weight: bold;
+  min-height: var(--altura-minima);
+}
+.tickets-sin-asignar {
+  background-color: var(--color-secundario);
+  color: white;
+  text-align: center;
+  margin-right: var(--tamanio-margen);
+  font-weight: bold;
+  min-height: var(--altura-minima);
+}
+.tickets-cerrados {
+  background-color: var(--color-terciario);
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  min-height: var(--altura-minima);
+}
+
+.titulo {
+  font-weight: bold;
+}
+
+.col {
+  font-size: small;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  color: white !important;
+}
