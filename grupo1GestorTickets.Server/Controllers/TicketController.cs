@@ -38,7 +38,7 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] Ticket ticket)
         {
-            ticket.FechaCreacion = DateTime.Now;
+            ticket.fecha_creacion = DateTime.Now;
             _context.Ticket.Add(ticket);
             await _context.SaveChangesAsync();
 
@@ -52,7 +52,7 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> AddComment(int id, [FromBody] Comentario comentario)
         {
-            comentario.IdTicket = id;
+            comentario.id_ticket = id;
             _context.Comentario.Add(comentario);
             await _context.SaveChangesAsync();
             return Ok(comentario);
@@ -62,7 +62,7 @@ namespace grupo1GestorTickets.Server.Controllers
         public async Task<IActionResult> DeleteComment(int ticketId, int commentId)
         {
             var comentario = await _context.Comentario.FindAsync(commentId);
-            if (comentario == null || comentario.IdTicket != ticketId)
+            if (comentario == null || comentario.id_ticket != ticketId)
             {
                 return NotFound();
             }
@@ -86,7 +86,7 @@ namespace grupo1GestorTickets.Server.Controllers
                         Nombre = file.FileName,
                         Contenido = Convert.ToBase64String(ms.ToArray()),
                         Tipo = Path.GetExtension(file.FileName),
-                        IdTicket = id
+                        id_ticket = id
                     };
                     _context.Archivo.Add(archivo);
                 }
@@ -99,7 +99,7 @@ namespace grupo1GestorTickets.Server.Controllers
         public async Task<IActionResult> DeleteFile(int ticketId, int fileId)
         {
             var archivo = await _context.Archivo.FindAsync(fileId);
-            if (archivo == null || archivo.IdTicket != ticketId)
+            if (archivo == null || archivo.id_ticket != ticketId)
             {
                 return NotFound();
             }
