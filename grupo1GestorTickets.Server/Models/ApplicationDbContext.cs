@@ -14,11 +14,8 @@ namespace grupo1GestorTickets.Server.Models
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Comentario> Comentario { get; set; }
         public DbSet<Bitacora> Bitacora { get; set; }
-
         public DbSet<Area> Area { get; set; }
         public DbSet<Archivo> Archivo { get; set; }
-
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,12 +30,12 @@ namespace grupo1GestorTickets.Server.Models
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Estado)
                 .WithMany(e => e.Tickets)
-                .HasForeignKey(t => t.IdEstado);
+                .HasForeignKey(t => t.id_estado);
 
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Area)
                 .WithMany(a => a.Tickets)
-                .HasForeignKey(t => t.IdArea);
+                .HasForeignKey(t => t.id_area);
 
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Usuario)
@@ -48,19 +45,23 @@ namespace grupo1GestorTickets.Server.Models
             modelBuilder.Entity<Comentario>()
                 .HasOne(c => c.Ticket)
                 .WithMany(t => t.Comentarios)
-                .HasForeignKey(c => c.IdTicket);
+                .HasForeignKey(c => c.id_ticket);
 
             modelBuilder.Entity<Archivo>()
                 .HasOne(a => a.Ticket)
                 .WithMany(t => t.Archivos)
-                .HasForeignKey(a => a.IdTicket);
+                .HasForeignKey(a => a.id_ticket);
 
             modelBuilder.Entity<Bitacora>()
                 .HasOne(b => b.Ticket)
                 .WithMany(t => t.Bitacoras)
                 .HasForeignKey(b => b.IdTicket);
         }
-    }
 
+    }
 }
+
+
+
+
 

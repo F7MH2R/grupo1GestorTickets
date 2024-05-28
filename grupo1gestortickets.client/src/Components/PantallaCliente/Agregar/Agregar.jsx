@@ -5,7 +5,7 @@ import { Form, Button, Container, Row, Col, Card, Image } from 'react-bootstrap'
 const CreateTicket = () => {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [areas, setAreas] = useState([]);  // Inicializa como un array vacío
+    const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState('');
     const [comentarios, setComentarios] = useState(['']);
     const [files, setFiles] = useState([]);
@@ -22,10 +22,8 @@ const CreateTicket = () => {
                     'Cache-Control': 'no-cache'
                 }
             });
-            console.log('API Response:', response.data); // Log completo de la respuesta
             if (Array.isArray(response.data)) {
                 setAreas(response.data);
-                console.log('Areas set:', response.data);
             } else {
                 console.error('Expected an array of areas');
             }
@@ -73,12 +71,12 @@ const CreateTicket = () => {
             nombre,
             descripcion,
             idArea: selectedArea,
-            idUsuario: localStorage.getItem('userId'),
+            idUsuario: 1,  // Usando id de usuario por defecto 1
             comentarios: comentarios.filter(comentario => comentario !== '')
         };
 
         try {
-            const response = await axios.post('/api/ticket', ticketData);
+            const response = await axios.post('https://localhost:7289/api/ticket', ticketData);
             const createdTicketId = response.data.id;
             setTicketId(createdTicketId);
 
@@ -87,7 +85,7 @@ const CreateTicket = () => {
                 for (let file of files) {
                     formData.append('files', file);
                 }
-                await axios.post(`/api/ticket/${createdTicketId}/files`, formData);
+                await axios.post(`https://localhost:7289/api/ticket/${createdTicketId}/files`, formData);
             }
 
             alert("Ticket creado y archivos subidos correctamente.");
@@ -96,6 +94,7 @@ const CreateTicket = () => {
             alert("Hubo un error al crear el ticket.");
         }
     };
+
 
     const renderFilePreview = (file) => {
         if (file.type.startsWith('image/')) {
@@ -122,22 +121,22 @@ const CreateTicket = () => {
                     />
                 </Form.Group>
                 <Form.Group controlId="formDescripcion">
-                    <Form.Label>Descripción</Form.Label>
+                    <Form.Label>Descripcion</Form.Label>
                     <Form.Control
                         as="textarea"
-                        placeholder="Descripción"
+                        placeholder="Descripcion"
                         value={descripcion}
                         onChange={(e) => setDescripcion(e.target.value)}
                     />
                 </Form.Group>
                 <Form.Group controlId="formArea">
-                    <Form.Label>Área</Form.Label>
+                    <Form.Label>Area</Form.Label>
                     <Form.Control
                         as="select"
                         value={selectedArea}
                         onChange={(e) => setSelectedArea(e.target.value)}
                     >
-                        <option value="">Seleccione un área</option>
+                        <option value="">Seleccione un area</option>
                         {areas.map(area => (
                             <option key={area.id} value={area.id}>
                                 {area.nombre}
@@ -188,3 +187,4 @@ const CreateTicket = () => {
 };
 
 export default CreateTicket;
+

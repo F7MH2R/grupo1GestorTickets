@@ -1,18 +1,25 @@
-﻿namespace grupo1GestorTickets.Server.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace grupo1GestorTickets.Server.Models
 {
     public class Ticket
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public string Descripcion { get; set; }
-        public DateTime? FechaActualizacion { get; set; }
-        public int? IdEstado { get; set; }
-        public int? IdArea { get; set; }
-        public int? IdComentario { get; set; }
-        public string Prioridad { get; set; }
+        public string nombre { get; set; }
+        
+        public DateTime fecha_creacion { get; set; }
+        public string descripcion { get; set; }
+        public DateTime? fecha_actualizacion { get; set; }
+        public int? id_estado { get; set; }
+        public int? id_area { get; set; }
+        public int? id_comentario { get; set; }
+        public string id_usuario { get; set; }
         public int? IdUsuario { get; set; }
 
+        // Navigation properties
         public Estado Estado { get; set; }
         public Area Area { get; set; }
         public Usuario Usuario { get; set; }
@@ -20,4 +27,10 @@
         public ICollection<Archivo> Archivos { get; set; }
         public ICollection<Bitacora> Bitacoras { get; set; }
     }
+
 }
+
+
+
+
+

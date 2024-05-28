@@ -8,7 +8,7 @@ import Cliente from './Components/Cliente';
 import Dashboard from './Components/Dashboard/Dashboard';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import Navbar from './Components/Navbars/Navbar';
-import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
+import CreateTicket from './Components/PantallaCliente/Agregar/Agregar';
 
 const App = () => {
     return (

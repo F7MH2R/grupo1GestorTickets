@@ -1,10 +1,11 @@
 ﻿using grupo1GestorTickets.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Net.Sockets;
 
 namespace grupo1GestorTickets.Server.Controllers
 {
@@ -22,14 +23,15 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _context.Ticket.Include(t => t.Estado).ToListAsync();
+            var tickets = await _context.Ticket.Include(t => t.Comentarios).Include(t => t.Archivos).ToListAsync();
             return Ok(tickets);
         }
 
         [HttpGet("{userId}/tickets")]
         public async Task<IActionResult> GetTicketsByUser(int userId)
         {
-            var tickets = await _context.Ticket.Include(t => t.Estado).Where(t => t.IdUsuario == userId).ToListAsync();
+            var tickets = await _context.Ticket.Include(t => t.Comentarios).Include(t => t.Archivos)
+                .Where(t => t.IdUsuario == userId).ToListAsync();
             return Ok(tickets);
         }
 
@@ -42,6 +44,10 @@ namespace grupo1GestorTickets.Server.Controllers
 
             return Ok(ticket);
         }
+
+
+
+
 
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> AddComment(int id, [FromBody] Comentario comentario)
@@ -104,3 +110,4 @@ namespace grupo1GestorTickets.Server.Controllers
         }
     }
 }
+
