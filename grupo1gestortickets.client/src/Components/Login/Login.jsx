@@ -28,9 +28,9 @@ const Login = () => {
                 localStorage.setItem('user', JSON.stringify(data));
                 console.log('Stored user data:', localStorage.getItem('user'));
 
-                // Redirigir según el tipo de usuario
+                // Redirigir segï¿½n el tipo de usuario
                 if (data.tipo_usuario === 1) {
-                    navigate('/admin');
+                    navigate("/inicioAdmin");
                 } else if (data.tipo_usuario === 2) {
                     navigate('/empleado');
                 } else {
