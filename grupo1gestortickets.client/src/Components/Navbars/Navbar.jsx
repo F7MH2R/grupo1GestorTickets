@@ -19,7 +19,16 @@ const Navbar = () => {
         return (
             <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top">
                 <Container>
-                    <BootstrapNavbar.Brand href="#">Bienvenido (Navbar generica)</BootstrapNavbar.Brand>
+                    <BootstrapNavbar.Brand href="#">
+                        <img
+                            src="https://i.postimg.cc/ydrSvHty/logo-Solucioness.png"
+                            width="50"
+                            height="50"
+                            alt="Logo"
+                        />
+                        {' '}
+                        Bienvenido (Navbar generica)
+                    </BootstrapNavbar.Brand>
                 </Container>
             </BootstrapNavbar>
         );
@@ -38,4 +47,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

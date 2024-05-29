@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 const Login = () => {
     const [correo, setCorreo] = useState('');
@@ -48,20 +49,31 @@ const Login = () => {
 
     return (
         <div>
-            <h2>Login</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Correo</label>
-                    <input type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
+            <h2 className="titulologin">Inicia Sesi&oacute;n</h2>
+            <div className="login-container">
+                <div className="login-form-container">
+                    {error && <p className="error-message">{error}</p>}
+                    <form className="login-form" onSubmit={handleSubmit}>
+                        <label>Correo electr&oacute;nico:</label>
+                        <input
+                            type="email"
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
+                            required
+                        />
+                        <label>Contrase&ntilde;a:</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <button type="submit">Iniciar Sesi&oacute;n</button>
+                    </form>
                 </div>
-                <div>
-                    <label>Password</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
-                <button type="submit">Login</button>
-            </form>
+            </div>
         </div>
+        
     );
 };
 
