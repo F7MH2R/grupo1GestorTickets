@@ -9,6 +9,9 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import Navbar from './Components/Navbars/Navbar';
 import CreateTicket from './Components/PantallaCliente/Agregar/Agregar';
+import RegisAd from './Components/AdminRegisUser/RegistrarUsuarios';
+import RegisAdCli from './Components/AdminRegisUser/ReCliente';
+import RegisAdEmp from './Components/AdminRegisUser/ReEmpleado';
 
 const App = () => {
     return (
@@ -24,6 +27,9 @@ const App = () => {
                         <Dashboard />
                     </ProtectedRoute>
                 } />
+                <Route path="registrar-usuarios" element={<RegisAd />} />
+                <Route path="registrar-empleado" element={<RegisAdCli />} />
+                <Route path="registrar-cliente" element={<RegisAdEmp />} />
                 <Route path="/crearticket" element={<CreateTicket />}/>
                 <Route path="/" element={<Login />} />
             </Routes>

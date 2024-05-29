@@ -1,36 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card, Image } from 'react-bootstrap';
 
 const CreateTicket = () => {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState('');
     const [comentarios, setComentarios] = useState(['']);
     const [files, setFiles] = useState([]);
-    const [ticketId, setTicketId] = useState(null);
-
-    useEffect(() => {
-        fetchAreas();
-    }, []);
-
-    const fetchAreas = async () => {
-        try {
-            const response = await axios.get('https://localhost:7289/api/area/area', {
-                headers: {
-                    'Cache-Control': 'no-cache'
-                }
-            });
-            if (Array.isArray(response.data)) {
-                setAreas(response.data);
-            } else {
-                console.error('Expected an array of areas');
-            }
-        } catch (error) {
-            console.error('Error fetching areas:', error);
-        }
-    };
 
     const handleAddComment = () => {
         setComentarios([...comentarios, '']);
@@ -66,36 +42,6 @@ const CreateTicket = () => {
         setFiles(newFiles);
     };
 
-    const handleSubmit = async () => {
-        const ticketData = {
-            nombre,
-            descripcion,
-            idArea: selectedArea,
-            idUsuario: 1,  // Usando id de usuario por defecto 1
-            comentarios: comentarios.filter(comentario => comentario !== '')
-        };
-
-        try {
-            const response = await axios.post('https://localhost:7289/api/ticket', ticketData);
-            const createdTicketId = response.data.id;
-            setTicketId(createdTicketId);
-
-            if (files.length > 0) {
-                const formData = new FormData();
-                for (let file of files) {
-                    formData.append('files', file);
-                }
-                await axios.post(`https://localhost:7289/api/ticket/${createdTicketId}/files`, formData);
-            }
-
-            alert("Ticket creado y archivos subidos correctamente.");
-        } catch (error) {
-            console.error('Error creating ticket:', error);
-            alert("Hubo un error al crear el ticket.");
-        }
-    };
-
-
     const renderFilePreview = (file) => {
         if (file.type.startsWith('image/')) {
             return <Image src={file.preview} thumbnail />;
@@ -110,6 +56,7 @@ const CreateTicket = () => {
 
     return (
         <Container>
+            <h1 className="my-4">Crear Ticket</h1>
             <Form>
                 <Form.Group controlId="formNombre">
                     <Form.Label>Nombre</Form.Label>
@@ -124,6 +71,7 @@ const CreateTicket = () => {
                     <Form.Label>Descripcion</Form.Label>
                     <Form.Control
                         as="textarea"
+                        rows={3}
                         placeholder="Descripcion"
                         value={descripcion}
                         onChange={(e) => setDescripcion(e.target.value)}
@@ -137,11 +85,7 @@ const CreateTicket = () => {
                         onChange={(e) => setSelectedArea(e.target.value)}
                     >
                         <option value="">Seleccione un area</option>
-                        {areas.map(area => (
-                            <option key={area.id} value={area.id}>
-                                {area.nombre}
-                            </option>
-                        ))}
+                        {/* Aquí agregarías las opciones de áreas */}
                     </Form.Control>
                 </Form.Group>
                 {comentarios.map((comentario, index) => (
@@ -156,13 +100,13 @@ const CreateTicket = () => {
                                     onChange={(e) => handleCommentChange(index, e.target.value)}
                                 />
                             </Col>
-                            <Col xs="auto">
+                            <Col xs="auto" className="d-flex align-items-end">
                                 <Button variant="danger" onClick={() => handleCommentDelete(index)}>Eliminar</Button>
                             </Col>
                         </Row>
                     </Form.Group>
                 ))}
-                <Button variant="secondary" onClick={handleAddComment}>Agregar Comentario</Button>
+                <Button variant="secondary" className="mb-3" onClick={handleAddComment}>Agregar Comentario</Button>
                 <Form.Group controlId="formFiles">
                     <Form.Label>Archivos</Form.Label>
                     <Form.Control type="file" multiple onChange={handleFileChange} />
@@ -180,11 +124,13 @@ const CreateTicket = () => {
                         </Col>
                     ))}
                 </Row>
-                <Button variant="primary" onClick={handleSubmit}>Guardar Ticket</Button>
+                <Button variant="primary">Guardar Ticket</Button>
             </Form>
         </Container>
     );
 };
 
 export default CreateTicket;
+
+
 
