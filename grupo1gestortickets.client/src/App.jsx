@@ -11,6 +11,8 @@ import Navbar from "./Components/Navbars/Navbar";
 import Usuario from "./Components/Usuario/Usuario";
 import Ticket from "./Components/Ticket/Ticket";
 import InicioAdmin from "./Components/InicioAdmin/InicioAdmin";
+import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
+import TicketsTableClient from './Components/PantallaCliente/InicioCliente/TicketsTable';
 
 const App = () => {
   return (
@@ -33,6 +35,8 @@ const App = () => {
         <Route path="/usuario/:id" element={<Usuario />} />
         <Route path="/ticket/:id" element={<Ticket />} />
         <Route path="/inicioAdmin" element={<InicioAdmin />} />
+        <Route path="/ticketsTableClient" element={<TicketsTableClient />} />
+        <Route path="/create" element={<CreateTicket />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+//import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
+import TicketsTableClient from './PantallaCliente/InicioCliente/TicketsTable';
 const Cliente = () => {
     const navigate = useNavigate();
 
@@ -10,7 +11,7 @@ const Cliente = () => {
 
     return (
         <div>
-            <h2>Cliente Dashboard</h2>
+            <TicketsTableClient/>
             <button onClick={goToDashboard}>Ir a Dashboard</button>
         </div>
     );
