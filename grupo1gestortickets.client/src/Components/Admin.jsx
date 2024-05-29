@@ -1,17 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import InicioAdmin from "./InicioAdmin/InicioAdmin"
 const Admin = () => {
-    const navigate = useNavigate();
 
-    const goToDashboard = () => {
-        navigate('/dashboard');
-    };
 
     return (
         <div>
             <h2>Admin Dashboard</h2>
-            <button onClick={goToDashboard}>Ir a Dashboard</button>
+            <InicioAdmin/>
         </div>
     );
 };
