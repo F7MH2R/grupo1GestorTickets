@@ -4,16 +4,16 @@ namespace grupo1GestorTickets.Server.Models
 {
     public class Comentario
     {
-        public int Id { get; set; }
-        public string comentario { get; set; }
-        public int id_ticket { get; set; }
 
-        // Navigation property
+        [Column("id")]
+        public int Id { get; set; }
+
+        [Column("comentario")]
+        public string Texto { get; set; }
+        [Column("id_ticket")]
+
+        public int? IdTicket { get; set; }
+
         public Ticket Ticket { get; set; }
     }
-
-
-
 }
-
-

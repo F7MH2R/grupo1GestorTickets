@@ -10,6 +10,7 @@ namespace grupo1GestorTickets.Server.Models
         }
 
         public DbSet<Usuario> Usuario { get; set; }
+    
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Comentario> Comentario { get; set; }
@@ -17,6 +18,7 @@ namespace grupo1GestorTickets.Server.Models
         public DbSet<Area> Area { get; set; }
         public DbSet<Archivo> Archivo { get; set; }
 
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,16 +28,17 @@ namespace grupo1GestorTickets.Server.Models
             modelBuilder.Entity<Usuario>().Property(u => u.estado_cuenta).HasColumnName("estado_cuenta");
             modelBuilder.Entity<Usuario>().Property(u => u.FechaCreacion).HasColumnName("fecha_creacion");
 
+
             // Configuración de relaciones y claves foráneas
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Estado)
                 .WithMany(e => e.Tickets)
-                .HasForeignKey(t => t.id_estado);
+                .HasForeignKey(t => t.IdEstado);
 
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Area)
                 .WithMany(a => a.Tickets)
-                .HasForeignKey(t => t.id_area);
+                .HasForeignKey(t => t.IdArea);
 
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Usuario)
@@ -45,23 +48,19 @@ namespace grupo1GestorTickets.Server.Models
             modelBuilder.Entity<Comentario>()
                 .HasOne(c => c.Ticket)
                 .WithMany(t => t.Comentarios)
-                .HasForeignKey(c => c.id_ticket);
+                .HasForeignKey(c => c.IdTicket);
 
             modelBuilder.Entity<Archivo>()
                 .HasOne(a => a.Ticket)
                 .WithMany(t => t.Archivos)
-                .HasForeignKey(a => a.id_ticket);
+                .HasForeignKey(a => a.IdTicket);
 
             modelBuilder.Entity<Bitacora>()
                 .HasOne(b => b.Ticket)
                 .WithMany(t => t.Bitacoras)
                 .HasForeignKey(b => b.IdTicket);
         }
-
     }
+
 }
-
-
-
-
 

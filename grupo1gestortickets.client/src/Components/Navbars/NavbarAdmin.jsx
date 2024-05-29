@@ -24,8 +24,3 @@ const NavbarAdmin = ({ onLogout }) => {
 };
 
 export default NavbarAdmin;
-
-
-
-
-

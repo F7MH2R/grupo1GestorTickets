@@ -1,0 +1,12 @@
+:root {
+  --bs-secondary-bg: #e9ece;
+}
+
+textarea.form-control {
+  min-height: 120px;
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}

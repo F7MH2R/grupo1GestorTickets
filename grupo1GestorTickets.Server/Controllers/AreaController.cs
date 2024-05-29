@@ -17,7 +17,7 @@ namespace grupo1GestorTickets.Server.Controllers
             _context = context;
         }
 
-
+        
 
         // GET: api/area
         [HttpGet("area")]

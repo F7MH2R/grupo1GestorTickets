@@ -1,25 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace grupo1GestorTickets.Server.Models
 {
     public class Ticket
     {
+        [Column("id")]
         public int Id { get; set; }
-        public string nombre { get; set; }
-        
-        public DateTime fecha_creacion { get; set; }
-        public string descripcion { get; set; }
-        public DateTime? fecha_actualizacion { get; set; }
-        public int? id_estado { get; set; }
-        public int? id_area { get; set; }
-        public int? id_comentario { get; set; }
-        public string id_usuario { get; set; }
-        public int? IdUsuario { get; set; }
+        [Column("nombre")]
+        public string Nombre { get; set; }
+        [Column ("fecha_creacion")]
+        public DateTime FechaCreacion { get; set; }
+        [Column("descripcion")]
+        public string Descripcion { get; set; }
+        [Column("fecha_actualizacion")]
+        public DateTime? FechaActualizacion { get; set; }
+        [Column("id_estado")]
+        public int? IdEstado { get; set; }
+        [Column("id_area")]
 
-        // Navigation properties
+        public int? IdArea { get; set; }
+        [Column("id_usuario_asignado")]
+
+        public int? IdUsuarioAsignado { get; set; }
+        [Column("prioridad")]
+
+        public string Prioridad { get; set; }
+        [Column("id_usuario")]
+
+        public int? IdUsuario { get; set; }
         public Estado Estado { get; set; }
         public Area Area { get; set; }
         public Usuario Usuario { get; set; }
@@ -27,10 +36,4 @@ namespace grupo1GestorTickets.Server.Models
         public ICollection<Archivo> Archivos { get; set; }
         public ICollection<Bitacora> Bitacoras { get; set; }
     }
-
 }
-
-
-
-
-
