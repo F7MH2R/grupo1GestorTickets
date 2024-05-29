@@ -13,6 +13,9 @@ import Ticket from "./Components/Ticket/Ticket";
 import InicioAdmin from "./Components/InicioAdmin/InicioAdmin";
 import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
 import TicketsTableClient from './Components/PantallaCliente/InicioCliente/TicketsTable';
+import RegisAd from './Components/AdminRegisUser/RegistrarUsuarios';
+import RegisAdCli from './Components/AdminRegisUser/ReCliente';
+import RegisAdEmp from './Components/AdminRegisUser/ReEmpleado';
 
 const App = () => {
   return (
@@ -37,6 +40,9 @@ const App = () => {
         <Route path="/inicioAdmin" element={<InicioAdmin />} />
         <Route path="/ticketsTableClient" element={<TicketsTableClient />} />
         <Route path="/create" element={<CreateTicket />} />
+        <Route path="registrar-usuarios" element={<RegisAd />} />
+        <Route path="registrar-empleado" element={<RegisAdCli />} />
+        <Route path="registrar-cliente" element={<RegisAdEmp />} />
       </Routes>
     </Router>
   );
