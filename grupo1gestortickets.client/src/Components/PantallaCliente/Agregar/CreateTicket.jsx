@@ -5,7 +5,8 @@ import { Form, Button, Container, Row, Col, Card, Image } from 'react-bootstrap'
 const CreateTicket = () => {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [areas, setAreas] = useState([]);  // Inicializa como un array vacío
+    const [prioridad, setPrioridad] = useState('Media'); // Valor predeterminado
+    const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState('');
     const [comentarios, setComentarios] = useState(['']);
     const [files, setFiles] = useState([]);
@@ -22,10 +23,8 @@ const CreateTicket = () => {
                     'Cache-Control': 'no-cache'
                 }
             });
-            console.log('API Response:', response.data); // Log completo de la respuesta
             if (Array.isArray(response.data)) {
                 setAreas(response.data);
-                console.log('Areas set:', response.data);
             } else {
                 console.error('Expected an array of areas');
             }
@@ -74,11 +73,17 @@ const CreateTicket = () => {
             descripcion,
             idArea: selectedArea,
             idUsuario: localStorage.getItem('userId'),
-            comentarios: comentarios.filter(comentario => comentario !== '')
+            idEstado: 1,  // Ajusta esto según tu lógica de negocio
+            prioridad,
+            comentarios: comentarios.filter(comentario => comentario !== '').map(comentario => ({ texto: comentario }))
         };
 
         try {
-            const response = await axios.post('/api/ticket', ticketData);
+            const response = await axios.post('https://localhost:7289/api/ticket', ticketData, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             const createdTicketId = response.data.id;
             setTicketId(createdTicketId);
 
@@ -87,7 +92,11 @@ const CreateTicket = () => {
                 for (let file of files) {
                     formData.append('files', file);
                 }
-                await axios.post(`/api/ticket/${createdTicketId}/files`, formData);
+                await axios.post(`https://localhost:7289/api/ticket/${createdTicketId}/files`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
             }
 
             alert("Ticket creado y archivos subidos correctamente.");
@@ -122,7 +131,7 @@ const CreateTicket = () => {
                     />
                 </Form.Group>
                 <Form.Group controlId="formDescripcion">
-                    <Form.Label>Descripción</Form.Label>
+                    <Form.Label>Descripci&oacute;n</Form.Label>
                     <Form.Control
                         as="textarea"
                         placeholder="Descripción"
@@ -131,18 +140,30 @@ const CreateTicket = () => {
                     />
                 </Form.Group>
                 <Form.Group controlId="formArea">
-                    <Form.Label>Área</Form.Label>
+                    <Form.Label>&Aacute;rea</Form.Label>
                     <Form.Control
                         as="select"
                         value={selectedArea}
                         onChange={(e) => setSelectedArea(e.target.value)}
                     >
-                        <option value="">Seleccione un área</option>
+                        <option value="">Seleccione un &aacute;rea</option>
                         {areas.map(area => (
                             <option key={area.id} value={area.id}>
                                 {area.nombre}
                             </option>
                         ))}
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="formPrioridad">
+                    <Form.Label>Prioridad</Form.Label>
+                    <Form.Control
+                        as="select"
+                        value={prioridad}
+                        onChange={(e) => setPrioridad(e.target.value)}
+                    >
+                        <option value="Alta">Alta</option>
+                        <option value="Media">Media</option>
+                        <option value="Baja">Baja</option>
                     </Form.Control>
                 </Form.Group>
                 {comentarios.map((comentario, index) => (
