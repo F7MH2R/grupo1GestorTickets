@@ -1,4 +1,5 @@
 import React from 'react';
+import { Navbar as BootstrapNavbar, Nav, Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import NavbarEmpleado from './NavbarEmpleado';
@@ -16,11 +17,11 @@ const Navbar = () => {
 
     if (!user) {
         return (
-            <nav>
-                <ul>
-                    <li>Bienvenido (Navbar generica)</li>
-                </ul>
-            </nav>
+            <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top">
+                <Container>
+                    <BootstrapNavbar.Brand href="#">Bienvenido (Navbar generica)</BootstrapNavbar.Brand>
+                </Container>
+            </BootstrapNavbar>
         );
     }
 
@@ -37,3 +38,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
