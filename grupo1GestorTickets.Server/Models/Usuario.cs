@@ -14,7 +14,6 @@ namespace grupo1GestorTickets.Server.Models
         public int? Cargo { get; set; }
         public int? estado_cuenta { get; set; }
         public DateTime? FechaCreacion { get; set; }
-        public ICollection<Ticket> Tickets { get; set; }
     }
 
 }

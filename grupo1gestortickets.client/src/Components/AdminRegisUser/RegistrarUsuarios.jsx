@@ -10,8 +10,8 @@ const RegistrarUsuarios = () => {
                 <Col xs={12} md={6} lg={4} className="mb-4">
                     <Card className="text-center">
                         <Card.Body>
-                            <Card.Img variant="top" src="empleado.png" alt="Registrar Cliente" />
-                            <Button variant="warning" className="mt-3" as={Link} to="/registrar-empleado">Registrar Cliente</Button>
+                            <Card.Img variant="top" src="empleado.png" alt="Registrar Admin" />
+                            <Button variant="warning" className="mt-3" as={Link} to="/registrar-administrador">Registrar Admin</Button>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -19,7 +19,7 @@ const RegistrarUsuarios = () => {
                     <Card className="text-center">
                         <Card.Body>
                             <Card.Img variant="top" src="cliente.png" alt="Registrar Empleado" />
-                            <Button variant="warning" className="mt-3" as={Link} to="/registrar-cliente">Registrar Empleado</Button>
+                            <Button variant="warning" className="mt-3" as={Link} to="/registrar-empleado">Registrar Empleado</Button>
                         </Card.Body>
                     </Card>
                 </Col>
