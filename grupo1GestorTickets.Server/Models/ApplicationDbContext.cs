@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace grupo1GestorTickets.Server.Models
 {
@@ -10,6 +10,7 @@ namespace grupo1GestorTickets.Server.Models
         }
 
         public DbSet<Usuario> Usuario { get; set; }
+    
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Comentario> Comentario { get; set; }
@@ -17,6 +18,7 @@ namespace grupo1GestorTickets.Server.Models
         public DbSet<Area> Area { get; set; }
         public DbSet<Archivo> Archivo { get; set; }
 
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,12 +28,8 @@ namespace grupo1GestorTickets.Server.Models
             modelBuilder.Entity<Usuario>().Property(u => u.estado_cuenta).HasColumnName("estado_cuenta");
             modelBuilder.Entity<Usuario>().Property(u => u.FechaCreacion).HasColumnName("fecha_creacion");
 
-
         }
     }
+
 }
-
-
-
-
 
