@@ -6,6 +6,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Table, Button, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import './InicioCliente.css'; 
 
 ChartJS.register(
     CategoryScale,
@@ -68,40 +69,44 @@ const TicketsTableClient = () => {
     };
 
     return (
-        <Container>
-            <Row className="mb-4">
-                <Col>
-                    <Bar data={chartData} />
-                </Col>
-            </Row>
-            <Row className="mb-4">
-                <Col>
-                    <Button onClick={handleAddTicket} className="mb-3">Agregar Nuevo Ticket</Button>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Fecha Creación</th>
-                                <th>Descripción</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tickets.map(ticket => (
-                                <tr key={ticket.id}>
-                                    <td>{ticket.id}</td>
-                                    <td>{ticket.nombre}</td>
-                                    <td>{ticket.fechaCreacion}</td>
-                                    <td>{ticket.descripcion}</td>
-                                    <td>{ticket.estado?.estado}</td>
+        <div className="tickets-container">
+            <Container className="chart-container">
+                <Row className="mb-4">
+                    <Col>
+                        <label className="size-letra">&iquest;C&Oacute;MO PODEMOS AYUDARTE HOY?</label>
+                    </Col>
+                </Row>
+            </Container>
+            <Container className="table-container">
+                <Row className="mb-4">
+                    <Col>
+                        <Table striped bordered hover responsive>
+                            <thead className="size-letra">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Fecha Creaci&oacute;n</th>
+                                    <th>Descripci&oacute;n</th>
+                                    <th>Estado</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
-        </Container>
+                            </thead>
+                            <tbody className="size-letra-td">
+                                {tickets.map(ticket => (
+                                    <tr key={ticket.id}>
+                                        <td>{ticket.id}</td>
+                                        <td>{ticket.nombre}</td>
+                                        <td>{ticket.fechaCreacion}</td>
+                                        <td>{ticket.descripcion}</td>
+                                        <td>{ticket.estado?.estado}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                        <Button onClick={handleAddTicket} className="mb-3 add-button-cliente" type="submit">Agregar Nuevo Ticket</Button>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 };
 

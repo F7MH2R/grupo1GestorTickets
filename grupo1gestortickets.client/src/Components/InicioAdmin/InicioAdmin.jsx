@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 
 const InicioAdmin = () => {
   return (
-    <>
-      <Container>
-        <Row className="justify-content-end">
+      <>
+        <Container className="container-ticket">
+        <Row className="justify-content-end mt-5">
           <Col className="tickets-abiertos" xs={2}>
             <Row>
               <Col>Abiertos</Col>
@@ -49,23 +49,23 @@ const InicioAdmin = () => {
             </Row>
           </Col>
         </Row>
-        <Row className="mt-4">
+        <Row className="ticket-left ">
           <Col>
             <Form.Group controlId="ticket">
               <Form.Label>Ticket</Form.Label>
-              <Form.Control type="text" size="sm"></Form.Control>
+              <Form.Control type="text" size="sm" style={{ border: '1px solid' }} ></Form.Control>
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="responsable">
               <Form.Label>Responsable</Form.Label>
-              <Form.Select>
+              <Form.Select style={{ border: '1px solid' }}>
                 <option value={1}>Juan Perez</option>
               </Form.Select>
             </Form.Group>
           </Col>
         </Row>
-        <Row className="mt-4">
+        <Row className="mt-4 custom-row-width">
           <Col>
             <Table striped bordered hover>
               <tbody>
@@ -127,7 +127,7 @@ const InicioAdmin = () => {
                       <Col>
                         <Row>
                           <Col>
-                            <Button variant="warning">Ver Mas</Button>
+                            <Button variant="warning ">Ver Mas</Button>
                           </Col>
                         </Row>
                       </Col>
