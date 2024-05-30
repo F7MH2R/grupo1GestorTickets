@@ -1,22 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace grupo1GestorTickets.Server.Models
+namespace grupo1GestorTickets.Server.Models;
+
+[Table("Bitacora")]
+public partial class Bitacora
 {
-    public class Bitacora
-    {
+    [Key]
+    public int Id { get; set; }
 
-        [Column("id")]
-        public int Id { get; set; }
+    [Column("fecha")]
+    public DateOnly? Fecha { get; set; }
 
-        [Column("fecha")]
-        public DateTime? Fecha { get; set; }
+    [Column("descripcion", TypeName = "text")]
+    public string Descripcion { get; set; } = null!;
 
-        [Column("descripcion")]
-        public string Descripcion { get; set; }
+    [Column("id_ticket")]
+    public int? IdTicket { get; set; }
 
-        [Column("id_ticket")]
-        public int? IdTicket { get; set; }
-
-        public Ticket Ticket { get; set; }
-    }
+    [ForeignKey("IdTicket")]
+    [InverseProperty("Bitacoras")]
+    public virtual Ticket? IdTicketNavigation { get; set; }
 }

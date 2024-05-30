@@ -23,14 +23,14 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _context.Ticket.Include(t => t.Estado).ToListAsync();
+            var tickets = await _context.Ticket.Include(t => t.IdEstado).ToListAsync();
             return Ok(tickets);
         }
 
         [HttpGet("{userId}/tickets")]
         public async Task<IActionResult> GetTicketsByUser(int userId)
         {
-            var tickets = await _context.Ticket.Include(t => t.Estado).Where(t => t.IdUsuario == userId).ToListAsync();
+            var tickets = await _context.Ticket.Include(t => t.IdEstado).Where(t => t.IdUsuario == userId).ToListAsync();
             return Ok(tickets);
         }
 
