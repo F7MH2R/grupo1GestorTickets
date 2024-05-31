@@ -1,19 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace grupo1GestorTickets.Server.Models
+namespace grupo1GestorTickets.Server.Models;
+
+[Table("comentario")]
+public partial class Comentario
 {
-    public class Comentario
-    {
+    [Key]
+    [Column("id")]
+    public int Id { get; set; }
 
-        [Column("id")]
-        public int Id { get; set; }
+    [Column("comentario", TypeName = "text")]
+    public string Comentario1 { get; set; } = null!;
 
-        [Column("comentario")]
-        public string Texto { get; set; }
-        [Column("id_ticket")]
+    [Column("id_ticket")]
+    public int IdTicket { get; set; }
 
-        public int? IdTicket { get; set; }
-
-        public Ticket Ticket { get; set; }
-    }
+    [ForeignKey("IdTicket")]
+    [InverseProperty("Comentarios")]
+    public virtual Ticket IdTicketNavigation { get; set; } = null!;
 }
