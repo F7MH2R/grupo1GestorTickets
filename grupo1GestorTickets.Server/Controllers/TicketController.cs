@@ -6,6 +6,7 @@ using MimeKit;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using grupo1GestorTickets.Server.DTO;
 
 namespace grupo1GestorTickets.Server.Controllers
 {
@@ -23,7 +24,7 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _context.Tickets.Include(t => t.IdEstado).ToListAsync();
+            var tickets = await _context.Tickets.ToListAsync();
             return Ok(tickets);
         }
 
@@ -35,9 +36,18 @@ namespace grupo1GestorTickets.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTicket([FromBody] Ticket ticket)
+        public async Task<IActionResult> CreateTicket([FromBody] TicketDTO ticketDTO)
         {
+            var ticket = new Ticket();
+            ticket.Nombre = ticketDTO.titulo;
+            ticket.Descripcion = ticketDTO.descripcion;
+            ticket.IdEstado = ticketDTO.idEstado;
+            ticket.IdArea = ticketDTO.idArea;
+            ticket.Prioridad = ticketDTO.prioridad;
+            ticket.IdUsuario = ticketDTO.idUsuario;
             ticket.FechaCreacion = DateTime.Now;
+            ticket.FechaActualizacion = DateOnly.FromDateTime(DateTime.Now);
+
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 

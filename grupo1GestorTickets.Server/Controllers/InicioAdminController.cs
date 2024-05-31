@@ -9,9 +9,9 @@ namespace grupo1GestorTickets.Server.Controllers
     [ApiController]
     public class InicioAdminController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TicketsCTX _context;
 
-        public InicioAdminController(ApplicationDbContext context)
+        public InicioAdminController(TicketsCTX context)
         {
             _context = context;
         }
@@ -19,13 +19,10 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _context.Ticket.Include(t => t.Estado).ToListAsync();
-            var ticketsAbiertos = await _context.Ticket.Include(t => t.Estado).Where(ticket => ticket.Estado.Nombre.Equals("Abierto")).CountAsync();
-            var ticketsEnProceso = await _context.Ticket.Include(t => t.Estado).Where(ticket => ticket.Estado.Nombre.Equals("En Proceso")).CountAsync();
+            var tickets = await _context.Tickets.ToListAsync();
+            //
             return Ok(new {
-                tickets,
-                ticketsAbiertos,
-                ticketsEnProceso
+                tickets
             });
         }
     }
