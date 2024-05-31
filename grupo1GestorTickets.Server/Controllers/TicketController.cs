@@ -13,9 +13,9 @@ namespace grupo1GestorTickets.Server.Controllers
     [Route("api/[controller]")]
     public class TicketController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TicketsCTX _context;
 
-        public TicketController(ApplicationDbContext context)
+        public TicketController(TicketsCTX context)
         {
             _context = context;
         }
@@ -23,14 +23,14 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _context.Ticket.Include(t => t.IdEstado).ToListAsync();
+            var tickets = await _context.Tickets.Include(t => t.IdEstado).ToListAsync();
             return Ok(tickets);
         }
 
         [HttpGet("{userId}/tickets")]
         public async Task<IActionResult> GetTicketsByUser(int userId)
         {
-            var tickets = await _context.Ticket.Include(t => t.IdEstado).Where(t => t.IdUsuario == userId).ToListAsync();
+            var tickets = await _context.Tickets.Include(t => t.IdEstado).Where(t => t.IdUsuario == userId).ToListAsync();
             return Ok(tickets);
         }
 
@@ -38,11 +38,11 @@ namespace grupo1GestorTickets.Server.Controllers
         public async Task<IActionResult> CreateTicket([FromBody] Ticket ticket)
         {
             ticket.FechaCreacion = DateTime.Now;
-            _context.Ticket.Add(ticket);
+            _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 
             // Enviar notificación por correo
-            var user = await _context.Usuario.FindAsync(ticket.IdUsuario);
+            var user = await _context.Usuarios.FindAsync(ticket.IdUsuario);
             if (user != null)
             {
                 await SendNotification(user.Correo, ticket.Id);
@@ -55,7 +55,7 @@ namespace grupo1GestorTickets.Server.Controllers
         public async Task<IActionResult> AddComment(int id, [FromBody] Comentario comentario)
         {
             comentario.IdTicket = id;
-            _context.Comentario.Add(comentario);
+            _context.Comentarios.Add(comentario);
             await _context.SaveChangesAsync();
             return Ok(comentario);
         }
@@ -63,13 +63,13 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpDelete("{ticketId}/comments/{commentId}")]
         public async Task<IActionResult> DeleteComment(int ticketId, int commentId)
         {
-            var comentario = await _context.Comentario.FindAsync(commentId);
+            var comentario = await _context.Comentarios.FindAsync(commentId);
             if (comentario == null || comentario.IdTicket != ticketId)
             {
                 return NotFound();
             }
 
-            _context.Comentario.Remove(comentario);
+            _context.Comentarios.Remove(comentario);
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -90,7 +90,7 @@ namespace grupo1GestorTickets.Server.Controllers
                         Tipo = Path.GetExtension(file.FileName),
                         IdTicket = id
                     };
-                    _context.Archivo.Add(archivo);
+                    _context.Archivos.Add(archivo);
                 }
             }
             await _context.SaveChangesAsync();
@@ -100,13 +100,13 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpDelete("{ticketId}/files/{fileId}")]
         public async Task<IActionResult> DeleteFile(int ticketId, int fileId)
         {
-            var archivo = await _context.Archivo.FindAsync(fileId);
+            var archivo = await _context.Archivos.FindAsync(fileId);
             if (archivo == null || archivo.IdTicket != ticketId)
             {
                 return NotFound();
             }
 
-            _context.Archivo.Remove(archivo);
+            _context.Archivos.Remove(archivo);
             await _context.SaveChangesAsync();
             return NoContent();
         }

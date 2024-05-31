@@ -10,9 +10,9 @@ namespace grupo1GestorTickets.Server.Controllers
     [Route("api/[controller]")]
     public class AreaController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TicketsCTX _context;
 
-        public AreaController(ApplicationDbContext context)
+        public AreaController(TicketsCTX context)
         {
             _context = context;
         }
@@ -23,11 +23,11 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet("area")]
         public async Task<ActionResult<IEnumerable<Area>>> GetAreas()
         {
-            return await _context.Area.ToListAsync();
+            return await _context.Areas.ToListAsync();
         }
         private bool AreaExists(int id)
         {
-            return _context.Area.Any(e => e.Id == id);
+            return _context.Areas.Any(e => e.Id == id);
         }
     }
 }
