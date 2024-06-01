@@ -42,30 +42,8 @@ public partial class Ticket
     public int? IdUsuario { get; set; }
 
     [Column("id_usuario_asignado")]
-    public int IdUsuarioAsignado { get; set; }
+    public int? IdUsuarioAsignado { get; set; }
 
-    [InverseProperty("IdTicketNavigation")]
-    public virtual ICollection<Archivo> Archivos { get; set; } = new List<Archivo>();
+    public virtual Area? Area { get; set; } = null!;
 
-    [InverseProperty("IdTicketNavigation")]
-    public virtual ICollection<Bitacora> Bitacoras { get; set; } = new List<Bitacora>();
-
-    [InverseProperty("IdTicketNavigation")]
-    public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
-
-    [ForeignKey("IdArea")]
-    [InverseProperty("Tickets")]
-    public virtual Area? IdAreaNavigation { get; set; }
-
-    [ForeignKey("IdEstado")]
-    [InverseProperty("Tickets")]
-    public virtual Estado? IdEstadoNavigation { get; set; }
-
-    [ForeignKey("IdUsuarioAsignado")]
-    [InverseProperty("TicketIdUsuarioAsignadoNavigations")]
-    public virtual Usuario? IdUsuarioAsignadoNavigation { get; set; }
-
-    [ForeignKey("IdUsuario")]
-    [InverseProperty("TicketIdUsuarioNavigations")]
-    public virtual Usuario? IdUsuarioNavigation { get; set; }
 }

@@ -17,7 +17,4 @@ public partial class Estado
     [StringLength(255)]
     [Unicode(false)]
     public string Estado1 { get; set; } = null!;
-
-    [InverseProperty("IdEstadoNavigation")]
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

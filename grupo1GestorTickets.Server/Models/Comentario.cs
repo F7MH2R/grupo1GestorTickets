@@ -19,7 +19,4 @@ public partial class Comentario
     [Column("id_ticket")]
     public int IdTicket { get; set; }
 
-    [ForeignKey("IdTicket")]
-    [InverseProperty("Comentarios")]
-    public virtual Ticket IdTicketNavigation { get; set; } = null!;
 }

@@ -42,9 +42,4 @@ public partial class Usuario
     [Column("fecha_creacion", TypeName = "datetime")]
     public DateTime? FechaCreacion { get; set; }
 
-    [InverseProperty("IdUsuarioAsignadoNavigation")]
-    public virtual ICollection<Ticket> TicketIdUsuarioAsignadoNavigations { get; set; } = new List<Ticket>();
-
-    [InverseProperty("IdUsuarioNavigation")]
-    public virtual ICollection<Ticket> TicketIdUsuarioNavigations { get; set; } = new List<Ticket>();
 }

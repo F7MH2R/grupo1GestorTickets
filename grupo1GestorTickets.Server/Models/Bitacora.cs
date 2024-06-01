@@ -21,7 +21,4 @@ public partial class Bitacora
     [Column("id_ticket")]
     public int? IdTicket { get; set; }
 
-    [ForeignKey("IdTicket")]
-    [InverseProperty("Bitacoras")]
-    public virtual Ticket? IdTicketNavigation { get; set; }
 }

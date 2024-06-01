@@ -30,7 +30,4 @@ public partial class Archivo
     [Column("id_ticket")]
     public int IdTicket { get; set; }
 
-    [ForeignKey("IdTicket")]
-    [InverseProperty("Archivos")]
-    public virtual Ticket IdTicketNavigation { get; set; } = null!;
 }
