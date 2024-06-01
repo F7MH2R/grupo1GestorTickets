@@ -19,14 +19,15 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
-            return await _context.Tickets.Include(t => t.Comentarios).Include(t => t.Archivos).ToListAsync();
+            //return await _context.Tickets.Include(t => t.Comentarios).Include(t => t.Archivos).ToListAsync();
+            return NoContent();
         }
 
         // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-            var ticket = await _context.Tickets.Include(t => t.Comentarios).Include(t => t.Archivos).FirstOrDefaultAsync(t => t.Id == id);
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id);
 
             if (ticket == null)
             {

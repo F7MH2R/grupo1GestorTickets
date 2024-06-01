@@ -39,6 +39,7 @@ namespace grupo1GestorTickets.Server.Controllers
         public async Task<IActionResult> CreateTicket([FromBody] TicketDTO ticketDTO)
         {
             var ticket = new Ticket();
+            var area = _context.Areas.Where(a => a.Id == ticketDTO.idArea).First();
             ticket.Nombre = ticketDTO.titulo;
             ticket.Descripcion = ticketDTO.descripcion;
             ticket.IdEstado = ticketDTO.idEstado;
