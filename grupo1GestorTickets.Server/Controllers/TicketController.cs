@@ -1,11 +1,7 @@
 ﻿using grupo1GestorTickets.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MailKit.Net.Smtp;
 using MimeKit;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using grupo1GestorTickets.Server.DTO;
 
 namespace grupo1GestorTickets.Server.Controllers
@@ -24,7 +20,14 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _context.Tickets.ToListAsync();
+            var tickets = await (from t in _context.Tickets
+                         join a in _context.Areas on t.IdArea equals a.Id
+                         select new {
+                            nombre = t.Nombre,
+                            descripcion = t.Descripcion,
+                            area = a.Nombre,
+                         }).ToListAsync();
+
             return Ok(tickets);
         }
 

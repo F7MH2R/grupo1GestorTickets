@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +41,5 @@ public partial class Ticket
 
     [Column("id_usuario_asignado")]
     public int? IdUsuarioAsignado { get; set; }
-
-    public virtual Area? Area { get; set; } = null!;
 
 }

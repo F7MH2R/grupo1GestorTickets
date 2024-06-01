@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,5 +15,4 @@ public partial class Area
     [StringLength(255)]
     [Unicode(false)]
     public string Nombre { get; set; } = null!;
-    public virtual Ticket Ticket { get; set; } = null!;
 }
