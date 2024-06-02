@@ -16,7 +16,6 @@ import TicketsTableClient from "./Components/PantallaCliente/InicioCliente/Ticke
 import RegisAd from "./Components/AdminRegisUser/RegistrarUsuarios";
 import RegisAdCli from "./Components/AdminRegisUser/ReCliente";
 import RegisAdEmp from "./Components/AdminRegisUser/ReEmpleado";
-import TicketForm from "./Components/PantallaCliente/Agregar/TicketForm";
 
 const App = () => {
   return (
@@ -44,7 +43,6 @@ const App = () => {
         <Route path="registrar-usuarios" element={<RegisAd />} />
         <Route path="registrar-empleado" element={<RegisAdCli />} />
         <Route path="registrar-cliente" element={<RegisAdEmp />} />
-        <Route path="ticketForm" element={<TicketForm />} />
       </Routes>
     </Router>
   );
