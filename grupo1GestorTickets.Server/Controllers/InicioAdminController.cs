@@ -18,7 +18,31 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _context.Tickets.ToListAsync();
+            var tickets = await (from t in _context.Tickets
+                                 join u in _context.Usuarios on t.IdUsuario equals u.Id
+                                 join ua in _context.Usuarios on t.IdUsuarioAsignado equals ua.Id into uas
+                                 from uasgroup in uas.DefaultIfEmpty()
+                                 join c in _context.Comentarios on t.Id equals c.IdTicket into cg
+                                 from subgroup2 in cg.DefaultIfEmpty()
+                                 group subgroup2 by new
+                                 {
+                                     t.Id,
+                                     Creado = u.Nombre,
+                                     t.Prioridad,
+                                     t.FechaCreacion,
+                                     Asignado = uasgroup.Nombre,
+                                     Titulo = t.Nombre
+                                 } into g
+                                 select new
+                                 {
+                                     idTicket = g.Key.Id,
+                                     creadoPor = g.Key.Creado,
+                                     prioridad = g.Key.Prioridad,
+                                     fechaCreacion = g.Key.FechaCreacion.ToShortDateString(),
+                                     usuarioAsignado = g.Key.Asignado,
+                                     accion = g.Key.Titulo,
+                                     comentarios = g.Where(c => c != null).ToList()
+                                 }).ToListAsync();
             var cantidadAbiertos = await obtenerTicketsxEstado("abierto");
             var cantidadCerrados = await obtenerTicketsxEstado("cerrado");
             var cantidadEnProceso = await obtenerTicketsxEstado("cerrado");
