@@ -69,44 +69,48 @@ const TicketsTableClient = () => {
     };
 
     return (
-        <div className="tickets-container">
-            <Container className="chart-container">
-                <Row className="mb-4">
-                    <Col>
-                        <label className="size-letra">&iquest;C&Oacute;MO PODEMOS AYUDARTE HOY?</label>
-                    </Col>
-                </Row>
-            </Container>
-            <Container className="table-container">
-                <Row className="mb-4">
-                    <Col>
-                        <Table striped bordered hover responsive>
-                            <thead className="size-letra">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Fecha Creaci&oacute;n</th>
-                                    <th>Descripci&oacute;n</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody className="size-letra-td">
-                                {tickets.map(ticket => (
-                                    <tr key={ticket.id}>
-                                        <td>{ticket.id}</td>
-                                        <td>{ticket.nombre}</td>
-                                        <td>{ticket.fechaCreacion}</td>
-                                        <td>{ticket.descripcion}</td>
-                                        <td>{ticket.estado?.estado}</td>
+        <>
+            <div className="titulo-text">Mis Ticket</div>
+            <div className="tickets-container">
+                <Container className="chart-container">
+                    <Row className="mb-4">
+                        <Col>
+                            <label className="size-letra">&iquest;C&Oacute;MO PODEMOS AYUDARTE HOY?</label>
+                        </Col>
+                    </Row>
+                </Container>
+                <Container className="table-container">
+                    <Row className="mb-4">
+                        <Col>
+                            <Table striped bordered hover responsive>
+                                <thead className="size-letra">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Fecha Creaci&oacute;n</th>
+                                        <th>Descripci&oacute;n</th>
+                                        <th>Estado</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>
-                        <Button onClick={handleAddTicket} className="mb-3 add-button-cliente" type="submit">Agregar Nuevo Ticket</Button>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+                                </thead>
+                                <tbody className="size-letra-td">
+                                    {tickets.map(ticket => (
+                                        <tr key={ticket.id}>
+                                            <td>{ticket.id}</td>
+                                            <td>{ticket.nombre}</td>
+                                            <td>{ticket.fechaCreacion}</td>
+                                            <td>{ticket.descripcion}</td>
+                                            <td>{ticket.estado?.estado}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                            <Button onClick={handleAddTicket} className="mb-3 add-button-cliente" type="submit">Agregar Nuevo Ticket</Button>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        </>
+        
     );
 };
 
