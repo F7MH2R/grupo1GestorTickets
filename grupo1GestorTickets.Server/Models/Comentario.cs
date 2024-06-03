@@ -18,4 +18,6 @@ public partial class Comentario
 
     public int idUsuario { get; set; }
 
+    public DateTime fechaCreacion { get; set; }
+
 }

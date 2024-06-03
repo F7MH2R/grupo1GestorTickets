@@ -184,7 +184,7 @@ const TicketsTableClient = () => {
   };
 
   const handleViewTicket = (ticketId) => {
-    navigate(`/ticketDetail/${ticketId}`);
+    navigate(`/detallepro/${ticketId}`);
   };
 
   const handleEditTicket = (ticketId) => {

@@ -103,7 +103,8 @@ namespace grupo1GestorTickets.Server.Controllers
                 {
                     Comentario1 = comentarioDTO.Comentario,
                     IdTicket = id,
-                    idUsuario = comentarioDTO.IdUsuario
+                    idUsuario = comentarioDTO.IdUsuario,
+                    fechaCreacion = DateTime.Now
 
                 };
                 _context.Comentarios.Add(comentario);
@@ -134,8 +135,9 @@ namespace grupo1GestorTickets.Server.Controllers
                                                        where c.IdTicket == ticketId
                                                        select new
                                                        {
+                                                           c.Id,
                                                            c.Comentario1,
-                                                           c.IdTicket,
+                                                           c.fechaCreacion,
                                                            User = new
                                                            {
                                                                cu.Id,
@@ -153,6 +155,7 @@ namespace grupo1GestorTickets.Server.Controllers
 
             return Ok(ticketDetails);
         }
+
 
 
         [HttpDelete("{ticketId}/comments/{commentId}")]
