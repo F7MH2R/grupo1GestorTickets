@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace grupo1GestorTickets.Server.Models
 {
@@ -25,40 +25,11 @@ namespace grupo1GestorTickets.Server.Models
 
             // Mapear propiedades a columnas
             modelBuilder.Entity<Usuario>().Property(u => u.tipo_usuario).HasColumnName("tipo_usuario");
-            modelBuilder.Entity<Usuario>().Property(u => u.estado_cuenta).HasColumnName("estado_cuenta");
+            modelBuilder.Entity<Usuario>().Property(u => u.EstadoCuenta).HasColumnName("estado_cuenta");
             modelBuilder.Entity<Usuario>().Property(u => u.FechaCreacion).HasColumnName("fecha_creacion");
 
 
-            // Configuración de relaciones y claves foráneas
-            modelBuilder.Entity<Ticket>()
-                .HasOne(t => t.Estado)
-                .WithMany(e => e.Tickets)
-                .HasForeignKey(t => t.IdEstado);
-
-            modelBuilder.Entity<Ticket>()
-                .HasOne(t => t.Area)
-                .WithMany(a => a.Tickets)
-                .HasForeignKey(t => t.IdArea);
-
-            modelBuilder.Entity<Ticket>()
-                .HasOne(t => t.Usuario)
-                .WithMany(u => u.Tickets)
-                .HasForeignKey(t => t.IdUsuario);
-
-            modelBuilder.Entity<Comentario>()
-                .HasOne(c => c.Ticket)
-                .WithMany(t => t.Comentarios)
-                .HasForeignKey(c => c.IdTicket);
-
-            modelBuilder.Entity<Archivo>()
-                .HasOne(a => a.Ticket)
-                .WithMany(t => t.Archivos)
-                .HasForeignKey(a => a.IdTicket);
-
-            modelBuilder.Entity<Bitacora>()
-                .HasOne(b => b.Ticket)
-                .WithMany(t => t.Bitacoras)
-                .HasForeignKey(b => b.IdTicket);
+        
         }
     }
 

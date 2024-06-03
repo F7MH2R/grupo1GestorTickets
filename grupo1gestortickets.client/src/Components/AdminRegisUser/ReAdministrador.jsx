@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
-const ReEmpleado = () => {
+const ReAdministrador = () => {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
-    const [tipoUsuario] = useState(2); // Siempre Empleado
+    const [tipoUsuario] = useState(1); // Siempre Admin
     const [telefono, setTelefono] = useState('');
     const [cargo, setCargo] = useState('');
     const [estadoCuenta, setEstadoCuenta] = useState(1); // Por defecto Activo
@@ -54,7 +54,7 @@ const ReEmpleado = () => {
         <Container>
             <Row className="justify-content-md-center">
                 <Col md="6">
-                    <h1 className="text-center mb-4">REGISTRAR EMPLEADOS</h1>
+                    <h1 className="text-center mb-4">REGISTRAR ADMINISTRADOR</h1>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formNombre">
@@ -108,7 +108,7 @@ const ReEmpleado = () => {
                                 value={tipoUsuario}
                                 readOnly
                             >
-                                <option value={2}>Empleado</option>
+                                <option value={1}>Administrador</option>
                             </Form.Control>
                         </Form.Group>
 
@@ -154,6 +154,4 @@ const ReEmpleado = () => {
     );
 };
 
-export default ReEmpleado;
-
-
+export default ReAdministrador;
