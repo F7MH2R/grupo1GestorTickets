@@ -64,7 +64,7 @@ namespace grupo1GestorTickets.Server.Controllers
                 tipo_usuario = user.tipo_usuario,
                 Telefono = user.Telefono,
                 Cargo = user.Cargo,
-                estado_cuenta = user.EstadoCuenta,
+                EstadoCuenta = user.EstadoCuenta,
                 FechaCreacion = user.FechaCreacion
             });
         }
