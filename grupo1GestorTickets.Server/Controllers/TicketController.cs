@@ -110,6 +110,34 @@ namespace grupo1GestorTickets.Server.Controllers
             return Ok(comentariosDTO);
         }
 
+        [HttpGet("details/{ticketId}")]
+        public async Task<IActionResult> GetTicketDetails(int ticketId)
+        {
+            var ticketDetails = await (from t in _context.Tickets
+                                       join u in _context.Usuarios on t.IdUsuario equals u.Id
+                                       join es in _context.Estados on t.IdEstado equals es.Id
+                                       join ar in _context.Areas on t.IdArea equals ar.Id
+                                       join au in _context.Usuarios on t.IdUsuarioAsignado equals au.Id into auGroup
+                                       from au in auGroup.DefaultIfEmpty()
+                                       where t.Id == ticketId
+                                       select new
+                                       {
+                                           Areas = ar.Nombre,
+                                           Ticket = t,
+                                           User = u,
+                                           State = es.Estado1,
+                                           AssignedUser = au,
+                                           Comments = _context.Comentarios.Where(c => c.IdTicket == ticketId).ToList(),
+                                           Files = _context.Archivos.Where(f => f.IdTicket == ticketId).ToList()
+                                       }).FirstOrDefaultAsync();
+
+            if (ticketDetails == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ticketDetails);
+        }
 
 
         [HttpDelete("{ticketId}/comments/{commentId}")]
