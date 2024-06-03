@@ -11,6 +11,7 @@
   <ItemGroup>
     <Folder Include="src\Components\Dashboard\" />
     <Folder Include="src\Components\Navbars\" />
+    <Folder Include="src\Components\Load\" />
     <Folder Include="src\Components\ProtectedRoute\" />
   </ItemGroup>
 </Project>
