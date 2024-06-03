@@ -214,60 +214,6 @@ namespace grupo1GestorTickets.Server.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
-        private async Task SendNotification(string email, int ticketId)
-        {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("System Ticket", "gestion.ticket.grupo01@gmail.com"));
-            message.To.Add(new MailboxAddress("User", email)); // Corregido para usar dos argumentos
-            message.Subject = "Ticket Creado";
-            message.Body = new TextPart("plain")
-            {
-                Text = $"Su ticket con ID {ticketId} ha sido creado correctamente."
-            };
-
-            using var client = new MailKit.Net.Smtp.SmtpClient();  // Usa MailKit.Net.Smtp.SmtpClient
-                                                                   // Conectar al servidor SMTP de Gmail
-            await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-
-            // Autenticar con el servidor SMTP utilizando el correo electrónico y la contraseña
-            await client.AuthenticateAsync("gestion.ticket.grupo01@gmail.com", "rugl rtch bkyw vcsv");
-
-            // Enviar el mensaje
-            await client.SendAsync(message);
-
-            // Desconectar del servidor SMTP
-            await client.DisconnectAsync(true);
-        }
-        /*
-       public async Task SendNotificationToAdmins(int ticketId)
-  {
-      using (var dbContext = new TicketsCTX()) // Reemplaza 'YourDbContext' con el nombre de tu contexto de base de datos
-      {
-          var admins = await dbContext.Usuarios.Where(u => u.tipo_usuario == 1).ToListAsync();
-
-          foreach (var admin in admins)
-          {
-              var message = new MimeMessage();
-              message.From.Add(new MailboxAddress("System Ticket", "gestion.ticket.grupo01@gmail.com"));
-              message.To.Add(new MailboxAddress("Admin", admin.Correo));
-              message.Subject = "Nuevo Ticket Sin Asignar";
-
-              var bodyBuilder = new BodyBuilder();
-              bodyBuilder.HtmlBody = "<h1>¡Nuevo Ticket Sin Asignar!</h1>" +
-                                     "<p>Se ha creado un nuevo ticket de un cliente sin asignar.</p>" +
-                                     "<p><img src=\"https://i.ibb.co/C2Nxxyb/2-P-ginas-Web-Gestor-de-Proyecto-Final.png\" alt=\"Logo\"></p>";
-
-              message.Body = bodyBuilder.ToMessageBody();
-
-              using var client = new MailKit.Net.Smtp.SmtpClient();
-              await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-              await client.AuthenticateAsync("gestion.ticket.grupo01@gmail.com", "rugl rtch bkyw vcsv");
-              await client.SendAsync(message);
-              await client.DisconnectAsync(true);
-          }
-      }
-  }
-        */
+   
     }
 }
