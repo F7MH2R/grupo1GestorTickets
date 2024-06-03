@@ -43,10 +43,10 @@ namespace grupo1GestorTickets.Server.Controllers
                                      accion = g.Key.Titulo,
                                      comentarios = g.Where(c => c != null).ToList()
                                  }).ToListAsync();
-            var cantidadAbiertos = await obtenerTicketsxEstado("abierto");
-            var cantidadCerrados = await obtenerTicketsxEstado("cerrado");
-            var cantidadEnProceso = await obtenerTicketsxEstado("cerrado");
-            var cantidadSinAsignar = await ticketsSinAsignar();
+            var cantidadAbiertos = await ObtenerTicketsxEstado("abierto");
+            var cantidadCerrados = await ObtenerTicketsxEstado("cerrado");
+            var cantidadEnProceso = await ObtenerTicketsxEstado("cerrado");
+            var cantidadSinAsignar = await TicketsSinAsignar();
             //
             return Ok(new {
                 abiertos = cantidadAbiertos.Count,
@@ -59,7 +59,7 @@ namespace grupo1GestorTickets.Server.Controllers
 
 
 
-        private Task<List<Ticket>> obtenerTicketsxEstado(string estado)
+        private Task<List<Ticket>> ObtenerTicketsxEstado(string estado)
         {
             return (from
                         t in _context.Tickets
@@ -74,7 +74,7 @@ namespace grupo1GestorTickets.Server.Controllers
                     ).ToListAsync();
         }
 
-        private Task<List<Ticket>> ticketsSinAsignar()
+        private Task<List<Ticket>> TicketsSinAsignar()
         {
             return (from t in _context.Tickets
                      where t.IdUsuarioAsignado == null
