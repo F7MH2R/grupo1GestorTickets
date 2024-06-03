@@ -9,7 +9,8 @@
             public string Comentario { get; set; } = null!;
 
             public int IdTicket { get; set; }
-        }
+        public int IdUsuario { get; set; }
+    }
     
 }
 

@@ -102,7 +102,9 @@ namespace grupo1GestorTickets.Server.Controllers
                 var comentario = new Comentario
                 {
                     Comentario1 = comentarioDTO.Comentario,
-                    IdTicket = id
+                    IdTicket = id,
+                    idUsuario = comentarioDTO.IdUsuario
+
                 };
                 _context.Comentarios.Add(comentario);
             }
@@ -127,7 +129,20 @@ namespace grupo1GestorTickets.Server.Controllers
                                            User = u,
                                            State = es.Estado1,
                                            AssignedUser = au,
-                                           Comments = _context.Comentarios.Where(c => c.IdTicket == ticketId).ToList(),
+                                           Comments = (from c in _context.Comentarios
+                                                       join cu in _context.Usuarios on c.idUsuario equals cu.Id
+                                                       where c.IdTicket == ticketId
+                                                       select new
+                                                       {
+                                                           c.Comentario1,
+                                                           c.IdTicket,
+                                                           User = new
+                                                           {
+                                                               cu.Id,
+                                                               cu.Nombre,
+                                                               cu.Correo
+                                                           }
+                                                       }).ToList(),
                                            Files = _context.Archivos.Where(f => f.IdTicket == ticketId).ToList()
                                        }).FirstOrDefaultAsync();
 

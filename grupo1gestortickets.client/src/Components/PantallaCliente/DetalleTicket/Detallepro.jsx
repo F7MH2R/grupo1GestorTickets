@@ -5,16 +5,18 @@ import {
   Container,
   Row,
   Col,
-  Table,
-  Button,
   Card,
+  Button,
   CardGroup,
+  ListGroup,
+  Form,
 } from "react-bootstrap";
 import { FaFilePdf, FaFileAudio } from "react-icons/fa";
 
-const TicketDetails = () => {
+const Detallepro = () => {
   const { ticketId } = useParams();
   const [ticketDetails, setTicketDetails] = useState(null);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     const fetchTicketDetails = async () => {
@@ -53,6 +55,46 @@ const TicketDetails = () => {
       return <FaFileAudio size={50} />;
     } else {
       return <p>Preview not available</p>;
+    }
+  };
+
+  const handleAddComment = async () => {
+    if (newComment.trim() === "") return;
+
+    const storedUser = localStorage.getItem("user");
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+    const commentData = {
+      comentario: newComment,
+      idUsuario: parsedUser?.id,
+    };
+
+    try {
+      await axios.post(
+        `https://localhost:7289/api/ticket/${ticketId}/comments`,
+        [commentData],
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setTicketDetails((prevDetails) => ({
+        ...prevDetails,
+        comments: [
+          ...prevDetails.comments,
+          {
+            comentario1: newComment,
+            user: {
+              nombre: parsedUser?.nombre,
+              correo: parsedUser?.correo,
+            },
+          },
+        ],
+      }));
+      setNewComment("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
     }
   };
 
@@ -108,24 +150,29 @@ const TicketDetails = () => {
       <Row className="mb-4">
         <Col>
           <h3>Comentarios</h3>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Comentario</th>
-                <th>Nombre del Usuario</th>
-                <th>Correo del Usuario</th>
-              </tr>
-            </thead>
-            <tbody>
-              {comments?.map((comment) => (
-                <tr key={comment.id}>
-                  <td>{comment.comentario1}</td>
-                  <td>{comment.user.nombre}</td>
-                  <td>{comment.user.correo}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <ListGroup>
+            {comments?.map((comment, index) => (
+              <ListGroup.Item key={index}>
+                <strong>
+                  {comment.user.nombre} ({comment.user.correo}):
+                </strong>
+                <p>{comment.comentario1}</p>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+          <Form className="mt-3">
+            <Form.Group controlId="formNewComment">
+              <Form.Control
+                type="text"
+                placeholder="Escribe un comentario"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="primary" onClick={handleAddComment}>
+              Añadir Comentario
+            </Button>
+          </Form>
         </Col>
       </Row>
       <Row className="mb-4">
@@ -154,4 +201,4 @@ const TicketDetails = () => {
   );
 };
 
-export default TicketDetails;
+export default Detallepro;

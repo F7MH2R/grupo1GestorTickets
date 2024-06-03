@@ -128,6 +128,7 @@ const CreateTicket = () => {
         .map((comentario) => ({
           comentario: comentario,
           idTicket: createdTicketId,
+          idUsuario: idUsuario, // Include idUsuario
         }));
       await axios.post(
         `https://localhost:7289/api/ticket/${createdTicketId}/comments`,
