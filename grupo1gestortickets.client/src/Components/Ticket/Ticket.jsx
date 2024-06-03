@@ -1,10 +1,16 @@
 import React from "react";
 import "./Ticket.css";
 import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 const Ticket = () => {
-  const { id } = useParams();
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate(-1); // Navegar hacia atrás
+    };
   return (
     <>
       <Container>
@@ -99,6 +105,9 @@ const Ticket = () => {
               <Row className="mt-3">
                 <Col className="text-end">
                   <Button variant="warning">Guardar</Button>
+                  <Button variant="secondary" onClick={handleBack} className="ml-2">
+                   Volver
+                  </Button>
                 </Col>
               </Row>
             </Form>

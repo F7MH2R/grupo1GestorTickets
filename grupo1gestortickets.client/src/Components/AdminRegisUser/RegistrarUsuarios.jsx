@@ -1,8 +1,14 @@
 import React from 'react';
 import { Button, Container, Row, Col, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegistrarUsuarios = () => {
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate(-1); // Navegar hacia atrás
+    };
+
     return (
         <Container className="mt-5 pt-5">
             <h1 className="text-center mb-4">Registrar</h1>
@@ -24,8 +30,12 @@ const RegistrarUsuarios = () => {
                     </Card>
                 </Col>
             </Row>
+            <Button variant="secondary" onClick={handleBack} className="ml-2">
+                Volver
+            </Button>
         </Container>
     );
 };
 
 export default RegistrarUsuarios;
+
