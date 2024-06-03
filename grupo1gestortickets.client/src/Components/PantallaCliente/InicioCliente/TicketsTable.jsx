@@ -187,10 +187,6 @@ const TicketsTableClient = () => {
     navigate(`/detallepro/${ticketId}`);
   };
 
-  const handleEditTicket = (ticketId) => {
-    navigate(`/edit-ticket/${ticketId}`);
-  };
-
   const filterTicketsByName = (searchTerm) => {
     if (!searchTerm) {
       setFilteredTickets(tickets);
@@ -350,13 +346,6 @@ const TicketsTableClient = () => {
                       className="mr-2"
                     >
                       Ver
-                    </Button>
-                    <Button
-                      variant="warning"
-                      size="sm"
-                      onClick={() => handleEditTicket(ticket.id)}
-                    >
-                      Editar
                     </Button>
                   </td>
                 </tr>

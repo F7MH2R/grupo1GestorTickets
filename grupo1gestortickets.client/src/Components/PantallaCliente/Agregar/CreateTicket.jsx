@@ -9,8 +9,10 @@ import {
   Card,
   Image,
   Modal,
+  CardGroup,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { FaFilePdf, FaFileAudio } from "react-icons/fa";
 
 const CreateTicket = () => {
   const [nombre, setNombre] = useState("");
@@ -172,11 +174,9 @@ const CreateTicket = () => {
     if (file.type.startsWith("image/")) {
       return <Image src={file.preview} thumbnail />;
     } else if (file.type === "application/pdf") {
-      return (
-        <a href={file.preview} target="_blank" rel="noopener noreferrer">
-          Ver PDF
-        </a>
-      );
+      return <FaFilePdf size={50} />;
+    } else if (file.type === "audio/mpeg") {
+      return <FaFileAudio size={50} />;
     } else if (file.type.startsWith("text/")) {
       return (
         <iframe
@@ -280,24 +280,22 @@ const CreateTicket = () => {
           <Form.Label>Archivos</Form.Label>
           <Form.Control type="file" multiple onChange={handleFileChange} />
         </Form.Group>
-        <Row>
+        <CardGroup>
           {files.map((file, index) => (
-            <Col key={index} xs={12} md={4} lg={3}>
-              <Card className="mb-3">
-                <Card.Body>
-                  {renderFilePreview(file)}
-                  <Card.Text>{file.name}</Card.Text>
-                  <Button
-                    variant="danger"
-                    onClick={() => handleFileDelete(index)}
-                  >
-                    Eliminar
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
+            <Card key={index} className="mb-3" style={{ width: "18rem" }}>
+              <Card.Body>
+                {renderFilePreview(file)}
+                <Card.Text>{file.name}</Card.Text>
+                <Button
+                  variant="danger"
+                  onClick={() => handleFileDelete(index)}
+                >
+                  Eliminar
+                </Button>
+              </Card.Body>
+            </Card>
           ))}
-        </Row>
+        </CardGroup>
         <Button variant="primary" onClick={handleSubmit}>
           Guardar Ticket
         </Button>
