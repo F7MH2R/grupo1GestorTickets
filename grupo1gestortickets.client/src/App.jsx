@@ -41,8 +41,8 @@ const App = () => {
         <Route path="/ticketsTableClient" element={<TicketsTableClient />} />
         <Route path="/create" element={<CreateTicket />} />
         <Route path="registrar-usuarios" element={<RegisAd />} />
-        <Route path="registrar-empleado" element={<RegisAdCli />} />
-        <Route path="registrar-cliente" element={<RegisAdEmp />} />
+        <Route path="registrar-cliente" element={<RegisAdCli />} />
+        <Route path="registrar-empleado" element={<RegisAdEmp />} />
       </Routes>
     </Router>
   );
