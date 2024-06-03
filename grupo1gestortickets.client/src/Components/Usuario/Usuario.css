@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=REM:ital,wght@0,100..900;1,100..900&display=swap');
+
+.container-fluid {
+    font-family: "Barlow", sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    width: 160%;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.usuario-header {
+    background-color: #F4DB73;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+    text-align: left;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.usuario-form-group {
+    margin-bottom: 15px;
+}
+
+form .usuario-form-label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+
+.usuario-form-control,
+.usuario-form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+
+.usuario-button {
+    background-color: #FDDD00;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 170px;
+}
+
+.usuario-button:hover {
+    background-color: #e6c600;
+    font-weight: bold;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .usuario-button {
+        width: 100%;
+    }
+}
