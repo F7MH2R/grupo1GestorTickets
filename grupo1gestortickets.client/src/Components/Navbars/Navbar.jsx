@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import NavbarEmpleado from './NavbarEmpleado';
 import NavbarCliente from './NavbarCliente';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -19,16 +20,19 @@ const Navbar = () => {
         return (
             <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top">
                 <Container>
-                    <BootstrapNavbar.Brand href="#">
+                    <BootstrapNavbar.Brand href="/login">
                         <img
-                            src="https://i.postimg.cc/ydrSvHty/logo-Solucioness.png"
-                            width="50"
-                            height="50"
-                            alt="Logo"
-                        />
-                        {' '}
-                        Bienvenido (Navbar generica)
-                    </BootstrapNavbar.Brand>
+                        src="https://i.postimg.cc/ydrSvHty/logo-Solucioness.png"
+                        width="50"
+                        height="50"
+                        alt="Logo"
+                        />{' '}Bienvenido (Navbar generica)</BootstrapNavbar.Brand>
+                    <BootstrapNavbar.Toggle arial-controls="basic-navbar-nav" />
+                    <BootstrapNavbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            <Button variant="outline-light" as={Link} to="/registrar-cliente">Crear Usuario</Button>
+                        </Nav>
+                    </BootstrapNavbar.Collapse>
                 </Container>
             </BootstrapNavbar>
         );

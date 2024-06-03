@@ -1,7 +1,6 @@
-function DetalleTicket() {
-  return (
-    <p>Hello world!</p>
-  );
+/* In your main CSS file or inline within the component */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }
-
-export default DetalleTicket;

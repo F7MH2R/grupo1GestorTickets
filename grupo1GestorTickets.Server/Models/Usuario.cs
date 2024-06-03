@@ -1,21 +1,45 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace grupo1GestorTickets.Server.Models
+namespace grupo1GestorTickets.Server.Models;
+
+[Table("usuario")]
+public partial class Usuario
 {
-    public class Usuario
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Correo { get; set; }
-        public string Password { get; set; }
-        public int tipo_usuario { get; set; }
-        public int? Telefono { get; set; }
-        public int? Cargo { get; set; }
-        public int? estado_cuenta { get; set; }
-        public DateTime? FechaCreacion { get; set; }
-        public ICollection<Ticket> Tickets { get; set; }
-    }
+    [Key]
+    [Column("id")]
+    public int Id { get; set; }
+
+    [Column("nombre")]
+    [StringLength(255)]
+    [Unicode(false)]
+    public string Nombre { get; set; } = null!;
+
+    [Column("correo")]
+    [StringLength(255)]
+    [Unicode(false)]
+    public string Correo { get; set; } = null!;
+
+    [Column("password")]
+    [StringLength(100)]
+    [Unicode(false)]
+    public string Password { get; set; } = null!;
+
+    [Column("tipo_usuario")]
+    public int tipo_usuario { get; set; }
+    [Column("telefono")]
+    public int? Telefono { get; set; }
+
+    [Column("cargo")]
+    public int? Cargo { get; set; }
+
+    [Column("estado_cuenta")]
+    public int? EstadoCuenta { get; set; }
+
+    [Column("fecha_creacion", TypeName = "datetime")]
+    public DateTime? FechaCreacion { get; set; }
+
+    public string? nombreEmpresa { get; set; }
 
 }
-

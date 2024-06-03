@@ -1,5 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using grupo1GestorTickets.Server.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using grupo1GestorTickets.Server.Models;
+
+using grupo1GestorTickets.Server.ServiceEmail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +20,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TicketDb")));
 
+
+builder.Services.AddDbContext<TicketsCTX>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TicketDb")));
+builder.Services.AddScoped<EmailNotificationService>();
+
+
 // Add CORS policy
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
