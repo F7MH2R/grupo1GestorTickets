@@ -4,13 +4,15 @@
     font-family: "Barlow", sans-serif;
     max-width: 250vh;
     max-height: 250vh;
+    width: 150vh;
+    height: 150vh;
 }
 
 .custom-form {
     margin-top: 20px;
     background-color: #E4E4E4;
     height: 95vh;
-    width: 110vh;
+    width: 120vh;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     align-items: center;
@@ -19,8 +21,8 @@
 .titulo-text {
     align-items: center;
     font-size: 25px;
-    margin-top: 10%;
-    margin-bottom: 4%;
+    margin-top: 7%;
+    margin-bottom: 2%;
     color: black;
     font-weight: bold;
     letter-spacing: 2px;
@@ -31,19 +33,19 @@
     margin-top: 25px;
 }
 
-.custom-form-container .form-group {
+.custom-form .form-group {
     margin-bottom: 1.5rem;
 }
 
-.custom-form-container .card {
+.custom-form .card {
     margin-bottom: 1.5rem;
 }
 
-.custom-form-container .btn {
+.custom-form .btn {
     margin-top: 3rem;
 }
 
-.custom-form-container .btn-danger {
+.custom-form .btn-danger {
     margin-left: 0.1rem;
 }
 
@@ -72,8 +74,8 @@
 
 @media (max-width: 768px) {
     .custom-form-container .row > div {
-        flex: 0 0 100%;
-        max-width: 100%;
+        flex: 0 0 200%;
+        max-width: 200%;
     }
 }
 

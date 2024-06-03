@@ -11,6 +11,21 @@
     margin: 0 auto;
 }
 
+.titulo-text-estadistica {
+    align-items: center;
+    font-size: 25px;
+    margin-top: 7%;
+    margin-bottom: 2%;
+    color: black;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.size {
+    font-size: 20px;
+}
+
+
 .size-letra{
     font-size: 15px;
 }
@@ -26,7 +41,7 @@
 }
 
 .table-container {
-    width: 150%;
+    width: 100%;
     float: right;
 }
 
@@ -36,12 +51,12 @@ th, td {
 }
 
 .add-button-cliente {
-    margin-top: 15%;
+    margin-top: 5%;
     float: right;
     background-color: #FDDD00;
     color: black;
     border: none;
-    width: 40%;
+    width: 25%;
     font-weight: bold;
     border-radius: 15px;
 }
