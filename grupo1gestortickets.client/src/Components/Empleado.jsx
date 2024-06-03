@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import TicketsTableClient from './PantallaEmpleado/InicioEmpleado/TicketsTable';
 
 const Empleado = () => {
     const navigate = useNavigate();
@@ -10,8 +11,7 @@ const Empleado = () => {
 
     return (
         <div>
-            <h2>Empleado Dashboard</h2>
-            <button onClick={goToDashboard}>Ir a Dashboard</button>
+            <TicketsTableClient />
         </div>
     );
 };

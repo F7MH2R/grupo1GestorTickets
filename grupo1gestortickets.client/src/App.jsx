@@ -11,11 +11,16 @@ import Navbar from "./Components/Navbars/Navbar";
 import Usuario from "./Components/Usuario/Usuario";
 import Ticket from "./Components/Ticket/Ticket";
 import InicioAdmin from "./Components/InicioAdmin/InicioAdmin";
-import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
-import TicketsTableClient from './Components/PantallaCliente/InicioCliente/TicketsTable';
-import RegisAd from './Components/AdminRegisUser/RegistrarUsuarios';
-import RegisAdCli from './Components/AdminRegisUser/ReCliente';
-import RegisAdEmp from './Components/AdminRegisUser/ReEmpleado';
+import CreateTicket from "./Components/PantallaCliente/Agregar/CreateTicket";
+import TicketsTableClient from "./Components/PantallaCliente/InicioCliente/TicketsTable";
+import RegisAd from "./Components/AdminRegisUser/RegistrarUsuarios";
+import RegisAdCli from "./Components/AdminRegisUser/ReCliente";
+import RegisAdEmp from "./Components/AdminRegisUser/ReEmpleado";
+import TicketDetails from "./Components/PantallaCliente/DetalleTicket/TicketDetails";
+import Detallepro from "./Components/PantallaCliente/DetalleTicket/Detallepro";
+import RegisAdAdmin from "./Components/AdminRegisUser/ReAdministrador";
+import EquipoAdmin from "./Components/InicioAdmin/EquipoAdmin"; 
+
 
 const App = () => {
   return (
@@ -26,6 +31,7 @@ const App = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="/empleado" element={<Empleado />} />
         <Route path="/cliente" element={<Cliente />} />
+        <Route path="/equipoAdmin" element={<EquipoAdmin />} />
         <Route
           path="/dashboard"
           element={
@@ -41,8 +47,11 @@ const App = () => {
         <Route path="/ticketsTableClient" element={<TicketsTableClient />} />
         <Route path="/create" element={<CreateTicket />} />
         <Route path="registrar-usuarios" element={<RegisAd />} />
-        <Route path="registrar-empleado" element={<RegisAdCli />} />
-        <Route path="registrar-cliente" element={<RegisAdEmp />} />
+        <Route path="registrar-empleado" element={<RegisAdEmp />} />
+        <Route path="registrar-cliente" element={<RegisAdCli />} />
+        <Route path="/ticketDetail/:ticketId" element={<TicketDetails />} />
+        <Route path="/detallepro/:ticketId" element={<Detallepro />} />
+        <Route path="registrar-administrador" element={<RegisAdAdmin />} />
       </Routes>
     </Router>
   );

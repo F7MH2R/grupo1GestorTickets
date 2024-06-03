@@ -1,39 +1,45 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace grupo1GestorTickets.Server.Models
+namespace grupo1GestorTickets.Server.Models;
+
+[Table("Ticket")]
+public partial class Ticket
 {
-    public class Ticket
-    {
-        [Column("id")]
-        public int Id { get; set; }
-        [Column("nombre")]
-        public string Nombre { get; set; }
-        [Column ("fecha_creacion")]
-        public DateTime FechaCreacion { get; set; }
-        [Column("descripcion")]
-        public string Descripcion { get; set; }
-        [Column("fecha_actualizacion")]
-        public DateTime? FechaActualizacion { get; set; }
-        [Column("id_estado")]
-        public int? IdEstado { get; set; }
-        [Column("id_area")]
+    [Key]
+    [Column("id")]
+    public int Id { get; set; }
 
-        public int? IdArea { get; set; }
-        [Column("id_usuario_asignado")]
+    [Column("nombre")]
+    [StringLength(255)]
+    [Unicode(false)]
+    public string Nombre { get; set; } = null!;
 
-        public int? IdUsuarioAsignado { get; set; }
-        [Column("prioridad")]
+    [Column("fecha_creacion", TypeName = "datetime")]
+    public DateTime FechaCreacion { get; set; }
 
-        public string Prioridad { get; set; }
-        [Column("id_usuario")]
+    [Column("descripcion", TypeName = "text")]
+    public string Descripcion { get; set; } = null!;
 
-        public int? IdUsuario { get; set; }
-        public Estado Estado { get; set; }
-        public Area Area { get; set; }
-        public Usuario Usuario { get; set; }
-        public ICollection<Comentario> Comentarios { get; set; }
-        public ICollection<Archivo> Archivos { get; set; }
-        public ICollection<Bitacora> Bitacoras { get; set; }
-    }
+    [Column("fecha_actualizacion")]
+    public DateOnly FechaActualizacion { get; set; }
+
+    [Column("id_estado")]
+    public int IdEstado { get; set; }
+
+    [Column("id_area")]
+    public int? IdArea { get; set; }
+
+    [Column("prioridad")]
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? Prioridad { get; set; }
+
+    [Column("id_usuario")]
+    public int? IdUsuario { get; set; }
+
+    [Column("id_usuario_asignado")]
+    public int? IdUsuarioAsignado { get; set; }
+
 }
