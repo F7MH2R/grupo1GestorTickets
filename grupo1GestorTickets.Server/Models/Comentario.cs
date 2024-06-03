@@ -16,4 +16,8 @@ public partial class Comentario
     [Column("id_ticket")]
     public int IdTicket { get; set; }
 
+    public int idUsuario { get; set; }
+
+    public DateTime fechaCreacion { get; set; }
+
 }

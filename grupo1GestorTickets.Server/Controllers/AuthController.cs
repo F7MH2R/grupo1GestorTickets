@@ -16,6 +16,30 @@ namespace grupo1GestorTickets.Server.Controllers
             _context = context;
         }
 
+        [HttpPost("crear-usuario")]
+        public async Task<IActionResult> CrearUsuario([FromBody] Usuario nuevoUsuario)
+        {
+            if (nuevoUsuario == null || string.IsNullOrEmpty(nuevoUsuario.Nombre) || string.IsNullOrEmpty(nuevoUsuario.Correo) || string.IsNullOrEmpty(nuevoUsuario.Password))
+            {
+                return BadRequest("Nombre, correo y contraseña son requeridos.");
+            }
+
+            nuevoUsuario.FechaCreacion = nuevoUsuario.FechaCreacion ?? DateTime.Now;
+
+            _context.Usuario.Add(nuevoUsuario);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error al crear usuario: " + ex.Message });
+            }
+
+            return Ok(new { message = "Usuario creado exitosamente" });
+        }
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -40,7 +64,7 @@ namespace grupo1GestorTickets.Server.Controllers
                 tipo_usuario = user.tipo_usuario,
                 Telefono = user.Telefono,
                 Cargo = user.Cargo,
-                estado_cuenta = user.EstadoCuenta,
+                EstadoCuenta = user.EstadoCuenta,
                 FechaCreacion = user.FechaCreacion
             });
         }

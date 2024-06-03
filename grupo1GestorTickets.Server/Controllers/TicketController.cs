@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using grupo1GestorTickets.Server.DTO;
+using grupo1GestorTickets.Server.ServiceEmail;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace grupo1GestorTickets.Server.Controllers
 {
@@ -11,32 +15,37 @@ namespace grupo1GestorTickets.Server.Controllers
     public class TicketController : ControllerBase
     {
         private readonly TicketsCTX _context;
+        private readonly EmailNotificationService _emailNotificationService;
 
-        public TicketController(TicketsCTX context)
+        public TicketController(TicketsCTX context, EmailNotificationService emailNotificationService)
         {
             _context = context;
+            _emailNotificationService = emailNotificationService;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetTickets()
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetTickets(int userId)
         {
             var tickets = await (from t in _context.Tickets
-                         join a in _context.Areas on t.IdArea equals a.Id
-                         select new {
-                            nombre = t.Nombre,
-                            descripcion = t.Descripcion,
-                            area = a.Nombre,
-                         }).ToListAsync();
+                                 join a in _context.Areas on t.IdArea equals a.Id
+                                 join es in _context.Estados on t.IdEstado equals es.Id
+                                 where t.IdUsuario == userId
+                                 select new
+                                 {
+                                     id = t.Id,
+                                     nombre = t.Nombre,
+                                     fechaCreacion = t.FechaCreacion,
+                                     descripcion = t.Descripcion,
+                                     prioridad = t.Prioridad,
+                                     estado = es.Estado1,
+                                     area = a.Nombre,
+                                 }).ToListAsync();
 
             return Ok(tickets);
         }
 
-        [HttpGet("{userId}/tickets")]
-        public async Task<IActionResult> GetTicketsByUser(int userId)
-        {
-            var tickets = await _context.Tickets.Include(t => t.IdEstado).Where(t => t.IdUsuario == userId).ToListAsync();
-            return Ok(tickets);
-        }
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] TicketDTO ticketDTO)
@@ -54,25 +63,100 @@ namespace grupo1GestorTickets.Server.Controllers
 
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
-
+/*
             // Enviar notificación por correo
             var user = await _context.Usuarios.FindAsync(ticket.IdUsuario);
             if (user != null)
             {
                 await SendNotification(user.Correo, ticket.Id);
-            }
 
+              
+            }
+           
+            await _emailNotificationService.SendNotificationToAdmins(ticket.Id);
+*/
+            if (ticket.Id != 0) // Assuming 'Id' is an integer and a new ticket will have a non-zero ID
+            {
+                var user = await _context.Usuarios.FindAsync(ticket.IdUsuario);
+                if (user != null)
+                {
+                    await _emailNotificationService.SendNotification(user.Correo, ticket.Id);
+                }
+
+                await _emailNotificationService.SendNotificationToAdmins(ticket.Id);
+            }
             return Ok(ticket);
         }
 
         [HttpPost("{id}/comments")]
-        public async Task<IActionResult> AddComment(int id, [FromBody] Comentario comentario)
+        public async Task<IActionResult> AddComments(int id, [FromBody] List<ComentarioDTO> comentariosDTO)
         {
-            comentario.IdTicket = id;
-            _context.Comentarios.Add(comentario);
+            var ticket = _context.Tickets.FirstOrDefault(t => t.Id == id);
+            if (ticket == null)
+            {
+                return NotFound("Ticket not found");
+            }
+
+            foreach (var comentarioDTO in comentariosDTO)
+            {
+                var comentario = new Comentario
+                {
+                    Comentario1 = comentarioDTO.Comentario,
+                    IdTicket = id,
+                    idUsuario = comentarioDTO.IdUsuario,
+                    fechaCreacion = DateTime.Now
+
+                };
+                _context.Comentarios.Add(comentario);
+            }
             await _context.SaveChangesAsync();
-            return Ok(comentario);
+            return Ok(comentariosDTO);
         }
+
+        [HttpGet("details/{ticketId}")]
+        public async Task<IActionResult> GetTicketDetails(int ticketId)
+        {
+            var ticketDetails = await (from t in _context.Tickets
+                                       join u in _context.Usuarios on t.IdUsuario equals u.Id
+                                       join es in _context.Estados on t.IdEstado equals es.Id
+                                       join ar in _context.Areas on t.IdArea equals ar.Id
+                                       join au in _context.Usuarios on t.IdUsuarioAsignado equals au.Id into auGroup
+                                       from au in auGroup.DefaultIfEmpty()
+                                       where t.Id == ticketId
+                                       select new
+                                       {
+                                           Areas = ar.Nombre,
+                                           Ticket = t,
+                                           User = u,
+                                           State = es.Estado1,
+                                           AssignedUser = au,
+                                           Comments = (from c in _context.Comentarios
+                                                       join cu in _context.Usuarios on c.idUsuario equals cu.Id
+                                                       where c.IdTicket == ticketId
+                                                       select new
+                                                       {
+                                                           c.Id,
+                                                           c.Comentario1,
+                                                           c.fechaCreacion,
+                                                           User = new
+                                                           {
+                                                               cu.Id,
+                                                               cu.Nombre,
+                                                               cu.Correo
+                                                           }
+                                                       }).ToList(),
+                                           Files = _context.Archivos.Where(f => f.IdTicket == ticketId).ToList()
+                                       }).FirstOrDefaultAsync();
+
+            if (ticketDetails == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ticketDetails);
+        }
+
+
 
         [HttpDelete("{ticketId}/comments/{commentId}")]
         public async Task<IActionResult> DeleteComment(int ticketId, int commentId)
@@ -91,6 +175,12 @@ namespace grupo1GestorTickets.Server.Controllers
         [HttpPost("{id}/files")]
         public async Task<IActionResult> UploadFiles(int id, [FromForm] List<IFormFile> files)
         {
+            var ticket = _context.Tickets.FirstOrDefault(t => t.Id == id);
+            if (ticket == null)
+            {
+                return NotFound("Ticket not found");
+            }
+
             foreach (var file in files)
             {
                 if (file.Length > 0)
@@ -124,30 +214,6 @@ namespace grupo1GestorTickets.Server.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
-        private async Task SendNotification(string email, int ticketId)
-        {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("System Ticket", "gestion.ticket.grupo01@gmail.com"));
-            message.To.Add(new MailboxAddress("User", email)); // Corregido para usar dos argumentos
-            message.Subject = "Ticket Creado";
-            message.Body = new TextPart("plain")
-            {
-                Text = $"Su ticket con ID {ticketId} ha sido creado correctamente."
-            };
-
-            using var client = new MailKit.Net.Smtp.SmtpClient();  // Usa MailKit.Net.Smtp.SmtpClient
-                                                                   // Conectar al servidor SMTP de Gmail
-            await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-
-            // Autenticar con el servidor SMTP utilizando el correo electrónico y la contraseña
-            await client.AuthenticateAsync("gestion.ticket.grupo01@gmail.com", "rugl rtch bkyw vcsv");
-
-            // Enviar el mensaje
-            await client.SendAsync(message);
-
-            // Desconectar del servidor SMTP
-            await client.DisconnectAsync(true);
-        }
+   
     }
 }

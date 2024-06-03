@@ -40,4 +40,6 @@ public partial class Usuario
     [Column("fecha_creacion", TypeName = "datetime")]
     public DateTime? FechaCreacion { get; set; }
 
+    public string? nombreEmpresa { get; set; }
+
 }
