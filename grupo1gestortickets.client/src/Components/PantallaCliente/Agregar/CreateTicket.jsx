@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaFilePdf, FaFileAudio } from "react-icons/fa";
+import withLoader from "../../Load/withLoader ";
 
 const CreateTicket = () => {
   const [nombre, setNombre] = useState("");
@@ -189,9 +190,9 @@ const CreateTicket = () => {
       return <span>{file.name}</span>;
     }
   };
-    const handleBack = () => {
-        navigate(-1); // Navegar hacia atrás
-    };
+  const handleBack = () => {
+    navigate(-1); // Navegar hacia atrás
+  };
   return (
     <Container>
       <Form>
@@ -300,10 +301,10 @@ const CreateTicket = () => {
         </CardGroup>
         <Button variant="primary" onClick={handleSubmit}>
           Guardar Ticket
-              </Button>
-              <Button variant="secondary" onClick={handleBack} className="ml-2">
-                  Volver
-              </Button>
+        </Button>
+        <Button variant="secondary" onClick={handleBack} className="ml-2">
+          Volver
+        </Button>
       </Form>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -318,4 +319,4 @@ const CreateTicket = () => {
   );
 };
 
-export default CreateTicket;
+export default withLoader(CreateTicket);

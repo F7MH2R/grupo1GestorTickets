@@ -1,26 +1,15 @@
 import React from "react";
-
-import { Audio } from "react-loader-spinner";
+import "./Loading.css";
 
 const Loading = () => {
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        textAlign: "center",
-      }}
-    >
-      <Audio
-        color="#4A261F"
-        height={100}
-        width={100}
-        ariaLabel="Loading"
-        timeout={4000} // Duraci�n m�xima de carga en milisegundos
-      />
-      <p>Cargando...</p>
+    <div className="loading-container">
+      <div className="loading-dots">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p className="loading-text">Cargando...</p>
     </div>
   );
 };
