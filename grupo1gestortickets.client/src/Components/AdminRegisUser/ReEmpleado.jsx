@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 const ReEmpleado = () => {
@@ -10,7 +11,10 @@ const ReEmpleado = () => {
     const [telefono, setTelefono] = useState('');
     const [cargo, setCargo] = useState('');
     const [estadoCuenta, setEstadoCuenta] = useState(1); // Por defecto Activo
+    const [nombreEmpresa, setNombreEmpresa] = useState('NULL');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -22,9 +26,10 @@ const ReEmpleado = () => {
             password: password,
             tipo_usuario: tipoUsuario,
             telefono: telefono ? parseInt(telefono) : null,
-            cargo: cargo ? parseInt(cargo) : null,
+            cargo: cargo,
             estado_cuenta: estadoCuenta,
-            fecha_creacion: new Date()
+            fecha_creacion: new Date(),
+            nombreEmpresa: nombreEmpresa
         };
 
         console.log("Datos del nuevo usuario:", nuevoUsuario);
@@ -40,6 +45,8 @@ const ReEmpleado = () => {
 
             if (response.ok) {
                 alert("Usuario registrado exitosamente.");
+                navigate('/registrar-usuarios');
+
             } else {
                 const errorMsg = await response.text();
                 setError(errorMsg);
@@ -48,6 +55,10 @@ const ReEmpleado = () => {
             setError('Failed to connect to the server. Please try again later.');
             console.error('Error:', error);
         }
+    };
+
+    const handleBack = () => {
+        navigate(-1); // Navegar hacia atrás
     };
 
     return (
@@ -125,27 +136,23 @@ const ReEmpleado = () => {
                         <Form.Group controlId="formCargo">
                             <Form.Label>Cargo</Form.Label>
                             <Form.Control
-                                type="number"
-                                placeholder="Ingrese cargo"
-                                value={cargo}
-                                onChange={(e) => setCargo(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formEstadoCuenta">
-                            <Form.Label>Estado de Cuenta</Form.Label>
-                            <Form.Control
                                 as="select"
-                                value={estadoCuenta}
-                                onChange={(e) => setEstadoCuenta(parseInt(e.target.value))}
+                                value={cargo}
+                                onChange={(e) => setCargo(parseInt(e.target.value))}
                             >
-                                <option value={1}>Activo</option>
-                                <option value={2}>Inactivo</option>
+                                <option value={1}>Base de Datos</option>
+                                <option value={2}>Redes</option>
+                                <option value={3}>Mantenimiento</option>
+                                <option value={4}>Ciberseguridad</option>
+                                <option value={5}>Desarrollo de Software</option>
                             </Form.Control>
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
                             Registrarse
+                        </Button>
+                        <Button variant="secondary" onClick={handleBack} className="ml-2">
+                            Volver
                         </Button>
                     </Form>
                 </Col>

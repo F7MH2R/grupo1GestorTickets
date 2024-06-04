@@ -189,7 +189,9 @@ const CreateTicket = () => {
       return <span>{file.name}</span>;
     }
   };
-
+    const handleBack = () => {
+        navigate(-1); // Navegar hacia atrás
+    };
   return (
     <Container>
       <Form>
@@ -298,7 +300,10 @@ const CreateTicket = () => {
         </CardGroup>
         <Button variant="primary" onClick={handleSubmit}>
           Guardar Ticket
-        </Button>
+              </Button>
+              <Button variant="secondary" onClick={handleBack} className="ml-2">
+                  Volver
+              </Button>
       </Form>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>

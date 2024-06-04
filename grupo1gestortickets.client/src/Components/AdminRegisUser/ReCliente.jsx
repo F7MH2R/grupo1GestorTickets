@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 const ReCliente = () => {
@@ -6,11 +7,14 @@ const ReCliente = () => {
     const [apellido, setApellido] = useState('');
     const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
-    const [tipoUsuario] = useState(3); // Siempre Cliente
     const [telefono, setTelefono] = useState('');
-    const [cargo, setCargo] = useState('');
-    const [estadoCuenta, setEstadoCuenta] = useState(1); // Por defecto Activo
+    const [cargo, setCargo] = useState(7);// Cliente
+    const [estadoCuenta, setEstadoCuenta] = useState(1);
+    const [tipoUsuario] = useState(3); // Cliente
+    const [nombreEmpresa, setNombreEmpresa] = useState('');
     const [error, setError] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -24,7 +28,8 @@ const ReCliente = () => {
             telefono: telefono ? parseInt(telefono) : null,
             cargo: cargo ? parseInt(cargo) : null,
             estado_cuenta: estadoCuenta,
-            fecha_creacion: new Date()
+            fecha_creacion: new Date(),
+            nombreEmpresa: nombreEmpresa
         };
 
         console.log("Datos del nuevo usuario:", nuevoUsuario);
@@ -40,6 +45,7 @@ const ReCliente = () => {
 
             if (response.ok) {
                 alert("Usuario registrado exitosamente.");
+                navigate('/login');
             } else {
                 const errorMsg = await response.text();
                 setError(errorMsg);
@@ -49,112 +55,96 @@ const ReCliente = () => {
             console.error('Error:', error);
         }
     };
+    const handleBack = () => {
+        navigate(-1); // Navegar hacia atrás
+    };
 
     return (
-        <Container>
-            <Row className="justify-content-md-center">
-                <Col md="6">
-                    <h1 className="text-center mb-4">REGISTRAR CLIENTES</h1>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <Form onSubmit={handleSubmit}>
+        <Container className="d-flex flex-column align-items-center">
+            <h2>Registrar Cliente</h2>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <Form onSubmit={handleSubmit}>
+                <Row>
+                    <Col>
                         <Form.Group controlId="formNombre">
-                            <Form.Label>Nombres</Form.Label>
+                            <Form.Label>Nombres:</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Ingrese nombres"
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
+                                placeholder="Nombres"
                                 required
                             />
                         </Form.Group>
-
+                    </Col>
+                    <Col>
                         <Form.Group controlId="formApellido">
-                            <Form.Label>Apellidos</Form.Label>
+                            <Form.Label>Apellidos:</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Ingrese apellidos"
                                 value={apellido}
                                 onChange={(e) => setApellido(e.target.value)}
+                                placeholder="Apellidos"
                                 required
                             />
                         </Form.Group>
-
-                        <Form.Group controlId="formCorreo">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Email"
-                                value={correo}
-                                onChange={(e) => setCorreo(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formTipoUsuario">
-                            <Form.Label>Tipo de Usuario</Form.Label>
-                            <Form.Control
-                                as="select"
-                                value={tipoUsuario}
-                                readOnly
-                            >
-                                <option value={3}>Cliente</option>
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="formTelefono">
-                            <Form.Label>Telefono</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Ingrese telefono"
-                                value={telefono}
-                                onChange={(e) => setTelefono(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formCargo">
-                            <Form.Label>Cargo</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Ingrese cargo"
-                                value={cargo}
-                                onChange={(e) => setCargo(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formEstadoCuenta">
-                            <Form.Label>Estado de Cuenta</Form.Label>
-                            <Form.Control
-                                as="select"
-                                value={estadoCuenta}
-                                onChange={(e) => setEstadoCuenta(parseInt(e.target.value))}
-                            >
-                                <option value={1}>Activo</option>
-                                <option value={2}>Inactivo</option>
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Registrarse
-                        </Button>
-                    </Form>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+                <Form.Group controlId="formCorreo">
+                    <Form.Label>Email:</Form.Label>
+                    <Form.Control
+                        type="email"
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
+                        placeholder="Correo"
+                        required
+                    />
+                </Form.Group>
+                <Form.Group controlId="formPassword">
+                    <Form.Label>Password:</Form.Label>
+                    <Form.Control
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        required
+                    />
+                </Form.Group>
+                <Form.Group controlId="formTipoUsuario">
+                    <Form.Label>Tipo de Usuario:</Form.Label>
+                    <Form.Control as="select" value={tipoUsuario} readOnly>
+                        <option value="3">Cliente</option>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="formTelefono">
+                    <Form.Label>Telefono:</Form.Label>
+                    <Form.Control
+                        type="tel"
+                        value={telefono}
+                        onChange={(e) => setTelefono(e.target.value)}
+                        placeholder="Telefono"
+                    />
+                </Form.Group>
+                <Form.Group controlId="formNombreEmpresa">
+                    <Form.Label>Nombre de la Empresa:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={nombreEmpresa}
+                        onChange={(e) => setNombreEmpresa(e.target.value)}
+                        placeholder="Nombre de la Empresa"
+                    />
+                </Form.Group>
+                <Button variant="primary" type="submit">Registrar</Button>
+                <Button variant="secondary" onClick={handleBack} className="ml-2">
+                    Volver
+                </Button>
+            </Form>
         </Container>
     );
 };
 
 export default ReCliente;
+
 
 
 
