@@ -25,7 +25,7 @@ namespace grupo1GestorTickets.Server.Models
 
             // Mapear propiedades a columnas
             modelBuilder.Entity<Usuario>().Property(u => u.tipo_usuario).HasColumnName("tipo_usuario");
-            modelBuilder.Entity<Usuario>().Property(u => u.estado_cuenta).HasColumnName("estado_cuenta");
+            modelBuilder.Entity<Usuario>().Property(u => u.EstadoCuenta).HasColumnName("estado_cuenta");
             modelBuilder.Entity<Usuario>().Property(u => u.FechaCreacion).HasColumnName("fecha_creacion");
 
 

@@ -56,7 +56,7 @@ const ReAdministrador = () => {
     };
 
     const handleBack = () => {
-        navigate(-1); // Navegar hacia atrás
+        navigate(-1); // Navegar hacia atrï¿½s
     };
 
     return (
