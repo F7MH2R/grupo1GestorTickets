@@ -14,6 +14,7 @@ import { FaFilePdf, FaFileAudio } from "react-icons/fa";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
+import withLoader from "../../Load/withLoader ";
 import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
 import "./DetalleTicket.css";
@@ -225,4 +226,4 @@ const Detallepro = () => {
   );
 };
 
-export default Detallepro;
+export default withLoader(Detallepro);
