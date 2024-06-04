@@ -32,6 +32,7 @@ namespace grupo1GestorTickets.Server.Controllers
                                      t.Prioridad,
                                      t.FechaCreacion,
                                      Asignado = uasgroup.Nombre,
+                                     idAsignado = uasgroup.Id != null ? uasgroup.Id : 0 ,
                                      Titulo = t.Nombre
                                  } into g
                                  select new
@@ -41,12 +42,13 @@ namespace grupo1GestorTickets.Server.Controllers
                                      prioridad = g.Key.Prioridad,
                                      fechaCreacion = g.Key.FechaCreacion.ToShortDateString(),
                                      usuarioAsignado = g.Key.Asignado,
+                                     idUsuarioAsignado = g.Key.idAsignado,
                                      accion = g.Key.Titulo,
                                      comentarios = g.Where(c => c != null).ToList()
                                  }).ToListAsync();
             var cantidadAbiertos = await ObtenerTicketsxEstado("abierto");
             var cantidadCerrados = await ObtenerTicketsxEstado("cerrado");
-            var cantidadEnProceso = await ObtenerTicketsxEstado("cerrado");
+            var cantidadEnProceso = await ObtenerTicketsxEstado("en proceso");
             var cantidadSinAsignar = await TicketsSinAsignar();
             //
             return Ok(new {
