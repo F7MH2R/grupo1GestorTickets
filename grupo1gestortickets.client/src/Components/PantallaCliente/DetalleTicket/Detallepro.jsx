@@ -17,6 +17,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
 import "./DetalleTicket.css";
+import withLoader from "../../Load/withLoader ";
 
 const Detallepro = () => {
   const { ticketId } = useParams();
@@ -225,4 +226,4 @@ const Detallepro = () => {
   );
 };
 
-export default Detallepro;
+export default withLoader(Detallepro);
