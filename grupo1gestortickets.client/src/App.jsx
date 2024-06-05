@@ -20,6 +20,7 @@ import TicketDetails from "./Components/PantallaCliente/DetalleTicket/TicketDeta
 import Detallepro from "./Components/PantallaCliente/DetalleTicket/Detallepro";
 import RegisAdAdmin from "./Components/AdminRegisUser/ReAdministrador";
 import Loader from ".//Components/Load/Loading";
+import TablaAdmin from "./Components/PantallaAdmin/tabla/TablaAdmin";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -72,6 +73,7 @@ const App = () => {
                 path="registrar-administrador"
                 element={<RegisAdAdmin />}
               />
+              <Route path="TAdmin" element={<TablaAdmin />} />
             </Routes>
           </Router>
         </div>

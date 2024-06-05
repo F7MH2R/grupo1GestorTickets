@@ -214,6 +214,81 @@ namespace grupo1GestorTickets.Server.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-   
+
+        // GET: api/tickets/tendencias
+        [HttpGet("tendencias")]
+        public async Task<ActionResult> GetTicketTrends()
+        {
+            var trends = new
+            {
+                Day = await GetTicketsByDay(),
+                Trend = await GetTicketsTrend(),
+                Month = await GetTicketsByMonth(),
+                Completed = await GetCompletedTickets()
+            };
+
+            return Ok(trends);
+        }
+
+        private async Task<IEnumerable<TrendData>> GetTicketsByDay()
+        {
+            return await _context.Tickets
+                .GroupBy(t => t.FechaCreacion.Date)
+                .Select(g => new TrendData
+                {
+                    Date = g.Key,
+                    Value = g.Count()
+                })
+                .ToListAsync();
+        }
+
+        private async Task<IEnumerable<TrendData>> GetTicketsTrend()
+        {
+            return await (from t in _context.Tickets
+                          join a in _context.Areas on t.IdArea equals a.Id
+                          group t by new { a.Nombre, t.FechaCreacion.Date } into g
+                          select new TrendData
+                          {
+                              AreaName = g.Key.Nombre,
+                              Date = g.Key.Date,
+                              Value = g.Count()
+                          })
+                          .ToListAsync();
+        }
+
+
+
+        private async Task<IEnumerable<TrendData>> GetTicketsByMonth()
+        {
+            return await _context.Tickets
+                .GroupBy(t => new { t.FechaCreacion.Year, t.FechaCreacion.Month })
+                .Select(g => new TrendData
+                {
+                    Date = new DateTime(g.Key.Year, g.Key.Month, 1),
+                    Value = g.Count()
+                })
+                .ToListAsync();
+        }
+
+        private async Task<IEnumerable<TrendData>> GetCompletedTickets()
+        {
+            return await _context.Tickets
+                .Where(t => t.IdEstado == 4) // Assuming 3 is the code for 'Completed'
+                .GroupBy(t => t.FechaCreacion.Date)
+                .Select(g => new TrendData
+                {
+                    Date = g.Key,
+                    Value = g.Count()
+                })
+                .ToListAsync();
+        }
+
+        public class TrendData
+        {
+            public string AreaName { get; set; }
+            public DateTime Date { get; set; }
+            public int Value { get; set; }
+        }
+
     }
 }
