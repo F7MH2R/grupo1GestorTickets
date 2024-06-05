@@ -6,16 +6,18 @@
     max-height: 250vh;
     width: 150vh;
     height: 150vh;
+    overflow: auto;
 }
 
 .custom-form {
     margin-top: 20px;
     background-color: #E4E4E4;
-    height: 95vh;
     width: 130vh;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     align-items: center;
+    overflow: auto;
+    padding: 20px;
 }
 
 .titulo-text {
@@ -26,6 +28,16 @@
     color: black;
     font-weight: bold;
     letter-spacing: 2px;
+}
+
+.titulo-text-arch {
+    border: 2px dashed #000000;
+    background-color: black;
+    align-items: center;
+    font-size: 15px;
+    margin-top: 8%;
+    color: white;
+    font-weight: bold;
 }
 
 .form-label-create-ticket {
@@ -50,8 +62,21 @@
 }
 
 .custom-form-comments-container {
+    background-color: #FCDCAD;
+    height: 50vh;
     max-height: 400px;
-    overflow-y: auto; 
+    overflow-y: auto;
+    padding: 5%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.custom-form-file-container {
+    background-color: #FCDCAD;
+    height: 30vh;
+    max-height: 400px;
+    overflow-x: auto;
+    padding: 5%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 .btnguardar {
@@ -62,8 +87,13 @@
     border-radius: 20px;
     height: 40px;
     width: 20%;
-    margin-bottom: 20px;
-    margin-top: 10%;
+    margin: 10px auto;
+}
+
+
+.align-items-start {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .btnguardar:hover {
@@ -72,16 +102,26 @@
     color: white;
 }
 
+
+
+.btn-add-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-add-comment {
+    background-color: #797979;
+    border: none;
+    font-weight: bold;
+    color: white;
+    height: 40px;
+    width: 40%;
+    margin-bottom: 8px;
+}
+
 @media (max-width: 768px) {
     .custom-form-container .row > div {
         flex: 0 0 200%;
         max-width: 200%;
-    }
-}
-
-@media (max-height: 968px) {
-    .custom-form-container .row > div {
-        flex: 0 0 300%;
-        max-height: 300%;
     }
 }

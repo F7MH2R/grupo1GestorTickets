@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import withLoader from "../../Load/withLoader ";
 import { useParams } from "react-router-dom";
 import {
   Container,
@@ -154,4 +155,4 @@ const TicketDetails = () => {
   );
 };
 
-export default TicketDetails;
+export default withLoader(TicketDetails);

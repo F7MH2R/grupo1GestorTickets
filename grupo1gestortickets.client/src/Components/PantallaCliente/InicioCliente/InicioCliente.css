@@ -1,37 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=REM:ital,wght@0,100..900;1,100..900&display=swap');
 
-
-/* TicketsTable */
 .tickets-container {
     font-family: "Barlow", sans-serif;
     overflow: hidden;
     display: flex;
     justify-content: space-between;
-    max-width: 100%;
+    max-width: 190%;
     margin: 0 auto;
 }
 
 .titulo-text-estadistica {
     align-items: center;
     font-size: 25px;
-    margin-top: 7%;
-    margin-bottom: 2%;
+    margin-top: 8%;
+    margin-bottom: 3%;
     color: black;
     font-weight: bold;
     letter-spacing: 2px;
 }
 
+.search-bar {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    font-size: 16px;
+}
+
+.search-bar input::placeholder {
+    color: #adb5bd;
+}
+
+
 .size {
     font-size: 20px;
 }
 
-
 .size-letra{
-    font-size: 15px;
+    font-size: 18px;
 }
 
 .size-letra-td {
-    font-size: 10px;
+    font-size: 18px;
 }
 
 .chart-container {
@@ -51,14 +69,16 @@ th, td {
 }
 
 .add-button-cliente {
-    margin-top: 5%;
+    margin-top: 2%;
     float: right;
     background-color: #FDDD00;
     color: black;
     border: none;
-    width: 20%;
+    height: 9%;
+    width: 18%;
     font-weight: bold;
     border-radius: 15px;
+    outline: none;
 }
 
 .add-button-cliente:hover {
@@ -66,14 +86,35 @@ th, td {
     color: white;
 }
 
-@media (max-width: 768px) {
+.ver-ticket-button {
+    background-color: #6F6F6F !important;
+    border-color: #6F6F6F !important;
+    color:white ;
+}
+
+@media (max-width: 1200px) {
     .tickets-container {
         flex-direction: column;
     }
 
     .chart-container,
     .table-container {
-        flex: 1 1 100%;
+        flex: 1 1 150%;
         margin-right: 0;
+    }
+}
+
+@media (max-width: 1200px) {
+    .titulo-text-estadistica {
+        font-size: 25px;
+    }
+
+    .chart-container,
+    .table-container {
+        flex: 1 1 120%;
+    }
+
+    .add-button-cliente {
+        width: 120%;
     }
 }
