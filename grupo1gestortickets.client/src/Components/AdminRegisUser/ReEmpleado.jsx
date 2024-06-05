@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import withLoader from "../Load/withLoader ";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import "./RegistrarEmpleado.css"
 
 const ReEmpleado = () => {
     const [nombre, setNombre] = useState('');
@@ -63,102 +64,109 @@ const ReEmpleado = () => {
     };
 
     return (
-        <Container>
-            <Row className="justify-content-md-center">
-                <Col md="6">
-                    <h1 className="text-center mb-4">REGISTRAR EMPLEADOS</h1>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="formNombre">
-                            <Form.Label>Nombres</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Ingrese nombres"
-                                value={nombre}
-                                onChange={(e) => setNombre(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
+        <div className="container-reempleado-fondo">
+            <Container className="reempleado-container">
+                <h1 className="reempleado-title mb-4">Registrar Empleado</h1>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <Form onSubmit={handleSubmit}>
+                    <Row>
+                        <Col>
+                            <Form.Group controlId="formNombre">
+                                <Form.Label className="reempleado-form-label">Nombres</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese nombres"
+                                    value={nombre}
+                                    onChange={(e) => setNombre(e.target.value)}
+                                    required
+                                    className="reempleado-input"
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group controlId="formApellido">
+                                <Form.Label className="reempleado-form-label">Apellidos</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese apellidos"
+                                    value={apellido}
+                                    onChange={(e) => setApellido(e.target.value)}
+                                    required
+                                    className="reempleado-input"
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Form.Group controlId="formCorreo">
+                        <Form.Label className="reempleado-form-label">Correo electr&oacute;nico:</Form.Label>
+                        <Form.Control
+                            type="email"
+                            placeholder="Email"
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
+                            required
+                            className="reempleado-input"
+                        />
+                    </Form.Group>
 
-                        <Form.Group controlId="formApellido">
-                            <Form.Label>Apellidos</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Ingrese apellidos"
-                                value={apellido}
-                                onChange={(e) => setApellido(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
+                    <Form.Group controlId="formPassword">
+                        <Form.Label className="reempleado-form-label">Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="reempleado-input"
+                        />
+                    </Form.Group>
 
-                        <Form.Group controlId="formCorreo">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Email"
-                                value={correo}
-                                onChange={(e) => setCorreo(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
+                    <Form.Group controlId="formTipoUsuario">
+                        <Form.Label className="reempleado-form-label">Tipo de Usuario</Form.Label>
+                        <Form.Control
+                            as="select"
+                            value={tipoUsuario}
+                            readOnly
+                        >
+                            <option value={2}>Empleado</option>
+                        </Form.Control>
+                    </Form.Group>
 
-                        <Form.Group controlId="formPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
+                    <Form.Group controlId="formTelefono">
+                        <Form.Label className="reempleado-form-label">Telefono</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="Ingrese telefono"
+                            value={telefono}
+                            onChange={(e) => setTelefono(e.target.value)}
+                        />
+                    </Form.Group>
 
-                        <Form.Group controlId="formTipoUsuario">
-                            <Form.Label>Tipo de Usuario</Form.Label>
-                            <Form.Control
-                                as="select"
-                                value={tipoUsuario}
-                                readOnly
-                            >
-                                <option value={2}>Empleado</option>
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="formTelefono">
-                            <Form.Label>Telefono</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Ingrese telefono"
-                                value={telefono}
-                                onChange={(e) => setTelefono(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formCargo">
-                            <Form.Label>Cargo</Form.Label>
-                            <Form.Control
-                                as="select"
-                                value={cargo}
-                                onChange={(e) => setCargo(parseInt(e.target.value))}
-                            >
-                                <option value={1}>Base de Datos</option>
-                                <option value={2}>Redes</option>
-                                <option value={3}>Mantenimiento</option>
-                                <option value={4}>Ciberseguridad</option>
-                                <option value={5}>Desarrollo de Software</option>
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Registrarse
-                        </Button>
-                        <Button variant="secondary" onClick={handleBack} className="ml-2">
+                    <Form.Group controlId="formCargo">
+                        <Form.Label className="reempleado-form-label">Cargo</Form.Label>
+                        <Form.Control
+                            as="select"
+                            value={cargo}
+                            onChange={(e) => setCargo(parseInt(e.target.value))}
+                        >
+                            <option value={1}>Base de Datos</option>
+                            <option value={2}>Redes</option>
+                            <option value={3}>Mantenimiento</option>
+                            <option value={4}>Ciberseguridad</option>
+                            <option value={5}>Desarrollo de Software</option>
+                        </Form.Control>
+                    </Form.Group>
+                    <div className="button-container-empleado">
+                        <Button variant="secondary" onClick={handleBack} className="reempleado-button ml-2">
                             Volver
                         </Button>
-                    </Form>
-                </Col>
-            </Row>
-        </Container>
+                        <Button variant="primary" type="submit" className="reempleado-button">
+                            Registrarse
+                        </Button>
+                    </div>
+                </Form>
+            </Container>
+        </div>
     );
 };
 

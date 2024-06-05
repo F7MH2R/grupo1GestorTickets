@@ -8,12 +8,18 @@
     align-items: center;
     height: 80vh;
     width: 100vh;
-    background-color: #E4E4E4;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-color: #000000;
+    color: white;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 20%, transparent 20%), radial-gradient(circle, rgba(255, 255, 255, 0.1) 20%, transparent 20%);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    padding: 25px;
 }
 
 .administrador-container {
     background-color: #d3d3d3;
+    color: black;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -48,8 +54,8 @@
 
 .administrador-button {
     width: 50%;
-    background-color: #FDDD00;
-    color: #000;
+    background-color: #FF8062;
+    color: #fff;
     padding: 10px;
     border: none;
     border-radius: 15px;
@@ -63,7 +69,8 @@
 }
 
 .administrador-button:hover {
-    background-color: #e6c600;
+    background-color: #FFB3A1;
+    color: black;
 }
 
 .administrador-button.ml-2 {
