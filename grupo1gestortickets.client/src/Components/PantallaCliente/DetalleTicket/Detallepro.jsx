@@ -110,7 +110,7 @@ const Detallepro = () => {
 
     return (
         <Container className="custom-ticket-container mt-4">
-            <h1 className="titulo-text text-center mb-4">Detalles del Ticket</h1>
+            <h3 className="titulo-text-detalle text-center mb-4">Detalles del Ticket</h3>
             <ReactToPrint
                 trigger={() => <Button variant="secondary" className="custom-print-button mb-4">Descargar PDF</Button>}
                 content={() => componentRef.current}
@@ -192,7 +192,7 @@ const Detallepro = () => {
                 </Col>
             </Row>
             <Row>
-                <Col md={12}>
+                <Col md={8}>
                     <div>
                         <Col className="custom-no-print">
                             <Card className="file-style mb-4">
@@ -206,7 +206,7 @@ const Detallepro = () => {
                                                 <Card key={file.id} className="custom-file-card mb-4">
                                                     {renderFilePreview(file)}
                                                     <Card.Body className="custom-card-body">
-                                                        <Card.Title className="custom-card-title-pdf">{file.nombre}</Card.Title>
+                                                        <Card className="custom-card-title-pdf">{file.nombre}</Card>
                                                         <Button
                                                             variant="primary"
                                                             href={`data:${file.tipo};base64,${file.contenido}`}
@@ -221,6 +221,7 @@ const Detallepro = () => {
                                         </CardGroup>
                                     </div>
                                 </Card.Body>
+
                             </Card>
                         </Col>
                     </div> 
