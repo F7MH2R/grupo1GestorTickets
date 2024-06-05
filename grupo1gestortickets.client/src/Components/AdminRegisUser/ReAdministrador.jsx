@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 const ReAdministrador = () => {
@@ -6,11 +7,13 @@ const ReAdministrador = () => {
     const [apellido, setApellido] = useState('');
     const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
-    const [tipoUsuario] = useState(1); // Siempre Admin
+    const [tipoUsuario] = useState(1); // Siempre Administrador
     const [telefono, setTelefono] = useState('');
-    const [cargo, setCargo] = useState('');
-    const [estadoCuenta, setEstadoCuenta] = useState(1); // Por defecto Activo
+    const [cargo, setCargo] = useState(6); // Por defecto administrador
+    const [estado_cuenta, setEstadoCuenta] = useState(1); // Siempre Activo
+    const [nombreEmpresa, setNombreEmpresa] = useState('NULL');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -22,9 +25,10 @@ const ReAdministrador = () => {
             password: password,
             tipo_usuario: tipoUsuario,
             telefono: telefono ? parseInt(telefono) : null,
-            cargo: cargo ? parseInt(cargo) : null,
-            estado_cuenta: estadoCuenta,
-            fecha_creacion: new Date()
+            cargo: cargo,
+            estado_cuenta: estado_cuenta,
+            fecha_creacion: new Date(),
+            nombreEmpresa: nombreEmpresa
         };
 
         console.log("Datos del nuevo usuario:", nuevoUsuario);
@@ -40,6 +44,7 @@ const ReAdministrador = () => {
 
             if (response.ok) {
                 alert("Usuario registrado exitosamente.");
+                navigate('/registrar-usuarios');
             } else {
                 const errorMsg = await response.text();
                 setError(errorMsg);
@@ -48,6 +53,10 @@ const ReAdministrador = () => {
             setError('Failed to connect to the server. Please try again later.');
             console.error('Error:', error);
         }
+    };
+
+    const handleBack = () => {
+        navigate(-1); // Navegar hacia atr�s
     };
 
     return (
@@ -83,7 +92,7 @@ const ReAdministrador = () => {
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Email"
+                                placeholder="Ingrese correo"
                                 value={correo}
                                 onChange={(e) => setCorreo(e.target.value)}
                                 required
@@ -122,30 +131,11 @@ const ReAdministrador = () => {
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="formCargo">
-                            <Form.Label>Cargo</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Ingrese cargo"
-                                value={cargo}
-                                onChange={(e) => setCargo(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formEstadoCuenta">
-                            <Form.Label>Estado de Cuenta</Form.Label>
-                            <Form.Control
-                                as="select"
-                                value={estadoCuenta}
-                                onChange={(e) => setEstadoCuenta(parseInt(e.target.value))}
-                            >
-                                <option value={1}>Activo</option>
-                                <option value={2}>Inactivo</option>
-                            </Form.Control>
-                        </Form.Group>
-
                         <Button variant="primary" type="submit">
                             Registrarse
+                        </Button>
+                        <Button variant="secondary" onClick={handleBack} className="ml-2">
+                            Volver
                         </Button>
                     </Form>
                 </Col>
@@ -155,3 +145,4 @@ const ReAdministrador = () => {
 };
 
 export default ReAdministrador;
+

@@ -21,7 +21,13 @@ const Navbar = () => {
         return (
             <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top">
                 <Container>
-                    <BootstrapNavbar.Brand href="/login">Bienvenido (Navbar generica)</BootstrapNavbar.Brand>
+                    <BootstrapNavbar.Brand href="/login"> 
+                    <img
+                        src="https://i.postimg.cc/ydrSvHty/logo-Solucioness.png"
+                        width="50"
+                        height="50"
+                        alt="Logo"
+                        />{' '}Bienvenido (Navbar generica)</BootstrapNavbar.Brand>
                     <BootstrapNavbar.Toggle arial-controls="basic-navbar-nav" />
                     <BootstrapNavbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
@@ -46,4 +52,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

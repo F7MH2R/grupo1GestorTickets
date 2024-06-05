@@ -13,6 +13,9 @@ import {
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaFilePdf, FaFileAudio } from "react-icons/fa";
+import withLoader from "../../Load/withLoader ";
+import { TrashFill } from "react-bootstrap-icons";
+import "./Agregar.css";
 
 const CreateTicket = () => {
   const [nombre, setNombre] = useState("");
@@ -191,126 +194,172 @@ const CreateTicket = () => {
   };
 
   return (
-    <Container>
-      <Form>
-        <Form.Group controlId="formNombre">
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            isInvalid={!!errors.nombre}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.nombre}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="formDescripcion">
-          <Form.Label>Descripción</Form.Label>
-          <Form.Control
-            as="textarea"
-            placeholder="Descripción"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-            isInvalid={!!errors.descripcion}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.descripcion}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="formArea">
-          <Form.Label>Área</Form.Label>
-          <Form.Control
-            as="select"
-            value={selectedArea}
-            onChange={(e) => setSelectedArea(e.target.value)}
-            isInvalid={!!errors.selectedArea}
-          >
-            <option value="">Seleccione un área</option>
-            {areas.map((area) => (
-              <option key={area.id} value={area.id}>
-                {area.nombre}
-              </option>
-            ))}
-          </Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {errors.selectedArea}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="formPrioridad">
-          <Form.Label>Prioridad</Form.Label>
-          <Form.Control
-            as="select"
-            value={prioridad}
-            onChange={(e) => setPrioridad(e.target.value)}
-          >
-            <option value="Alta">Alta</option>
-            <option value="Media">Media</option>
-            <option value="Baja">Baja</option>
-          </Form.Control>
-        </Form.Group>
-        {comentarios.map((comentario, index) => (
-          <Form.Group controlId={`formComentario${index}`} key={index}>
+    <>
+      <div className="container-create-ticket min-vh-100 overflow-auto">
+        <div className="titulo-text">Nuevo ticket</div>
+        <Container className="custom-form">
+          <Form>
             <Row>
-              <Col>
-                <Form.Label>Comentario {index + 1}</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={`Comentario ${index + 1}`}
-                  value={comentario}
-                  onChange={(e) => handleCommentChange(index, e.target.value)}
-                />
+              <Col md={6}>
+                <Form.Group controlId="formNombre">
+                  <Form.Label className="form-label-create-ticket">
+                    Nombre
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Nombre"
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                    isInvalid={!!errors.nombre}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.nombre}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="formArea">
+                  <Form.Label className="form-label-create-ticket">
+                    Área
+                  </Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={selectedArea}
+                    onChange={(e) => setSelectedArea(e.target.value)}
+                    isInvalid={!!errors.selectedArea}
+                  >
+                    <option value="">Seleccione un área</option>
+                    {areas.map((area) => (
+                      <option key={area.id} value={area.id}>
+                        {area.nombre}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.selectedArea}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="formDescripcion">
+                  <Form.Label className="form-label-create-ticket">
+                    Descripción
+                  </Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    placeholder="Descripción"
+                    value={descripcion}
+                    onChange={(e) => setDescripcion(e.target.value)}
+                    isInvalid={!!errors.descripcion}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.descripcion}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="formPrioridad">
+                  <Form.Label className="form-label-create-ticket">
+                    Prioridad
+                  </Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={prioridad}
+                    onChange={(e) => setPrioridad(e.target.value)}
+                  >
+                    <option value="Alta">Alta</option>
+                    <option value="Media">Media</option>
+                    <option value="Baja">Baja</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="formFiles">
+                  <Form.Label className="form-label-create-ticket">
+                    Archivos
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    multiple
+                    onChange={handleFileChange}
+                  />
+                </Form.Group>
               </Col>
-              <Col xs="auto">
+              <Col md={6}>
+                <Button variant="secondary" onClick={handleAddComment}>
+                  + Agregar Comentario
+                </Button>
+                <div className="custom-form-comments-container">
+                  {comentarios.map((comentario, index) => (
+                    <Form.Group
+                      controlId={`formComentario${index}`}
+                      key={index}
+                    >
+                      <Row>
+                        <Col>
+                          <Form.Label className="form-label-create-ticket">
+                            Comentario {index + 1}
+                          </Form.Label>
+                          <Form.Control
+                            as="textarea"
+                            placeholder={`Comentario ${index + 1}`}
+                            value={comentario}
+                            onChange={(e) =>
+                              handleCommentChange(index, e.target.value)
+                            }
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <Button
+                            variant="danger"
+                            onClick={() => handleCommentDelete(index)}
+                          >
+                            <TrashFill />
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Form.Group>
+                  ))}
+                </div>
+                <CardGroup>
+                  {files.map((file, index) => (
+                    <Card
+                      key={index}
+                      className="mb-3"
+                      style={{ width: "18rem" }}
+                    >
+                      <Card.Body>
+                        {renderFilePreview(file)}
+                        <Card.Text>{file.name}</Card.Text>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleFileDelete(index)}
+                        >
+                          Eliminar
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </CardGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={12}>
                 <Button
-                  variant="danger"
-                  onClick={() => handleCommentDelete(index)}
+                  className="btnguardar"
+                  variant="primary"
+                  onClick={handleSubmit}
                 >
-                  Eliminar
+                  Guardar Ticket
                 </Button>
               </Col>
             </Row>
-          </Form.Group>
-        ))}
-        <Button variant="secondary" onClick={handleAddComment}>
-          Agregar Comentario
-        </Button>
-        <Form.Group controlId="formFiles">
-          <Form.Label>Archivos</Form.Label>
-          <Form.Control type="file" multiple onChange={handleFileChange} />
-        </Form.Group>
-        <CardGroup>
-          {files.map((file, index) => (
-            <Card key={index} className="mb-3" style={{ width: "18rem" }}>
-              <Card.Body>
-                {renderFilePreview(file)}
-                <Card.Text>{file.name}</Card.Text>
-                <Button
-                  variant="danger"
-                  onClick={() => handleFileDelete(index)}
-                >
-                  Eliminar
-                </Button>
-              </Card.Body>
-            </Card>
-          ))}
-        </CardGroup>
-        <Button variant="primary" onClick={handleSubmit}>
-          Guardar Ticket
-        </Button>
-      </Form>
-
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Ticket Creado</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          El ticket se ha creado con éxito. El ID de su ticket es {ticketId}.
-        </Modal.Body>
-      </Modal>
-    </Container>
+          </Form>
+          <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Ticket Creado</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              El ticket se ha creado con éxito. El ID de su ticket es {ticketId}
+              .
+            </Modal.Body>
+          </Modal>
+        </Container>
+      </div>
+    </>
   );
 };
 
-export default CreateTicket;
+export default withLoader(CreateTicket);

@@ -35,7 +35,7 @@ public partial class Usuario
     public int? Cargo { get; set; }
 
     [Column("estado_cuenta")]
-    public int? EstadoCuenta { get; set; }
+    public int? estado_cuenta { get; set; }
 
     [Column("fecha_creacion", TypeName = "datetime")]
     public DateTime? FechaCreacion { get; set; }

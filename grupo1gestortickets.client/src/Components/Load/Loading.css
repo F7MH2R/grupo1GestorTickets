@@ -1,0 +1,66 @@
+/* Loading.css */
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.loading-dots div {
+  width: 24px;
+  height: 24px;
+  margin: 0 8px;
+  background-color: #4a261f;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots div:nth-child(1) {
+  animation-delay: -0.32s;
+  background-color: #ff0000;
+}
+
+.loading-dots div:nth-child(2) {
+  animation-delay: -0.16s;
+  background-color: #ffee00;
+}
+
+.loading-dots div:nth-child(3) {
+  background-color: #000000;
+}
+
+.loading-text {
+  font-size: 1.5rem;
+  color: #4a261f;
+  animation: fade 3s infinite;
+}
