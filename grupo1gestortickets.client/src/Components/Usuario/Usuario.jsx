@@ -24,7 +24,7 @@ const Usuario = () => {
         setPassword(data.password);
       })
       .catch((error) => console.log("Ha ocurrido un error: ", error));
-  }, []);
+  }, [id]);
 
   const handleClick = () => {
     if (tipoId != 0 && cargoId != 0 && password.length > 0) {
