@@ -196,11 +196,11 @@ const CreateTicket = () => {
     return (
         <>
             <div className="container-create-ticket min-vh-100 overflow-auto">
-                <div className="titulo-text">Nuevo ticket</div>
+                <div className="titulo-text-create">Nuevo ticket</div>
                 <Container className="custom-form min-vh-100">
                     <Form>
                         <Row className="align-items-start">
-                            <Col md={6}>
+                            <Col md={6} className="form-fondo">
                                 <Form.Group controlId="formNombre">
                                     <Form.Label className="form-label-create-ticket">
                                         Nombre
@@ -278,6 +278,11 @@ const CreateTicket = () => {
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
+                                <div className="btn-add-container">
+                                    <Button variant="secondary" className="btn-add-comment" onClick={handleAddComment}>
+                                        + Comentar
+                                    </Button>
+                                </div>
                                 <div className="titulo-text-arch">Comentarios</div>
                                 <div className="custom-form-comments-container">
                                     {comentarios.map((comentario, index) => (
@@ -311,11 +316,10 @@ const CreateTicket = () => {
                                         </Form.Group>
                                     ))}
                                 </div>
-                                <div className="btn-add-container">
-                                    <Button variant="secondary" className="btn-add-comment" onClick={handleAddComment}>
-                                        + Agregar Comentario
-                                    </Button>
-                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
                                 <div className="titulo-text-arch">Archivos cargados</div>
                                 <div className="custom-form-file-container">
                                     <CardGroup style={{ display: "flex", flexWrap: "wrap" }}>
@@ -324,10 +328,10 @@ const CreateTicket = () => {
                                                 key={index}
                                                 className="mb-3"
                                                 style={{
-                                                    width: "10rem", 
-                                                    flex: "0 0 auto", 
+                                                    width: "10rem",
+                                                    flex: "0 0 auto",
                                                     marginRight: "15px",
-                                                    marginBottom: "15px" 
+                                                    marginBottom: "15px"
                                                 }}
                                             >
                                                 <Card.Body>
