@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import withLoader from "../Load/withLoader ";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 const ReEmpleado = () => {
@@ -161,6 +162,6 @@ const ReEmpleado = () => {
     );
 };
 
-export default ReEmpleado;
+export default withLoader(ReEmpleado);
 
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import withLoader from "../Load/withLoader ";
 import './Login.css';
 
 const Login = () => {
@@ -77,4 +78,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default withLoader(Login);

@@ -5,7 +5,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Table, Button, Container, Row, Col, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaSearch } from 'react-icons/fa';
+import withLoader from "../../Load/withLoader ";
+import { FaEye } from 'react-icons/fa';
 import "./InicioCliente.css"
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
@@ -204,7 +205,7 @@ const TicketsTableClient = () => {
         <div className="tickets-container">
             <Container>
                 <h1 className="titulo-text-estadistica">Estadísticas</h1>
-                <Row className="mb-4">
+                <Row className="estadisticas-size mb-4">
                     <Col md={4}>
                         <h3 className="size">Estados</h3>
                         <Pie
@@ -302,14 +303,16 @@ const TicketsTableClient = () => {
                         />
                     </Col>
                 </Row>
-                <Row className="mb-4">
+                <Row className="mb-4 justify-content-center">
                     <Col md={6}>
-                        <Form.Control
-                            type="text"
-                            placeholder="Buscar por nombre"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
+                        <div className="search-bar">
+                            <Form.Control
+                                type="text"
+                                placeholder="Buscar por nombre"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
                     </Col>
                 </Row>
                 <div className="titulo-text size-letra">Mis tickets</div>
@@ -324,7 +327,6 @@ const TicketsTableClient = () => {
                                     <th>ID</th>
                                     <th>Nombre</th>
                                     <th>Fecha Creación</th>
-                                    <th>Descripción</th>
                                     <th>Estado</th>
                                     <th>Área</th>
                                     <th>Prioridad</th>
@@ -337,7 +339,6 @@ const TicketsTableClient = () => {
                                         <td>{ticket.id}</td>
                                         <td>{ticket.nombre}</td>
                                         <td>{new Date(ticket.fechaCreacion).toLocaleDateString()}</td>
-                                        <td>{ticket.descripcion}</td>
                                         <td>{ticket.estado}</td>
                                         <td>{ticket.area}</td>
                                         <td>{ticket.prioridad}</td>
@@ -346,9 +347,9 @@ const TicketsTableClient = () => {
                                                 variant="info"
                                                 size="sm"
                                                 onClick={() => handleViewTicket(ticket.id)}
-                                                className="mr-2"
+                                                className="mr-2 ver-ticket-button"
                                             >
-                                                Ver
+                                                <FaEye className="mr-1" /> Detalle
                                             </Button>
                                         </td>
                                     </tr>
@@ -362,4 +363,4 @@ const TicketsTableClient = () => {
     );
 };
 
-export default TicketsTableClient;
+export default withLoader(TicketsTableClient);

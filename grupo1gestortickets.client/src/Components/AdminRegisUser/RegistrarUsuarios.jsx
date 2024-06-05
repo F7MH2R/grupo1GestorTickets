@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Container, Row, Col, Card } from 'react-bootstrap';
+import withLoader from "../Load/withLoader ";
 import { Link, useNavigate } from 'react-router-dom';
 
 const RegistrarUsuarios = () => {
@@ -16,15 +17,15 @@ const RegistrarUsuarios = () => {
                 <Col xs={12} md={6} lg={4} className="mb-4">
                     <Card className="text-center">
                         <Card.Body>
-                            <Card.Img variant="top" src="empleado.png" alt="Registrar Admin" />
-                            <Button variant="warning" className="mt-3" as={Link} to="/registrar-administrador">Registrar Admin</Button>
+                            <Card.Img variant="top" src="https://i.ibb.co/qs6XMdg/administrador.jpg" alt="Registrar Admin" />
+                            <Button style={{ color: "black", background: "#FDDD00" }} variant="warning" className="mt-3" as={Link} to="/registrar-administrador">Registrar Admin</Button>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col xs={12} md={6} lg={4} className="mb-4">
                     <Card className="text-center">
                         <Card.Body>
-                            <Card.Img variant="top" src="cliente.png" alt="Registrar Empleado" />
+                            <Card.Img variant="top" src="https://i.ibb.co/N9hmWTG/empleado.jpg" alt="Registrar Empleado" />
                             <Button variant="warning" className="mt-3" as={Link} to="/registrar-empleado">Registrar Empleado</Button>
                         </Card.Body>
                     </Card>
@@ -37,5 +38,5 @@ const RegistrarUsuarios = () => {
     );
 };
 
-export default RegistrarUsuarios;
+export default withLoader(RegistrarUsuarios);
 
