@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=REM:ital,wght@0,100..900;1,100..900&display=swap");
+
+.container-reempleado-fondo {
+  margin-top: 10%;
+  font-family: "Barlow", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+  width: 95vh;
+  background-color: #d3d3d3;
+  background-image: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.1) 20%,
+      transparent 20%
+    ),
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 20%, transparent 20%);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  padding: 25px;
+}
+
+.reempleado-container {
+  background-color: #d3d3d3;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.reempleado-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.reempleado-form-label {
+  float: left;
+  width: 100%;
+  font-size: 18px;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.reempleado-input {
+  margin-bottom: 10px;
+}
+
+.button-container-empleado {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.reempleado-button {
+  width: 50%;
+  background-color: #ff8062;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  margin-top: 10%;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.reempleado-button:hover {
+  background-color: #ffb3a1;
+  color: black;
+}
+
+.reempleado-button.ml-2 {
+  width: 50%;
+  background-color: #6f6f6f;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  margin-top: 10%;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.reempleado-button + .reempleado-button {
+  margin-left: 8px;
+}
+.rounded-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}

@@ -27,7 +27,7 @@ const Navbar = () => {
                         width="50"
                         height="50"
                         alt="Logo"
-                        />{' '}Bienvenido (Navbar generica)</BootstrapNavbar.Brand>
+                        />{' '}Bienvenido</BootstrapNavbar.Brand>
                     <BootstrapNavbar.Toggle arial-controls="basic-navbar-nav" />
                     <BootstrapNavbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">

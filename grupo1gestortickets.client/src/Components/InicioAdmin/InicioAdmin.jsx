@@ -1,6 +1,7 @@
 import React from "react";
 import "./InicioAdmin.css";
 import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
+import withLoader from "../Load/withLoader ";
 import { Link } from "react-router-dom";
 
 const InicioAdmin = () => {
@@ -143,4 +144,4 @@ const InicioAdmin = () => {
   );
 };
 
-export default InicioAdmin;
+export default withLoader(InicioAdmin);
