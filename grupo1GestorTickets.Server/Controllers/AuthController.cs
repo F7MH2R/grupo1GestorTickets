@@ -73,7 +73,9 @@ namespace grupo1GestorTickets.Server.Controllers
                 Telefono = user.Telefono,
                 Cargo = user.Cargo,
                 estado_cuenta = user.estado_cuenta,
-                FechaCreacion = user.FechaCreacion
+                FechaCreacion = user.FechaCreacion,
+                imgurl=user.imgurl
+
             });
         }
     }
