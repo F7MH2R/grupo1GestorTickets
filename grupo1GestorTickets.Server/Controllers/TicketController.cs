@@ -290,5 +290,48 @@ namespace grupo1GestorTickets.Server.Controllers
             public int Value { get; set; }
         }
 
+
+        //Empleado
+        [HttpGet("empleado/{userId}")]
+        public async Task<IActionResult> obtenerTempleados(int userId)
+        {
+            var tickets = await (from t in _context.Tickets
+                                 join a in _context.Areas on t.IdArea equals a.Id
+                                 join es in _context.Estados on t.IdEstado equals es.Id
+                                 where t.IdUsuarioAsignado == userId
+                                 select new
+                                 {
+                                     id = t.Id,
+                                     nombre = t.Nombre,
+                                     fechaCreacion = t.FechaCreacion,
+                                     descripcion = t.Descripcion,
+                                     prioridad = t.Prioridad,
+                                     estado = es.Estado1,
+                                     area = a.Nombre,
+                                 }).ToListAsync();
+
+            return Ok(tickets);
+        }
+        [HttpPut("{ticketId}/estado")]
+        public async Task<IActionResult> UpdateTicketState(int ticketId, [FromBody] EstadoDTO estadoDTO)
+        {
+            var ticket = await _context.Tickets.FindAsync(ticketId);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            ticket.IdEstado = estadoDTO.IdEstado;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        public class EstadoDTO
+        {
+            public int IdEstado { get; set; }
+        }
+
+
     }
 }

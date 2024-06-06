@@ -21,6 +21,8 @@ import Detallepro from "./Components/PantallaCliente/DetalleTicket/Detallepro";
 import RegisAdAdmin from "./Components/AdminRegisUser/ReAdministrador";
 import Loader from ".//Components/Load/Loading";
 import TablaAdmin from "./Components/PantallaAdmin/tabla/TablaAdmin";
+import TicketsTableEmployee from "./Components/PantallaEmpleado/Tabla/TicketsTableEmployee";
+import DetalleProE from "./Components/PantallaEmpleado/DetalleEmple/DetalleProE";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -74,6 +76,8 @@ const App = () => {
                 element={<RegisAdAdmin />}
               />
               <Route path="TAdmin" element={<TablaAdmin />} />
+              <Route path="tableemployee" element={<TicketsTableEmployee />} />
+              <Route path="/detalleproe/:ticketId" element={<DetalleProE />} />
             </Routes>
           </Router>
         </div>

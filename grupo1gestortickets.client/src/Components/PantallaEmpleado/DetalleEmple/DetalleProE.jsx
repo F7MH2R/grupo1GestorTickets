@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
@@ -19,10 +19,13 @@ import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
 import "./DetalleTicket.css";
 
-const Detallepro = () => {
+const DetalletProE = () => {
   const { ticketId } = useParams();
+  const navigate = useNavigate();
   const [ticketDetails, setTicketDetails] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const [states, setStates] = useState([]);
+  const [selectedState, setSelectedState] = useState("");
   const componentRef = useRef();
 
   useEffect(() => {
@@ -33,12 +36,23 @@ const Detallepro = () => {
         );
         console.log(response.data); // Log the response data
         setTicketDetails(response.data);
+        setSelectedState(response.data.state); // Set the initial state
       } catch (error) {
         console.error("Error fetching ticket details:", error);
       }
     };
 
+    const fetchStates = async () => {
+      try {
+        const response = await axios.get("https://localhost:7289/api/estado");
+        setStates(response.data);
+      } catch (error) {
+        console.error("Error fetching states:", error);
+      }
+    };
+
     fetchTicketDetails();
+    fetchStates();
   }, [ticketId]);
 
   if (!ticketDetails) {
@@ -49,8 +63,7 @@ const Detallepro = () => {
     );
   }
 
-  const { ticket, user, state, assignedUser, comments, files, areas } =
-    ticketDetails;
+  const { ticket, user, assignedUser, comments, files, areas } = ticketDetails;
 
   const renderFilePreview = (file) => {
     if (file.tipo === ".png" || file.tipo === ".jpg" || file.tipo === ".jpeg") {
@@ -112,6 +125,30 @@ const Detallepro = () => {
     }
   };
 
+  const handleStateChange = (event) => {
+    setSelectedState(event.target.value);
+  };
+
+  const handleUpdateState = async () => {
+    try {
+      await axios.put(
+        `https://localhost:7289/api/ticket/${ticketId}/estado`,
+        { idEstado: selectedState },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success("Estado del ticket actualizado con éxito");
+    } catch (error) {
+      console.error("Error updating ticket state:", error);
+      toast.error("Error al actualizar el estado del ticket");
+    }
+  };
+
+  const isTicketClosed = ticketDetails.state === "Cerrado";
+
   return (
     <div className="container-detalle-primero">
       <Container className="custom-ticket-container mt-4">
@@ -126,6 +163,13 @@ const Detallepro = () => {
           )}
           content={() => componentRef.current}
         />
+        <Button
+          variant="secondary"
+          className="mb-4"
+          onClick={() => navigate(-1)}
+        >
+          Regresar
+        </Button>
         <Row md={12}>
           <Col md={12}>
             <div ref={componentRef} className="ticket-info-container">
@@ -137,7 +181,7 @@ const Detallepro = () => {
                     </Card.Header>
                     <Card.Body>
                       <p className="info-line-e">
-                        <strong>ID:</strong> {ticket?.id}
+                        <strong>N° Ticket:</strong> {ticket?.id}
                       </p>
                       <p className="info-line-e">
                         <strong>Nombre:</strong> {ticket?.nombre}
@@ -154,9 +198,38 @@ const Detallepro = () => {
                       <p className="info-line-e">
                         <strong>Prioridad:</strong> {ticket?.prioridad}
                       </p>
-                      <p className="info-line-e">
-                        <strong>Estado:</strong> {state}
-                      </p>
+                      <Form.Group controlId="formState">
+                        <Form.Label className="info-line-e">
+                          <strong>Estado:</strong>
+                        </Form.Label>
+                        <Form.Control
+                          as="select"
+                          value={selectedState}
+                          onChange={handleStateChange}
+                          className="custom-dropdown"
+                        >
+                          <option key="current" value={ticketDetails.stateId}>
+                            {ticketDetails.state}
+                          </option>
+                          {states
+                            .filter(
+                              (state) => state.estado1 !== ticketDetails.state
+                            )
+                            .map((state) => (
+                              <option key={state.id} value={state.id}>
+                                {state.estado1}
+                              </option>
+                            ))}
+                        </Form.Control>
+                      </Form.Group>
+                      <Button
+                        variant="primary"
+                        onClick={handleUpdateState}
+                        className="mt-2"
+                        disabled={isTicketClosed}
+                      >
+                        Actualizar Estado
+                      </Button>
                       <p className="info-line-e">
                         <strong>Área:</strong> {areas}
                       </p>
@@ -232,6 +305,7 @@ const Detallepro = () => {
                         variant="primary"
                         onClick={handleAddComment}
                         className="custom-comment-button mt-2"
+                        disabled={isTicketClosed}
                       >
                         Añadir Comentario
                       </Button>
@@ -285,4 +359,4 @@ const Detallepro = () => {
   );
 };
 
-export default withLoader(Detallepro);
+export default withLoader(DetalletProE);
