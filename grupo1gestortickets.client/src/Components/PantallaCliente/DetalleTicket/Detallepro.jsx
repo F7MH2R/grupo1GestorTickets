@@ -9,8 +9,9 @@ import {
   Button,
   CardGroup,
   Form,
+  Modal,
 } from "react-bootstrap";
-import { FaFilePdf, FaFileAudio } from "react-icons/fa";
+import { FaFilePdf, FaFileAudio, FaCheckCircle } from "react-icons/fa";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
@@ -25,7 +26,9 @@ const Detallepro = () => {
   const navigate = useNavigate();
   const [ticketDetails, setTicketDetails] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const componentRef = useRef();
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const fetchTicketDetails = async () => {
@@ -35,6 +38,10 @@ const Detallepro = () => {
         );
         console.log(response.data); // Log the response data
         setTicketDetails(response.data);
+        if (response.data.state === "CERRADO") {
+          setShowModal(true);
+          playCelebrationSound();
+        }
       } catch (error) {
         console.error("Error fetching ticket details:", error);
       }
@@ -42,6 +49,23 @@ const Detallepro = () => {
 
     fetchTicketDetails();
   }, [ticketId]);
+  const audio = new Audio("../../../../public/Cliente.mp3");
+  const playCelebrationSound = () => {
+    audioRef.current = audio;
+    audio.play();
+  };
+
+  const stopCelebrationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    stopCelebrationSound();
+  };
 
   if (!ticketDetails) {
     return (
@@ -130,6 +154,13 @@ const Detallepro = () => {
           )}
           content={() => componentRef.current}
         />
+        <Button
+          variant="secondary"
+          className="custom-button mb-4"
+          onClick={() => navigate(-1)}
+        >
+          Regresar
+        </Button>
         <Row md={12}>
           <Col md={12}>
             <div ref={componentRef} className="ticket-info-container">
@@ -294,6 +325,23 @@ const Detallepro = () => {
         </Row>
         <ToastContainer />
       </Container>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>¡Felicitaciones!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <FaCheckCircle size={80} color="green" />
+          <p>
+            ¡Felicidades su ticket a sido completado con éxito! ¡Gracias por
+            preferirnos!
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

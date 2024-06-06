@@ -9,11 +9,13 @@ import {
   Button,
   CardGroup,
   Form,
+  Modal,
 } from "react-bootstrap";
-import { FaFilePdf, FaFileAudio } from "react-icons/fa";
+import { FaFilePdf, FaFileAudio, FaCheckCircle } from "react-icons/fa";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
+
 import withLoader from "../../Load/withLoader ";
 import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
@@ -26,7 +28,9 @@ const DetalletProE = () => {
   const [newComment, setNewComment] = useState("");
   const [states, setStates] = useState([]);
   const [selectedState, setSelectedState] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const componentRef = useRef();
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const fetchTicketDetails = async () => {
@@ -37,6 +41,12 @@ const DetalletProE = () => {
         console.log(response.data); // Log the response data
         setTicketDetails(response.data);
         setSelectedState(response.data.state); // Set the initial state
+
+        // Show the modal if the ticket is closed
+        if (response.data.state === "CERRADO") {
+          setShowModal(true);
+          playCelebrationSound();
+        }
       } catch (error) {
         console.error("Error fetching ticket details:", error);
       }
@@ -54,6 +64,24 @@ const DetalletProE = () => {
     fetchTicketDetails();
     fetchStates();
   }, [ticketId]);
+  const audio = new Audio("../../../../public/Empleado.mp3");
+  const playCelebrationSound = () => {
+    // Path to your sound file in the public folder
+    audioRef.current = audio;
+    audio.play();
+  };
+
+  const stopCelebrationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    stopCelebrationSound();
+  };
 
   if (!ticketDetails) {
     return (
@@ -165,7 +193,7 @@ const DetalletProE = () => {
         />
         <Button
           variant="secondary"
-          className="mb-4"
+          className="custom-button mb-4"
           onClick={() => navigate(-1)}
         >
           Regresar
@@ -353,8 +381,31 @@ const DetalletProE = () => {
             </div>
           </Col>
         </Row>
+        <Row>
+          <Col md={12} className="text-center">
+            <Button variant="secondary" onClick={() => navigate(-1)}>
+              Regresar
+            </Button>
+          </Col>
+        </Row>
         <ToastContainer />
       </Container>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>¡Felicitaciones!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <FaCheckCircle size={80} color="green" />
+          <p>
+            ¡Has completado el ticket con éxito! ¡Gracias por tu compromiso!
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
