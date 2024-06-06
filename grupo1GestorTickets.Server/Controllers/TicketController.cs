@@ -126,6 +126,7 @@ namespace grupo1GestorTickets.Server.Controllers
                                        select new
                                        {
                                            Areas = ar.Nombre,
+                                           idArea = ar.Id,
                                            Ticket = t,
                                            User = u,
                                            State = es.Estado1,
