@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Container, Row} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap'; // Asegúrate de importar Button si usas react-bootstrap
+import { Button } from 'react-bootstrap';
+import './Dashboard.css';
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
@@ -9,7 +11,6 @@ const Dashboard = () => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            console.log('Retrieved user data:', storedUser);
             setUser(JSON.parse(storedUser));
         }
     }, []);
@@ -19,30 +20,29 @@ const Dashboard = () => {
     }
 
     const handleBack = () => {
-        navigate(-1); // Navegar hacia atrás
+        navigate(-1);
     };
 
     return (
-        <div>
-            <h1>Welcome, {user.nombre || 'Usuario'}</h1>
-            <p>Correo: {user.correo || 'No disponible'}</p>
-            <p>Tipo de Usuario: {user.tipo_usuario || 'No disponible'}</p>
-            <p>Telefono: {user.telefono || 'No disponible'}</p>
-            <p>Cargo: {user.cargo || 'No disponible'}</p>
-            <p>Estado de la Cuenta: {user.estado_cuenta || 'No disponible'}</p>
-            <p>Fecha de Creacion: {user.fechaCreacion ? new Date(user.fechaCreacion).toLocaleDateString() : 'No disponible'}</p>
-            <Button variant="secondary" onClick={handleBack} className="ml-2">
-                Volver
-            </Button>
+        <div className="dashboard-container-uno">
+            <Container className="dashboard-container-dos">
+                <Row className="dashboard-content">
+                    <h1 className="dashboard-title">Bienvenido, {user.nombre || 'User'}</h1>
+                    <div className="user-details">
+                        <p className="user-detail">Correo electr&oacute;nico: {user.correo || 'Not available'}</p>
+                        <p className="user-detail">Tipo de Usuario: {user.tipo_usuario || 'Not available'}</p>
+                        <p className="user-detail">Tel&eacute;fono: {user.telefono || 'Not available'}</p>
+                        <p className="user-detail">Cargo: {user.cargo || 'Not available'}</p>
+                        <p className="user-detail">Estado de Cuenta: {user.estado_cuenta || 'Not available'}</p>
+                        <p className="user-detail">Fecha de Creaci&oacute;n: {user.fechaCreacion ? new Date(user.fechaCreacion).toLocaleDateString() : 'Not available'}</p>
+                    </div>
+                    <Button variant="secondary" onClick={handleBack} className="back-btn">
+                        Volver
+                    </Button>
+                </Row>
+            </Container>
         </div>
     );
 };
 
 export default Dashboard;
-
-
-
-
-
-
-

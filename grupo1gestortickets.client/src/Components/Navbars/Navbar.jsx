@@ -5,7 +5,7 @@ import NavbarAdmin from './NavbarAdmin';
 import NavbarEmpleado from './NavbarEmpleado';
 import NavbarCliente from './NavbarCliente';
 import { Link } from 'react-router-dom';
-
+import "./Navbar.css";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -19,23 +19,30 @@ const Navbar = () => {
 
     if (!user) {
         return (
-            <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top">
+            <BootstrapNavbar className="navbar-container" expand="lg" fixed="top">
                 <Container>
-                    <BootstrapNavbar.Brand href="/login"> 
-                    <img
-                        src="https://i.postimg.cc/ydrSvHty/logo-Solucioness.png"
-                        width="50"
-                        height="50"
-                        alt="Logo"
-                        />{' '}Bienvenido</BootstrapNavbar.Brand>
-                    <BootstrapNavbar.Toggle arial-controls="basic-navbar-nav" />
-                    <BootstrapNavbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            <Button variant="outline-light" as={Link} to="/registrar-cliente">Crear Usuario</Button>
-                        </Nav>
-                    </BootstrapNavbar.Collapse>
+                    <div className="d-flex align-items-center mr-auto">
+                        <BootstrapNavbar.Brand href="/login">
+                            <img
+                                src="https://i.postimg.cc/ydrSvHty/logo-Solucioness.png"
+                                width="50"
+                                height="50"
+                                alt="Logo"
+                            />{' '}Bienvenido
+                        </BootstrapNavbar.Brand>
+                    </div>
+                    <div className="ml-auto">
+                        <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
+                        <BootstrapNavbar.Collapse id="basic-navbar-nav">
+                            <Nav>
+                                <Button className="boton-derecha" variant="outline-light" as={Link} to="/registrar-cliente">Crear Usuario</Button>
+                            </Nav>
+                        </BootstrapNavbar.Collapse>
+                    </div>
                 </Container>
             </BootstrapNavbar>
+
+
         );
     }
 

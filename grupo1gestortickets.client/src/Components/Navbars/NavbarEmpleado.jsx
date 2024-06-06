@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import "./Navbar.css";
 
 const NavbarEmpleado = ({ onLogout }) => {
     const [user, setUser] = useState({});
@@ -13,7 +14,7 @@ const NavbarEmpleado = ({ onLogout }) => {
     }, []);
 
     return (
-        <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+        <Navbar className="navbar-container" expand="lg" fixed="top">
             <Container>
                 <Navbar.Brand as={Link} to="/empleado">
                     <img
@@ -22,11 +23,16 @@ const NavbarEmpleado = ({ onLogout }) => {
                         height="50"
                         alt="Logo"
                     />
-                    Empleado Dashboard
+                    Empleado 
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="ml-auto align-items-center">
+                    <Nav className="mx-auto">
+                        <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
+                        <Nav.Link as={Link} to="/control-usuarios">Control de Usuarios</Nav.Link>
+                        <Nav.Link as={Link} to="/registrar-usuarios">Registrar Usuarios</Nav.Link>
+                    </Nav>
+                    <Nav className="ml-lg-auto">
                         {user && user.imgurl && (
                             <img
                                 src={user.imgurl}
@@ -35,11 +41,11 @@ const NavbarEmpleado = ({ onLogout }) => {
                             />
                         )}
                         {user && user.nombre && (
-                            <span style={{ color: 'white', marginRight: '10px' }}>
+                            <span style={{ color: 'white', marginRight: '15px', marginTop: "5px" }}>
                                 {user.nombre}
                             </span>
                         )}
-                        <Button variant="outline-light" onClick={onLogout}>Cerrar Sesion</Button>
+                        <Button className="btn-cerrar-sesion" variant="outline-light" onClick={onLogout}>Cerrar Sesi&oacute;n</Button>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
