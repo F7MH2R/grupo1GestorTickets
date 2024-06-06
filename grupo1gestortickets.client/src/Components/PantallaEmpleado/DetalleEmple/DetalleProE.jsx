@@ -147,7 +147,7 @@ const DetalletProE = () => {
     }
   };
 
-  const isTicketClosed = ticketDetails.state === "Cerrado";
+  const isTicketClosed = ticketDetails.state === "CERRADO";
 
   return (
     <div className="container-detalle-primero">
@@ -226,7 +226,6 @@ const DetalletProE = () => {
                         variant="primary"
                         onClick={handleUpdateState}
                         className="mt-2"
-                        disabled={isTicketClosed}
                       >
                         Actualizar Estado
                       </Button>
@@ -300,6 +299,7 @@ const DetalletProE = () => {
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         className="custom-comment-input mr-2"
+                        disabled={isTicketClosed}
                       />
                       <Button
                         variant="primary"

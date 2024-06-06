@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
@@ -14,6 +14,7 @@ import { FaFilePdf, FaFileAudio } from "react-icons/fa";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
+
 import withLoader from "../../Load/withLoader ";
 import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
@@ -21,6 +22,7 @@ import "./DetalleTicket.css";
 
 const Detallepro = () => {
   const { ticketId } = useParams();
+  const navigate = useNavigate();
   const [ticketDetails, setTicketDetails] = useState(null);
   const [newComment, setNewComment] = useState("");
   const componentRef = useRef();
@@ -112,6 +114,8 @@ const Detallepro = () => {
     }
   };
 
+  const isTicketClosed = state === "CERRADO";
+
   return (
     <div className="container-detalle-primero">
       <Container className="custom-ticket-container mt-4">
@@ -137,7 +141,7 @@ const Detallepro = () => {
                     </Card.Header>
                     <Card.Body>
                       <p className="info-line-e">
-                        <strong>ID:</strong> {ticket?.id}
+                        <strong>N° Ticket:</strong> {ticket?.id}
                       </p>
                       <p className="info-line-e">
                         <strong>Nombre:</strong> {ticket?.nombre}
@@ -227,11 +231,13 @@ const Detallepro = () => {
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         className="custom-comment-input mr-2"
+                        disabled={isTicketClosed}
                       />
                       <Button
                         variant="primary"
                         onClick={handleAddComment}
                         className="custom-comment-button mt-2"
+                        disabled={isTicketClosed}
                       >
                         Añadir Comentario
                       </Button>
@@ -277,6 +283,13 @@ const Detallepro = () => {
                 </Card>
               </Col>
             </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="text-center">
+            <Button variant="secondary" onClick={() => navigate(-1)}>
+              Regresar
+            </Button>
           </Col>
         </Row>
         <ToastContainer />

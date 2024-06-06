@@ -5,6 +5,9 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Table, Button, Container, Row, Col, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
+import withLoader from "../../Load/withLoader ";
+import "./InicioCliente.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -25,9 +28,10 @@ const TicketsTableEmployee = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const [idUsuario, setIdUsuario] = useState(null);
+  const [userId, setIdUsuario] = useState(null);
 
   useEffect(() => {
+    // Obtener idUsuario del objeto user en local storage
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
@@ -36,10 +40,10 @@ const TicketsTableEmployee = () => {
   }, []);
 
   useEffect(() => {
-    if (idUsuario) {
-      fetchTickets(idUsuario);
+    if (userId) {
+      fetchTickets(userId);
     }
-  }, [idUsuario]);
+  }, [userId]);
 
   useEffect(() => {
     filterTicketsByName(searchTerm);
@@ -74,6 +78,7 @@ const TicketsTableEmployee = () => {
   };
 
   const generateChartData = (tickets) => {
+    // Generate data for status pie chart
     const statuses = tickets.map((ticket) => ticket.estado);
     const statusCounts = statuses.reduce((acc, status) => {
       if (status) {
@@ -97,6 +102,7 @@ const TicketsTableEmployee = () => {
       ],
     });
 
+    // Generate data for area pie chart
     const areas = tickets.map((ticket) => ticket.area);
     const areaCounts = areas.reduce((acc, area) => {
       if (area) {
@@ -120,6 +126,7 @@ const TicketsTableEmployee = () => {
       ],
     });
 
+    // Generate data for priority pie chart
     const priorities = tickets.map((ticket) => ticket.prioridad);
     const priorityCounts = priorities.reduce((acc, priority) => {
       if (priority) {
@@ -179,8 +186,8 @@ const TicketsTableEmployee = () => {
     navigate("/create");
   };
 
-  const handleViewDetail = (id) => {
-    navigate(`/detalleproe/${id}`);
+  const handleViewTicket = (ticketId) => {
+    navigate(`/detalleproe/${ticketId}`);
   };
 
   const filterTicketsByName = (searchTerm) => {
@@ -195,156 +202,173 @@ const TicketsTableEmployee = () => {
   };
 
   return (
-    <Container>
-      <Row className="mb-4">
-        <Col md={4}>
-          <Pie
-            data={statusChartData}
-            options={{
-              plugins: {
-                datalabels: {
-                  color: "#fff",
-                  display: true,
-                  formatter: (value, context) => {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label.length > 10
-                      ? `${label.substring(0, 7)}...`
-                      : label;
-                  },
-                  font: {
-                    weight: "bold",
-                    size: (context) => {
-                      const width = context.chart.width;
-                      const size = Math.round(width / 32);
-                      return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+    <div className="tickets-container">
+      <Container>
+        <h1 className="titulo-text-estadistica">Estadísticas</h1>
+        <Row className="estadisticas-size mb-4">
+          <Col md={4}>
+            <h3 className="size">Estados</h3>
+            <Pie
+              data={statusChartData}
+              options={{
+                plugins: {
+                  datalabels: {
+                    color: "#fff",
+                    display: true,
+                    formatter: (value, context) => {
+                      const label =
+                        context.chart.data.labels[context.dataIndex];
+                      return label.length > 10
+                        ? `${label.substring(0, 7)}...`
+                        : label;
                     },
-                  },
-                  textAlign: "center",
-                  clip: true,
-                  clamp: true,
-                },
-              },
-              onClick: handleStatusChartClick,
-            }}
-          />
-        </Col>
-        <Col md={4}>
-          <Pie
-            data={areaChartData}
-            options={{
-              plugins: {
-                datalabels: {
-                  color: "#fff",
-                  display: true,
-                  formatter: (value, context) => {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label.length > 10
-                      ? `${label.substring(0, 7)}...`
-                      : label;
-                  },
-                  font: {
-                    weight: "bold",
-                    size: (context) => {
-                      const width = context.chart.width;
-                      const size = Math.round(width / 32);
-                      return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                    font: {
+                      weight: "bold",
+                      size: (context) => {
+                        const width = context.chart.width;
+                        const size = Math.round(width / 32);
+                        return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                      },
                     },
+                    textAlign: "center",
+                    clip: true,
+                    clamp: true,
                   },
-                  textAlign: "center",
-                  clip: true,
-                  clamp: true,
                 },
-              },
-              onClick: handleAreaChartClick,
-            }}
-          />
-        </Col>
-        <Col md={4}>
-          <Pie
-            data={priorityChartData}
-            options={{
-              plugins: {
-                datalabels: {
-                  color: "#fff",
-                  display: true,
-                  formatter: (value, context) => {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label.length > 10
-                      ? `${label.substring(0, 7)}...`
-                      : label;
-                  },
-                  font: {
-                    weight: "bold",
-                    size: (context) => {
-                      const width = context.chart.width;
-                      const size = Math.round(width / 32);
-                      return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                onClick: handleStatusChartClick,
+              }}
+            />
+          </Col>
+          <Col md={4}>
+            <h3 className="size">Áreas</h3>
+            <Pie
+              data={areaChartData}
+              options={{
+                plugins: {
+                  datalabels: {
+                    color: "#fff",
+                    display: true,
+                    formatter: (value, context) => {
+                      const label =
+                        context.chart.data.labels[context.dataIndex];
+                      return label.length > 10
+                        ? `${label.substring(0, 7)}...`
+                        : label;
                     },
+                    font: {
+                      weight: "bold",
+                      size: (context) => {
+                        const width = context.chart.width;
+                        const size = Math.round(width / 32);
+                        return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                      },
+                    },
+                    textAlign: "center",
+                    clip: true,
+                    clamp: true,
                   },
-                  textAlign: "center",
-                  clip: true,
-                  clamp: true,
                 },
-              },
-              onClick: handlePriorityChartClick,
-            }}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <Form.Control
-            type="text"
-            placeholder="Buscar por nombre"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <Button onClick={handleAddTicket} className="mb-3">
-            Agregar Nuevo Ticket
-          </Button>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Fecha Creación</th>
-                <th>Descripción</th>
-                <th>Estado</th>
-                <th>Área</th>
-                <th>Prioridad</th>
-                <th>Acciones</th> {/* New column for actions */}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTickets.map((ticket) => (
-                <tr key={ticket.id}>
-                  <td>{ticket.id}</td>
-                  <td>{ticket.nombre}</td>
-                  <td>{new Date(ticket.fechaCreacion).toLocaleDateString()}</td>
-                  <td>{ticket.descripcion}</td>
-                  <td>{ticket.estado}</td>
-                  <td>{ticket.area}</td>
-                  <td>{ticket.prioridad}</td>
-                  <td>
-                    <Button
-                      variant="primary"
-                      onClick={() => handleViewDetail(ticket.id)}
-                    >
-                      Ver detalle
-                    </Button>
-                  </td>
+                onClick: handleAreaChartClick,
+              }}
+            />
+          </Col>
+          <Col md={4}>
+            <h3 className="size">Prioridad</h3>
+            <Pie
+              data={priorityChartData}
+              options={{
+                plugins: {
+                  datalabels: {
+                    color: "#fff",
+                    display: true,
+                    formatter: (value, context) => {
+                      const label =
+                        context.chart.data.labels[context.dataIndex];
+                      return label.length > 10
+                        ? `${label.substring(0, 7)}...`
+                        : label;
+                    },
+                    font: {
+                      weight: "bold",
+                      size: (context) => {
+                        const width = context.chart.width;
+                        const size = Math.round(width / 32);
+                        return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                      },
+                    },
+                    textAlign: "center",
+                    clip: true,
+                    clamp: true,
+                  },
+                },
+                onClick: handlePriorityChartClick,
+              }}
+            />
+          </Col>
+        </Row>
+        <Row className="mb-4 justify-content-center">
+          <Col md={6}>
+            <div className="search-bar">
+              <Form.Control
+                type="text"
+                placeholder="Buscar por nombre"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </Col>
+        </Row>
+        <h1 className="titulo-text-mis-ticket">Mis tickets</h1>
+        <Row className="tickets-container">
+          <Col md={12}>
+            <Button
+              onClick={handleAddTicket}
+              className="add-button-cliente mb-3"
+            >
+              Agregar Nuevo Ticket
+            </Button>
+            <Table className="table-container" striped bordered hover>
+              <thead className="size-letra">
+                <tr>
+                  <th>N° Ticket</th>
+                  <th>Nombre</th>
+                  <th>Fecha Creación</th>
+                  <th>Estado</th>
+                  <th>Área</th>
+                  <th>Prioridad</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-    </Container>
+              </thead>
+              <tbody className="size-letra-td">
+                {filteredTickets.map((ticket) => (
+                  <tr key={ticket.id}>
+                    <td>{ticket.id}</td>
+                    <td>{ticket.nombre}</td>
+                    <td>
+                      {new Date(ticket.fechaCreacion).toLocaleDateString()}
+                    </td>
+                    <td>{ticket.estado}</td>
+                    <td>{ticket.area}</td>
+                    <td>{ticket.prioridad}</td>
+                    <td>
+                      <Button
+                        variant="info"
+                        size="sm"
+                        onClick={() => handleViewTicket(ticket.id)}
+                        className="mr-2 ver-ticket-button"
+                      >
+                        <FaEye className="mr-1" /> Detalle
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
-export default TicketsTableEmployee;
+export default withLoader(TicketsTableEmployee);
