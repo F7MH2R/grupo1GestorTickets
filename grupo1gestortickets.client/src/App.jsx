@@ -19,6 +19,7 @@ import RegisAdEmp from "./Components/AdminRegisUser/ReEmpleado";
 import TicketDetails from "./Components/PantallaCliente/DetalleTicket/TicketDetails";
 import Detallepro from "./Components/PantallaCliente/DetalleTicket/Detallepro";
 import RegisAdAdmin from "./Components/AdminRegisUser/ReAdministrador";
+import TicketEmpleado from "./Components/TicketEmpleado/TicketEmpleado";
 
 const App = () => {
   return (
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="/ticketDetail/:ticketId" element={<TicketDetails />} />
         <Route path="/detallepro/:ticketId" element={<Detallepro />} />
         <Route path="registrar-administrador" element={<RegisAdAdmin />} />
+        <Route path="/mis-tickets" element={<TicketEmpleado />} />
       </Routes>
     </Router>
   );
