@@ -27,8 +27,6 @@ builder.Services.AddScoped<EmailNotificationService>();
 
 
 // Add CORS policy
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",

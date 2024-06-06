@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using grupo1GestorTickets.Server.Models;
+using grupo1GestorTickets.Server.DTO;
 
 namespace grupo1GestorTickets.Server.Controllers
 {
@@ -78,6 +79,40 @@ namespace grupo1GestorTickets.Server.Controllers
 
             });
         }
+
+        [HttpPatch("usuario/{id}")]
+        public async Task<IActionResult> patchUsuario([FromBody] UsuarioUpdateDTO usuarioUpdateDTO, int id)
+        {
+            var usuario = await _context.Usuario.Where(usuario => usuario.Id == id).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            usuario.Cargo = usuarioUpdateDTO.CargoId;
+            usuario.tipo_usuario = usuarioUpdateDTO.TipoUsuarioId;
+            usuario.Password = usuarioUpdateDTO.NuevoPassword;
+
+            _context.Entry(usuario).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok(usuario);
+        }
+
+        [HttpGet("usuario/{id}")]
+        public async Task<IActionResult> obtenerUsuarioById( int id)
+        {
+            var usuario = await _context.Usuario.Where(usuario => usuario.Id == id).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuario);
+        }
+
     }
 
     public class LoginModel
@@ -86,4 +121,3 @@ namespace grupo1GestorTickets.Server.Controllers
         public string Password { get; set; }
     }
 }
-
