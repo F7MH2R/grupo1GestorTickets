@@ -426,8 +426,8 @@ namespace grupo1GestorTickets.Server.ServiceEmail
                         <p><strong>Prioridad:</strong> {ticket.Prioridad}</p>
                         <p><strong>Área:</strong> {ticket.Area}</p>
                         <p><strong>Fecha de Creación:</strong> {ticket.FechaCreacion}</p>
-                        <p><img src='https://i.ibb.co/C2Nxxyb/2-P-ginas-Web-Gestor-de-Proyecto-Final.png' alt='Logo'></p>
-                    </div>
+
+                       <p><img src='https://i.ibb.co/C2Nxxyb/2-P-ginas-Web-Gestor-de-Proyecto-Final.png' alt='Logo'></p>                    </div>
                 </body>
             </html>";
 
