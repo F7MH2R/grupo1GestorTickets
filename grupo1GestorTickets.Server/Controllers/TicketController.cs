@@ -285,7 +285,7 @@ namespace grupo1GestorTickets.Server.Controllers
 
         public class TrendData
         {
-            public string AreaName { get; set; }
+            public string? AreaName { get; set; }
             public DateTime Date { get; set; }
             public int Value { get; set; }
         }
@@ -323,6 +323,9 @@ namespace grupo1GestorTickets.Server.Controllers
 
             ticket.IdEstado = estadoDTO.IdEstado;
             await _context.SaveChangesAsync();
+
+            await _emailNotificationService.NotifyUserOnStateChange(ticketId);
+            await _emailNotificationService.NotifyAdminsOnStateChange(ticketId);
 
             return Ok();
         }

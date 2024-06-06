@@ -211,6 +211,259 @@ namespace grupo1GestorTickets.Server.ServiceEmail
                 await client.DisconnectAsync(true);
             }
         }
+        // Notify Admins on Ticket State Change by Assigned User
+        public async Task NotifyAdminsOnStateChange(int ticketId)
+        {
+            var ticket = await GetTicketDetails(ticketId);
+
+            if (ticket == null)
+            {
+                throw new Exception("Ticket not found");
+            }
+
+            var admins = await _context.Usuarios.Where(u => u.tipo_usuario == 1).ToListAsync();
+
+            foreach (var admin in admins)
+            {
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("System Ticket", _smtpUser));
+                message.To.Add(new MailboxAddress("Admin", admin.Correo));
+                message.Subject = "Cambio de Estado del Ticket";
+
+                var bodyBuilder = new BodyBuilder();
+                bodyBuilder.HtmlBody = $@"
+                <html>
+                    <head>
+                        <style>
+                            .card {{
+                                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                                transition: 0.3s;
+                                width: 80%;
+                                max-width: 600px;
+                                margin: auto;
+                                background-color: #000;
+                                color: #fff;
+                                border: 1px solid #ccc;
+                                border-radius: 10px;
+                                padding: 20px;
+                                font-family: Arial, sans-serif;
+                            }}
+                            .card h1 {{
+                                font-size: 24px;
+                                color: white;
+                            }}
+                            .card p {{
+                                color: white;
+                                font-size: 18px;
+                            }}
+                            .card img {{
+                                width: 100%;
+                                height: auto;
+                                border-radius: 10px;
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        <div class='card'>
+                            <h1>Cambio de Estado del Ticket</h1>
+                            <p>El estado del ticket ha sido cambiado por el usuario asignado.</p>
+                            <p><strong>Número de Ticket:</strong> {ticket.Id}</p>
+                            <p><strong>Nombre:</strong> {ticket.Nombre}</p>
+                            <p><strong>Estado:</strong> {ticket.NameEstado}</p>
+                            <p><strong>Descripción:</strong> {ticket.Descripcion}</p>
+                            <p><strong>Prioridad:</strong> {ticket.Prioridad}</p>
+                            <p><strong>Área:</strong> {ticket.Area}</p>
+                            <p><strong>Fecha de Creación:</strong> {ticket.FechaCreacion}</p>
+                            <p><img src='https://i.ibb.co/C2Nxxyb/2-P-ginas-Web-Gestor-de-Proyecto-Final.png' alt='Logo'></p>
+                        </div>
+                    </body>
+                </html>";
+
+                message.Body = bodyBuilder.ToMessageBody();
+
+                await SendEmailAsync(message);
+            }
+        }
+
+        // Notify Ticket Owner on Ticket State Change
+        public async Task NotifyUserOnStateChange(int ticketId)
+        {
+            var ticket = await GetTicketDetails(ticketId);
+
+            if (ticket == null)
+            {
+                throw new Exception("Ticket not found");
+            }
+
+            var user = await _context.Usuarios.FindAsync(ticket.IdUsuario);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("System Ticket", _smtpUser));
+            message.To.Add(new MailboxAddress("User", user.Correo));
+            message.Subject = "Cambio de Estado del Ticket";
+
+            var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = $@"
+            <html>
+                <head>
+                    <style>
+                        .card {{
+                            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                            transition: 0.3s;
+                            width: 70%;
+                            max-width: 500px;
+                            margin: auto;
+                            background-color: #000;
+                            color: #fff;
+                            border: 1px solid #ccc;
+                            border-radius: 10px;
+                            padding: 20px;
+                            font-family: Arial, sans-serif;
+                        }}
+                        .card h1 {{
+                            color: white;
+                            font-size: 24px;
+                        }}
+                        .card p {{
+                            color: white;
+                            font-size: 18px;
+                        }}
+                        .card img {{
+                            width: 100%;
+                            height: auto;
+                            border-radius: 10px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='card'>
+                        <h1>Cambio de Estado del Ticket</h1>
+                        <p>El estado de su ticket ha sido cambiado.</p>
+                        <p><strong>Número de Ticket:</strong> {ticket.Id}</p>
+                        <p><strong>Nombre:</strong> {ticket.Nombre}</p>
+                        <p><strong>Estado:</strong> {ticket.NameEstado}</p>
+                        <p><strong>Descripción:</strong> {ticket.Descripcion}</p>
+                        <p><strong>Prioridad:</strong> {ticket.Prioridad}</p>
+                        <p><strong>Área:</strong> {ticket.Area}</p>
+                        <p><strong>Fecha de Creación:</strong> {ticket.FechaCreacion}</p>
+                        <p><img src='https://i.ibb.co/C2Nxxyb/2-P-ginas-Web-Gestor-de-Proyecto-Final.png' alt='Logo'></p>
+                    </div>
+                </body>
+            </html>";
+
+            message.Body = bodyBuilder.ToMessageBody();
+
+            await SendEmailAsync(message);
+        }
+
+        // Notify Assigned User on Ticket Assignment
+        public async Task NotifyAssignedUser(int ticketId)
+        {
+            var ticket = await GetTicketDetails(ticketId);
+
+            if (ticket == null)
+            {
+                throw new Exception("Ticket not found");
+            }
+
+            var assignedUser = await _context.Usuarios.FindAsync(ticket.IdUsuarioAsignado);
+
+            if (assignedUser == null)
+            {
+                throw new Exception("Assigned user not found");
+            }
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("System Ticket", _smtpUser));
+            message.To.Add(new MailboxAddress("User", assignedUser.Correo));
+            message.Subject = "Nuevo Ticket Asignado";
+
+            var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = $@"
+            <html>
+                <head>
+                    <style>
+                        .card {{
+                            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                            transition: 0.3s;
+                            width: 70%;
+                            max-width: 500px;
+                            margin: auto;
+                            background-color: #000;
+                            color: #fff;
+                            border: 1px solid #ccc;
+                            border-radius: 10px;
+                            padding: 20px;
+                            font-family: Arial, sans-serif;
+                        }}
+                        .card h1 {{
+                            color: white;
+                            font-size: 24px;
+                        }}
+                        .card p {{
+                            color: white;
+                            font-size: 18px;
+                        }}
+                        .card img {{
+                            width: 100%;
+                            height: auto;
+                            border-radius: 10px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='card'>
+                        <h1>Nuevo Ticket Asignado</h1>
+                        <p>Se le ha asignado un nuevo ticket para trabajar y darle solución.</p>
+                        <p><strong>Número de Ticket:</strong> {ticket.Id}</p>
+                        <p><strong>Nombre:</strong> {ticket.Nombre}</p>
+                        <p><strong>Descripción:</strong> {ticket.Descripcion}</p>
+                        <p><strong>Prioridad:</strong> {ticket.Prioridad}</p>
+                        <p><strong>Área:</strong> {ticket.Area}</p>
+                        <p><strong>Fecha de Creación:</strong> {ticket.FechaCreacion}</p>
+                        <p><img src='https://i.ibb.co/C2Nxxyb/2-P-ginas-Web-Gestor-de-Proyecto-Final.png' alt='Logo'></p>
+                    </div>
+                </body>
+            </html>";
+
+            message.Body = bodyBuilder.ToMessageBody();
+
+            await SendEmailAsync(message);
+        }
+
+        private async Task SendEmailAsync(MimeMessage message)
+        {
+            using var client = new SmtpClient();
+            await client.ConnectAsync(_smtpServer, _smtpPort, SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(_smtpUser, _smtpPass);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
+        }
+
+        private async Task<dynamic> GetTicketDetails(int ticketId)
+        {
+            return await (from t in _context.Tickets
+                          join a in _context.Areas on t.IdArea equals a.Id
+                          join usu in _context.Estados on t.IdEstado equals usu.Id
+                          where t.Id == ticketId
+                          select new
+                          {
+                              t.Id,
+                              t.Nombre,
+                              t.Descripcion,
+                              t.Prioridad,
+                              Area = a.Nombre,
+                              FechaCreacion = t.FechaCreacion,
+                              NameEstado = usu.Estado1,
+                              t.IdUsuario,
+                              t.IdUsuarioAsignado
+                          }).FirstOrDefaultAsync();
+        }
 
     }
 }
