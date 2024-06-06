@@ -25,7 +25,14 @@ namespace grupo1GestorTickets.Server.Controllers
                 return BadRequest("Nombre, correo y contraseña son requeridos.");
             }
 
-            nuevoUsuario.FechaCreacion = nuevoUsuario.FechaCreacion ?? DateTime.Now;
+            // Asignar la fecha de creación si es null
+            nuevoUsuario.FechaCreacion = DateTime.Now;
+
+            // Validación adicional para estado_cuenta
+            if (nuevoUsuario.estado_cuenta == null)
+            {
+                nuevoUsuario.estado_cuenta = 1; // Por defecto Activo
+            }
 
             _context.Usuario.Add(nuevoUsuario);
             try
@@ -39,6 +46,7 @@ namespace grupo1GestorTickets.Server.Controllers
 
             return Ok(new { message = "Usuario creado exitosamente" });
         }
+
 
 
         [HttpPost("login")]
@@ -65,8 +73,10 @@ namespace grupo1GestorTickets.Server.Controllers
                 tipo_usuario = user.tipo_usuario,
                 Telefono = user.Telefono,
                 Cargo = user.Cargo,
-                EstadoCuenta = user.EstadoCuenta,
-                FechaCreacion = user.FechaCreacion
+                estado_cuenta = user.estado_cuenta,
+                FechaCreacion = user.FechaCreacion,
+                imgurl=user.imgurl
+
             });
         }
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card, Image } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
 
 const CreateTicket = () => {
     const [nombre, setNombre] = useState('');
@@ -7,6 +9,7 @@ const CreateTicket = () => {
     const [selectedArea, setSelectedArea] = useState('');
     const [comentarios, setComentarios] = useState(['']);
     const [files, setFiles] = useState([]);
+    const navigate = useNavigate();
 
     const handleAddComment = () => {
         setComentarios([...comentarios, '']);
@@ -52,6 +55,9 @@ const CreateTicket = () => {
         } else {
             return <span>{file.name}</span>;
         }
+    };
+    const handleBack = () => {
+        navigate(-1); // Navegar hacia atrás
     };
 
     return (
@@ -125,6 +131,9 @@ const CreateTicket = () => {
                     ))}
                 </Row>
                 <Button variant="primary">Guardar Ticket</Button>
+                <Button variant="secondary" onClick={handleBack} className="ml-2">
+                    Volver
+                </Button>
             </Form>
         </Container>
     );

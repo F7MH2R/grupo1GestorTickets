@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const NavbarAdmin = ({ onLogout }) => {
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
     return (
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
             <Container>
-                <Navbar.Brand as={Link} to="/admin">Administrador</Navbar.Brand>
+                <Navbar.Brand as={Link} to="/admin">
+                    <img
+                        src="https://i.postimg.cc/ydrSvHty/logo-Solucioness.png"
+                        width="50"
+                        height="50"
+                        alt="Logo"
+                    />
+                    Administrador
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
@@ -14,7 +31,19 @@ const NavbarAdmin = ({ onLogout }) => {
                         <Nav.Link as={Link} to="/control-usuarios">Control de Usuarios</Nav.Link>
                         <Nav.Link as={Link} to="/registrar-usuarios">Registrar Usuarios</Nav.Link>
                     </Nav>
-                    <Nav>
+                    <Nav className="align-items-center">
+                        {user && user.imgurl && (
+                            <img
+                                src={user.imgurl}
+                                alt="User"
+                                style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }}
+                            />
+                        )}
+                        {user && user.nombre && (
+                            <span style={{ color: 'white', marginRight: '10px' }}>
+                                {user.nombre}
+                            </span>
+                        )}
                         <Button variant="outline-light" onClick={onLogout}>Cerrar Sesion</Button>
                     </Nav>
                 </Navbar.Collapse>

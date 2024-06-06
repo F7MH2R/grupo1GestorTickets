@@ -56,30 +56,31 @@ const Usuario = () => {
 
   return (
     <>
-      <Container fluid>
+          <Container fluid className="usuario-container">
         <Row>
           <Col>
             <Form>
               <Row>
                 <Col className="text-end">
-                  <h2>Control de usuarios</h2>
+                                  <div className="usuario-header">Control de usuarios</div>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Form.Group controlId="nombre">
-                    <Form.Label>Nombre</Form.Label>
+                                  <Form.Group controlId="nombre" className="usuario-form-group">
+                                      <Form.Label className="usuario-form-label">Nombre</Form.Label>
                     <Form.Control
                       type="text"
                       disabled
-                      value={nombre}
+                                          value={nombre}
+                                          className="usuario-form-control"
                     ></Form.Control>
                   </Form.Group>
                 </Col>
                 <Col>
-                  <Form.Group controlId="cargo">
-                    <Form.Label>Cargo:</Form.Label>
-                    <Form.Select value={cargoId} onChange={handleCargoChange}>
+                                  <Form.Group controlId="cargo" className="usuario-form-group">
+                                      <Form.Label className="usuario-form-label">Cargo:</Form.Label>
+                                      <Form.Select value={cargoId} onChange={handleCargoChange} className="usuario-form-select">
                       <option value={0}>Seleccionar Cargo</option>
                       {cargos.length > 0
                         ? cargos.map((cargo) => (
@@ -90,21 +91,22 @@ const Usuario = () => {
                         : null}
                     </Form.Select>
                   </Form.Group>
-                  <Form.Group controlId="tipo">
-                    <Form.Label>Tipo de usuario:</Form.Label>
-                    <Form.Select value={tipoId} onChange={handleTipoChange}>
+                                  <Form.Group controlId="tipo" className="usuario-form-group">
+                                      <Form.Label className="usuario-form-label">Tipo de usuario:</Form.Label>
+                                      <Form.Select value={tipoId} onChange={handleTipoChange} className="usuario-form-select">
                       <option value={0}>Seleccionar Tipo</option>
                       <option value={1}>Administrador</option>
                       <option value={2}>Empleado</option>
                       <option value={3}>Cliente</option>
                     </Form.Select>
                   </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Contrase&ntilde;a nueva:</Form.Label>
+                                  <Form.Group className="usuario-form-group">
+                                      <Form.Label className="usuario-form-label">Contrase&ntilde;a nueva:</Form.Label>
                     <Form.Control
                       type="password"
                       value={password}
-                      onChange={handleChange}
+                                          onChange={handleChange}
+                                          className="usuario-form-control"
                     ></Form.Control>
                   </Form.Group>
                 </Col>

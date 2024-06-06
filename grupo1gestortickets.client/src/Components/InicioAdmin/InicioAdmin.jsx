@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./InicioAdmin.css";
 import { Col, Container, Form, Row, Table } from "react-bootstrap";
+import withLoader from "../Load/withLoader ";
 import { Link } from "react-router-dom";
 import { ejecutarGet } from "../Utilidades/requests";
 
@@ -78,9 +79,9 @@ const InicioAdmin = () => {
   };
 
   return (
-    <>
-      <Container>
-        <Row className="justify-content-end">
+      <>
+        <Container className="container-ticket">
+        <Row className="justify-content-end mt-5">
           <Col className="tickets-abiertos" xs={2}>
             <Row>
               <Col>Abiertos</Col>
@@ -122,7 +123,7 @@ const InicioAdmin = () => {
             </Row>
           </Col>
         </Row>
-        <Row className="mt-4">
+        <Row className="ticket-left ">
           <Col>
             <Form.Group controlId="ticket">
               <Form.Label>Filtar por t&iacute;tulo del ticket</Form.Label>
@@ -156,7 +157,7 @@ const InicioAdmin = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Row className="mt-4">
+        <Row className="mt-4 custom-row-width">
           <Col>
             <Table striped bordered hover>
               <tbody>
@@ -257,4 +258,4 @@ const InicioAdmin = () => {
   );
 };
 
-export default InicioAdmin;
+export default withLoader(InicioAdmin);

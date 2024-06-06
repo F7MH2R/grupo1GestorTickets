@@ -5,6 +5,9 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Table, Button, Container, Row, Col, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import withLoader from "../../Load/withLoader ";
+import { FaEye } from 'react-icons/fa';
+import "./InicioCliente.css"
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -198,164 +201,166 @@ const TicketsTableClient = () => {
     }
   };
 
-  return (
-    <Container>
-      <div style={{ marginTop: "15%" }}></div>
-      <h1>Estadísticas</h1>
-      <Row className="mb-4">
-        <Col md={4}>
-          <h3>Estados</h3>
-          <Pie
-            data={statusChartData}
-            options={{
-              plugins: {
-                datalabels: {
-                  color: "#fff",
-                  display: true,
-                  formatter: (value, context) => {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label.length > 10
-                      ? `${label.substring(0, 7)}...`
-                      : label;
-                  },
-                  font: {
-                    weight: "bold",
-                    size: (context) => {
-                      const width = context.chart.width;
-                      const size = Math.round(width / 32);
-                      return size > 12 ? 12 : size; // Ensures the text doesn't get too small
-                    },
-                  },
-                  textAlign: "center",
-                  clip: true,
-                  clamp: true,
-                },
-              },
-              onClick: handleStatusChartClick,
-            }}
-          />
-        </Col>
-        <Col md={4}>
-          <h3>Áreas</h3>
-          <Pie
-            data={areaChartData}
-            options={{
-              plugins: {
-                datalabels: {
-                  color: "#fff",
-                  display: true,
-                  formatter: (value, context) => {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label.length > 10
-                      ? `${label.substring(0, 7)}...`
-                      : label;
-                  },
-                  font: {
-                    weight: "bold",
-                    size: (context) => {
-                      const width = context.chart.width;
-                      const size = Math.round(width / 32);
-                      return size > 12 ? 12 : size; // Ensures the text doesn't get too small
-                    },
-                  },
-                  textAlign: "center",
-                  clip: true,
-                  clamp: true,
-                },
-              },
-              onClick: handleAreaChartClick,
-            }}
-          />
-        </Col>
-        <Col md={4}>
-          <h3>Prioridad</h3>
-          <Pie
-            data={priorityChartData}
-            options={{
-              plugins: {
-                datalabels: {
-                  color: "#fff",
-                  display: true,
-                  formatter: (value, context) => {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label.length > 10
-                      ? `${label.substring(0, 7)}...`
-                      : label;
-                  },
-                  font: {
-                    weight: "bold",
-                    size: (context) => {
-                      const width = context.chart.width;
-                      const size = Math.round(width / 32);
-                      return size > 12 ? 12 : size; // Ensures the text doesn't get too small
-                    },
-                  },
-                  textAlign: "center",
-                  clip: true,
-                  clamp: true,
-                },
-              },
-              onClick: handlePriorityChartClick,
-            }}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <Form.Control
-            type="text"
-            placeholder="Buscar por nombre"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <Button onClick={handleAddTicket} className="mb-3">
-            Agregar Nuevo Ticket
-          </Button>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Fecha Creación</th>
-                <th>Descripción</th>
-                <th>Estado</th>
-                <th>Área</th>
-                <th>Prioridad</th>
-                <th>Acciones</th> {/* New column for actions */}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTickets.map((ticket) => (
-                <tr key={ticket.id}>
-                  <td>{ticket.id}</td>
-                  <td>{ticket.nombre}</td>
-                  <td>{new Date(ticket.fechaCreacion).toLocaleDateString()}</td>
-                  <td>{ticket.descripcion}</td>
-                  <td>{ticket.estado}</td>
-                  <td>{ticket.area}</td>
-                  <td>{ticket.prioridad}</td>
-                  <td>
-                    <Button
-                      variant="info"
-                      size="sm"
-                      onClick={() => handleViewTicket(ticket.id)}
-                      className="mr-2"
-                    >
-                      Ver
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-    </Container>
-  );
+    return (
+        <div className="tickets-container">
+            <Container>
+                <h1 className="titulo-text-estadistica">Estadísticas</h1>
+                <Row className="estadisticas-size mb-4">
+                    <Col md={4}>
+                        <h3 className="size">Estados</h3>
+                        <Pie
+                            data={statusChartData}
+                            options={{
+                                plugins: {
+                                    datalabels: {
+                                        color: "#fff",
+                                        display: true,
+                                        formatter: (value, context) => {
+                                            const label = context.chart.data.labels[context.dataIndex];
+                                            return label.length > 10
+                                                ? `${label.substring(0, 7)}...`
+                                                : label;
+                                        },
+                                        font: {
+                                            weight: "bold",
+                                            size: (context) => {
+                                                const width = context.chart.width;
+                                                const size = Math.round(width / 32);
+                                                return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                                            },
+                                        },
+                                        textAlign: "center",
+                                        clip: true,
+                                        clamp: true,
+                                    },
+                                },
+                                onClick: handleStatusChartClick,
+                            }}
+                        />
+                    </Col>
+                    <Col md={4}>
+                        <h3 className="size">Áreas</h3>
+                        <Pie
+                            data={areaChartData}
+                            options={{
+                                plugins: {
+                                    datalabels: {
+                                        color: "#fff",
+                                        display: true,
+                                        formatter: (value, context) => {
+                                            const label = context.chart.data.labels[context.dataIndex];
+                                            return label.length > 10
+                                                ? `${label.substring(0, 7)}...`
+                                                : label;
+                                        },
+                                        font: {
+                                            weight: "bold",
+                                            size: (context) => {
+                                                const width = context.chart.width;
+                                                const size = Math.round(width / 32);
+                                                return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                                            },
+                                        },
+                                        textAlign: "center",
+                                        clip: true,
+                                        clamp: true,
+                                    },
+                                },
+                                onClick: handleAreaChartClick,
+                            }}
+                        />
+                    </Col>
+                    <Col md={4}>
+                        <h3 className="size">Prioridad</h3>
+                        <Pie
+                            data={priorityChartData}
+                            options={{
+                                plugins: {
+                                    datalabels: {
+                                        color: "#fff",
+                                        display: true,
+                                        formatter: (value, context) => {
+                                            const label = context.chart.data.labels[context.dataIndex];
+                                            return label.length > 10
+                                                ? `${label.substring(0, 7)}...`
+                                                : label;
+                                        },
+                                        font: {
+                                            weight: "bold",
+                                            size: (context) => {
+                                                const width = context.chart.width;
+                                                const size = Math.round(width / 32);
+                                                return size > 12 ? 12 : size; // Ensures the text doesn't get too small
+                                            },
+                                        },
+                                        textAlign: "center",
+                                        clip: true,
+                                        clamp: true,
+                                    },
+                                },
+                                onClick: handlePriorityChartClick,
+                            }}
+                        />
+                    </Col>
+                </Row>
+                <Row className="mb-4 justify-content-center">
+                    <Col md={6}>
+                        <div className="search-bar">
+                            <Form.Control
+                                type="text"
+                                placeholder="Buscar por nombre"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                    </Col>
+                </Row>
+                <div className="titulo-text size-letra">Mis tickets</div>
+                <Row className="tickets-container">
+                    <Col md={12}>
+                        <Button onClick={handleAddTicket} className="add-button-cliente mb-3">
+                            Agregar Nuevo Ticket
+                        </Button>
+                        <Table className="table-container" striped bordered hover>
+                            <thead className="size-letra">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Fecha Creación</th>
+                                    <th>Estado</th>
+                                    <th>Área</th>
+                                    <th>Prioridad</th>
+                                    <th>Acciones</th> {/* New column for actions */}
+                                </tr>
+                            </thead>
+                            <tbody className="size-letra-td">
+                                {filteredTickets.map((ticket) => (
+                                    <tr key={ticket.id}>
+                                        <td>{ticket.id}</td>
+                                        <td>{ticket.nombre}</td>
+                                        <td>{new Date(ticket.fechaCreacion).toLocaleDateString()}</td>
+                                        <td>{ticket.estado}</td>
+                                        <td>{ticket.area}</td>
+                                        <td>{ticket.prioridad}</td>
+                                        <td>
+                                            <Button
+                                                variant="info"
+                                                size="sm"
+                                                onClick={() => handleViewTicket(ticket.id)}
+                                                className="mr-2 ver-ticket-button"
+                                            >
+                                                <FaEye className="mr-1" /> Detalle
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
+    );
 };
 
-export default TicketsTableClient;
+export default withLoader(TicketsTableClient);
