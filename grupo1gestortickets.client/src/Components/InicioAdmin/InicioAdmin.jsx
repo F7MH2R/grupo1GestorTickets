@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "./InicioAdmin.css";
-import { Col, Container, Form, Row, Table } from "react-bootstrap";
+import { Col, Container, Form, Row, Table, Card } from "react-bootstrap";
 import withLoader from "../Load/withLoader ";
 import { Link } from "react-router-dom";
 import { ejecutarGet } from "../Utilidades/requests";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const InicioAdmin = () => {
   const [abierto, setAbierto] = useState(0);
-  const [cerrado, setcerrado] = useState(0);
+  const [cerrado, setCerrado] = useState(0);
   const [enProceso, setEnProceso] = useState(0);
   const [sinAsignar, setSinAsignar] = useState(0);
   const [filtro, setFiltro] = useState("");
@@ -36,7 +55,7 @@ const InicioAdmin = () => {
       .then((response) => {
         const data = response.data;
         setAbierto(data.abiertos || 0);
-        setcerrado(data.cerrados || 0);
+        setCerrado(data.cerrados || 0);
         setEnProceso(data.enProceso || 0);
         setSinAsignar(data.sinAsignar || 0);
         setTickets(data.tickets || []);
@@ -77,49 +96,89 @@ const InicioAdmin = () => {
     }
   };
 
+  const chartData = (label, count) => {
+    return {
+      labels: [label],
+      datasets: [
+        {
+          label: label,
+          data: [count],
+          backgroundColor: "rgba(75,192,192,0.6)",
+          borderColor: "rgba(75,192,192,1)",
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return context.raw; // Correctly show the count value
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
     <>
       <Container className="container-ticket">
         <Row className="justify-content-end mt-5">
-          <Col className="tickets-abiertos" xs={2}>
-            <Row>
-              <Col>Abiertos</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{abierto}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Abiertos</Card.Title>
+                <Bar
+                  data={chartData("Abiertos", abierto)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
-          <Col className="tickets-proceso" xs={2}>
-            <Row>
-              <Col>En Proceso</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{enProceso}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>En Proceso</Card.Title>
+                <Bar
+                  data={chartData("En Proceso", enProceso)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
-          <Col className="tickets-sin-asignar" xs={2}>
-            <Row>
-              <Col>Sin Asignar</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{sinAsignar}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Sin Asignar</Card.Title>
+                <Bar
+                  data={chartData("Sin Asignar", sinAsignar)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
-          <Col className="tickets-cerrados" xs={2}>
-            <Row>
-              <Col>Cerrados</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{cerrado}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Cerrados</Card.Title>
+                <Bar
+                  data={chartData("Cerrados", cerrado)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
         <Row className="ticket-left ">
