@@ -23,6 +23,7 @@ import Loader from ".//Components/Load/Loading";
 import TablaAdmin from "./Components/PantallaAdmin/tabla/TablaAdmin";
 import TicketsTableEmployee from "./Components/PantallaEmpleado/Tabla/TicketsTableEmployee";
 import DetalleProE from "./Components/PantallaEmpleado/DetalleEmple/DetalleProE";
+import TicketEmpleado from "./Components/TicketEmpleado/TicketEmpleado";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
