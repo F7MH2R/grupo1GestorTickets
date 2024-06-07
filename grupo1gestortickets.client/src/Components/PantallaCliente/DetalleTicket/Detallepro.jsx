@@ -21,8 +21,8 @@ import {
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
+import WithLoader from "../../Load/withLoader ";
 
-import withLoader from "../../Load/withLoader ";
 import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
 import "./DetalleTicket.css";
@@ -76,7 +76,7 @@ const Detallepro = () => {
   if (!ticketDetails) {
     return (
       <div>
-        <withLoader />
+        <WithLoader />
       </div>
     );
   }
@@ -356,4 +356,4 @@ const Detallepro = () => {
   );
 };
 
-export default withLoader(Detallepro);
+export default WithLoader(Detallepro);

@@ -365,8 +365,7 @@ const CreateTicket = () => {
               <Modal.Title>Ticket Creado</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              El ticket se ha creado con éxito. El ID de su ticket es {ticketId}
-              .
+              El ticket se ha creado con éxito. El N° Ticket es {ticketId}.
             </Modal.Body>
           </Modal>
           <div className="align-items-start">

@@ -321,12 +321,6 @@ const TicketsTableEmployee = () => {
         <h1 className="titulo-text-mis-ticket">Mis tickets</h1>
         <Row className="tickets-container">
           <Col md={12}>
-            <Button
-              onClick={handleAddTicket}
-              className="add-button-cliente mb-3"
-            >
-              Agregar Nuevo Ticket
-            </Button>
             <Table className="table-container" striped bordered hover>
               <thead className="size-letra">
                 <tr>
