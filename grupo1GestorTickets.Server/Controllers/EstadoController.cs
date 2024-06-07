@@ -11,15 +11,25 @@ namespace grupo1GestorTickets.Server.Controllers
     public class EstadoController : ControllerBase
     {
         private readonly TicketsCTX _context;
-        private readonly EmailNotificationService _emailNotificationService;
 
-        public EstadoController(TicketsCTX context, EmailNotificationService emailNotificationService)
+        public EstadoController(TicketsCTX context)
         {
             _context = context;
-            _emailNotificationService = emailNotificationService;
         }
 
         [HttpGet]
+        public async Task<IActionResult> ObtenerTodos()
+        {
+            var estados = await _context.Estados.ToListAsync();
+            
+            if(estados == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(estados);
+        }
+        [HttpGet("estado")]
         public async Task<IActionResult> GetEstados()
         {
             var estados = await _context.Estados
@@ -28,6 +38,5 @@ namespace grupo1GestorTickets.Server.Controllers
 
             return Ok(estados);
         }
-
     }
 }

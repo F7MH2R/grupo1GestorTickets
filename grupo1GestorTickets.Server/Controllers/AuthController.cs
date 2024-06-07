@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using grupo1GestorTickets.Server.Models;
+using grupo1GestorTickets.Server.DTO;
 
 namespace grupo1GestorTickets.Server.Controllers
 {
@@ -78,6 +79,53 @@ namespace grupo1GestorTickets.Server.Controllers
 
             });
         }
+
+        [HttpPatch("usuario/{id}")]
+        public async Task<IActionResult> patchUsuario([FromBody] UsuarioUpdateDTO usuarioUpdateDTO, int id)
+        {
+            var usuario = await _context.Usuario.Where(usuario => usuario.Id == id).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            usuario.Cargo = usuarioUpdateDTO.CargoId;
+            usuario.tipo_usuario = usuarioUpdateDTO.TipoUsuarioId;
+            usuario.Password = usuarioUpdateDTO.NuevoPassword;
+
+            _context.Entry(usuario).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok(usuario);
+        }
+
+        [HttpGet("usuario/{id}")]
+        public async Task<IActionResult> ObtenerUsuarioById( int id)
+        {
+            var usuario = await _context.Usuario.Where(usuario => usuario.Id == id).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuario);
+        }
+
+        [HttpGet("usuarios/tipo/{id}")]
+        public async Task<IActionResult> ObtenerUsuarioByTipo(int id)
+        {
+            var usuarios = await _context.Usuario.Where(usuario => usuario.tipo_usuario == id && usuario.estado_cuenta == 1).ToListAsync();
+
+            if (usuarios == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuarios);
+        }
+
     }
 
     public class LoginModel
@@ -86,4 +134,3 @@ namespace grupo1GestorTickets.Server.Controllers
         public string Password { get; set; }
     }
 }
-

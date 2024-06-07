@@ -78,6 +78,7 @@ const App = () => {
               <Route path="TAdmin" element={<TablaAdmin />} />
               <Route path="tableemployee" element={<TicketsTableEmployee />} />
               <Route path="/detalleproe/:ticketId" element={<DetalleProE />} />
+              <Route path="/mis-tickets" element={<TicketEmpleado />} />
             </Routes>
           </Router>
         </div>
