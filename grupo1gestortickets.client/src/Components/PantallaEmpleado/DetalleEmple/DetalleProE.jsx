@@ -54,7 +54,9 @@ const DetalletProE = () => {
 
     const fetchStates = async () => {
       try {
-        const response = await axios.get("https://localhost:7289/api/estado");
+        const response = await axios.get(
+          "https://localhost:7289/api/estado/estado"
+        );
         setStates(response.data);
       } catch (error) {
         console.error("Error fetching states:", error);
