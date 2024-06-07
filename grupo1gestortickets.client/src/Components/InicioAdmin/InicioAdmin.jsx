@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "./InicioAdmin.css";
-import { Col, Container, Form, Row, Table } from "react-bootstrap";
+import { Col, Container, Form, Row, Table, Card } from "react-bootstrap";
 import withLoader from "../Load/withLoader ";
 import { Link } from "react-router-dom";
 import { ejecutarGet } from "../Utilidades/requests";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const InicioAdmin = () => {
   const [abierto, setAbierto] = useState(0);
-  const [cerrado, setcerrado] = useState(0);
+  const [cerrado, setCerrado] = useState(0);
   const [enProceso, setEnProceso] = useState(0);
   const [sinAsignar, setSinAsignar] = useState(0);
   const [filtro, setFiltro] = useState("");
@@ -20,14 +39,13 @@ const InicioAdmin = () => {
     const obtenerResponsables = (tickets) => {
       return tickets.reduce((resultado, ticket) => {
         if (
-          !resultado.includes({
-            id: ticket.idUsuarioAsignado,
-            nombre: ticket.usuarioAsignado,
-          })
+          !resultado.some(
+            (responsable) => responsable.id === ticket.idUsuarioAsignado
+          )
         ) {
           resultado.push({
             id: ticket.idUsuarioAsignado,
-            nombre: ticket.usuarioAsignado || `Sin asignar`,
+            nombre: ticket.usuarioAsignado || "Sin asignar",
           });
         }
         return resultado;
@@ -37,7 +55,7 @@ const InicioAdmin = () => {
       .then((response) => {
         const data = response.data;
         setAbierto(data.abiertos || 0);
-        setcerrado(data.cerrados || 0);
+        setCerrado(data.cerrados || 0);
         setEnProceso(data.enProceso || 0);
         setSinAsignar(data.sinAsignar || 0);
         setTickets(data.tickets || []);
@@ -78,55 +96,104 @@ const InicioAdmin = () => {
     }
   };
 
+  const generateRandomColor = () => {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return `rgba(${r}, ${g}, ${b}, 0.6)`;
+  };
+
+  const chartData = (label, count) => {
+    return {
+      labels: [label],
+      datasets: [
+        {
+          label: label,
+          data: [count],
+          backgroundColor: generateRandomColor(),
+          borderColor: generateRandomColor(),
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return context.raw; // Correctly show the count value
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
-      <>
-        <Container className="container-ticket">
+    <>
+      <Container className="container-ticket">
         <Row className="justify-content-end mt-5">
-          <Col className="tickets-abiertos" xs={2}>
-            <Row>
-              <Col>Abiertos</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{abierto}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Abiertos</Card.Title>
+                <Bar
+                  data={chartData("Abiertos", abierto)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
-          <Col className="tickets-proceso" xs={2}>
-            <Row>
-              <Col>En Proceso</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{enProceso}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>En Proceso</Card.Title>
+                <Bar
+                  data={chartData("En Proceso", enProceso)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
-          <Col className="tickets-sin-asignar" xs={2}>
-            <Row>
-              <Col>Sin Asignar</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{sinAsignar}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Sin Asignar</Card.Title>
+                <Bar
+                  data={chartData("Sin Asignar", sinAsignar)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
-          <Col className="tickets-cerrados" xs={2}>
-            <Row>
-              <Col>Cerrados</Col>
-            </Row>
-            <Row>
-              <Col>
-                <Link to={"#"}>{cerrado}</Link>
-              </Col>
-            </Row>
+          <Col xs={3}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Cerrados</Card.Title>
+                <Bar
+                  data={chartData("Cerrados", cerrado)}
+                  options={chartOptions}
+                />
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
         <Row className="ticket-left ">
           <Col>
             <Form.Group controlId="ticket">
-              <Form.Label>Filtar por t&iacute;tulo del ticket</Form.Label>
+              <Form.Label style={{ fontSize: "15px" }}>
+                Filtar por t&iacute;tulo del ticket
+              </Form.Label>
               <Form.Control
                 type="text"
                 size="sm"
@@ -137,13 +204,17 @@ const InicioAdmin = () => {
           </Col>
           <Col>
             <Form.Group controlId="responsable">
-              <Form.Label>Filtrar por responsable</Form.Label>
+              <Form.Label style={{ fontSize: "15px" }}>
+                Filtrar por responsable
+              </Form.Label>
               <Form.Control
                 as={"select"}
                 value={idResponsable}
                 onChange={(evento) => setIdResponsable(evento.target.value)}
               >
-                <option value={-1}>Seleccione un valor para filtar</option>
+                <option style={{ fontSize: "15px" }} value={-1}>
+                  Seleccione un valor para filtar
+                </option>
                 {responsables.length > 0 ? (
                   responsables.map((item) => (
                     <option key={item.id} value={item.id}>

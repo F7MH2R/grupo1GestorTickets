@@ -315,7 +315,7 @@ const TicketsTableClient = () => {
                         </div>
                     </Col>
                 </Row>
-                <div className="titulo-text size-letra">Mis tickets</div>
+                <h1 className="titulo-text-mis-ticket">Mis tickets</h1>
                 <Row className="tickets-container">
                     <Col md={12}>
                         <Button onClick={handleAddTicket} className="add-button-cliente mb-3">
@@ -324,7 +324,7 @@ const TicketsTableClient = () => {
                         <Table className="table-container" striped bordered hover>
                             <thead className="size-letra">
                                 <tr>
-                                    <th>ID</th>
+                                    <th>N° Ticket</th>
                                     <th>Nombre</th>
                                     <th>Fecha Creación</th>
                                     <th>Estado</th>

@@ -11,27 +11,23 @@ import {
   Form,
   Modal,
 } from "react-bootstrap";
-import {
-  FaFilePdf,
-  FaFileAudio,
-  FaCheckCircle,
-  FaVideo,
-  FaDatabase,
-} from "react-icons/fa";
+import { FaFilePdf, FaFileAudio, FaCheckCircle } from "react-icons/fa";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
-import WithLoader from "../../Load/withLoader ";
 
+import withLoader from "../../Load/withLoader ";
 import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
 import "./DetalleTicket.css";
 
-const Detallepro = () => {
+const DetalletProE = () => {
   const { ticketId } = useParams();
   const navigate = useNavigate();
   const [ticketDetails, setTicketDetails] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const [states, setStates] = useState([]);
+  const [selectedState, setSelectedState] = useState("");
   const [showModal, setShowModal] = useState(false);
   const componentRef = useRef();
   const audioRef = useRef(null);
@@ -44,6 +40,9 @@ const Detallepro = () => {
         );
         console.log(response.data); // Log the response data
         setTicketDetails(response.data);
+        setSelectedState(response.data.state); // Set the initial state
+
+        // Show the modal if the ticket is closed
         if (response.data.state === "CERRADO") {
           setShowModal(true);
           playCelebrationSound();
@@ -53,10 +52,23 @@ const Detallepro = () => {
       }
     };
 
+    const fetchStates = async () => {
+      try {
+        const response = await axios.get(
+          "https://localhost:7289/api/estado/estado"
+        );
+        setStates(response.data);
+      } catch (error) {
+        console.error("Error fetching states:", error);
+      }
+    };
+
     fetchTicketDetails();
+    fetchStates();
   }, [ticketId]);
-  const audio = new Audio("../../../../public/Cliente.mp3");
+  const audio = new Audio("../../../../public/Empleado.mp3");
   const playCelebrationSound = () => {
+    // Path to your sound file in the public folder
     audioRef.current = audio;
     audio.play();
   };
@@ -76,13 +88,12 @@ const Detallepro = () => {
   if (!ticketDetails) {
     return (
       <div>
-        <WithLoader />
+        <withLoader />
       </div>
     );
   }
 
-  const { ticket, user, state, assignedUser, comments, files, areas } =
-    ticketDetails;
+  const { ticket, user, assignedUser, comments, files, areas } = ticketDetails;
 
   const renderFilePreview = (file) => {
     if (file.tipo === ".png" || file.tipo === ".jpg" || file.tipo === ".jpeg") {
@@ -96,10 +107,6 @@ const Detallepro = () => {
       return <FaFilePdf size={50} />;
     } else if (file.tipo === ".mp3") {
       return <FaFileAudio size={50} />;
-    } else if (file.tipo == ".mp4") {
-      return <FaVideo size={50} />;
-    } else if (file.tipo == ".sql") {
-      return <FaDatabase size={50} />;
     } else {
       return <p>Preview not available</p>;
     }
@@ -148,7 +155,29 @@ const Detallepro = () => {
     }
   };
 
-  const isTicketClosed = state === "CERRADO";
+  const handleStateChange = (event) => {
+    setSelectedState(event.target.value);
+  };
+
+  const handleUpdateState = async () => {
+    try {
+      await axios.put(
+        `https://localhost:7289/api/ticket/${ticketId}/estado`,
+        { idEstado: selectedState },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success("Estado del ticket actualizado con éxito");
+    } catch (error) {
+      console.error("Error updating ticket state:", error);
+      toast.error("Error al actualizar el estado del ticket");
+    }
+  };
+
+  const isTicketClosed = ticketDetails.state === "CERRADO";
 
   return (
     <div className="container-detalle-primero">
@@ -199,9 +228,37 @@ const Detallepro = () => {
                       <p className="info-line-e">
                         <strong>Prioridad:</strong> {ticket?.prioridad}
                       </p>
-                      <p className="info-line-e">
-                        <strong>Estado:</strong> {state}
-                      </p>
+                      <Form.Group controlId="formState">
+                        <Form.Label className="info-line-e">
+                          <strong>Estado:</strong>
+                        </Form.Label>
+                        <Form.Control
+                          as="select"
+                          value={selectedState}
+                          onChange={handleStateChange}
+                          className="custom-dropdown"
+                        >
+                          <option key="current" value={ticketDetails.stateId}>
+                            {ticketDetails.state}
+                          </option>
+                          {states
+                            .filter(
+                              (state) => state.estado1 !== ticketDetails.state
+                            )
+                            .map((state) => (
+                              <option key={state.id} value={state.id}>
+                                {state.estado1}
+                              </option>
+                            ))}
+                        </Form.Control>
+                      </Form.Group>
+                      <Button
+                        variant="primary"
+                        onClick={handleUpdateState}
+                        className="mt-2"
+                      >
+                        Actualizar Estado
+                      </Button>
                       <p className="info-line-e">
                         <strong>Área:</strong> {areas}
                       </p>
@@ -342,8 +399,7 @@ const Detallepro = () => {
         <Modal.Body className="text-center">
           <FaCheckCircle size={80} color="green" />
           <p>
-            ¡Felicidades su ticket a sido completado con éxito! ¡Gracias por
-            preferirnos!
+            ¡Has completado el ticket con éxito! ¡Gracias por tu compromiso!
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -356,4 +412,4 @@ const Detallepro = () => {
   );
 };
 
-export default WithLoader(Detallepro);
+export default withLoader(DetalletProE);

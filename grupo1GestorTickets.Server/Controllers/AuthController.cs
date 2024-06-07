@@ -101,7 +101,7 @@ namespace grupo1GestorTickets.Server.Controllers
         }
 
         [HttpGet("usuario/{id}")]
-        public async Task<IActionResult> obtenerUsuarioById( int id)
+        public async Task<IActionResult> ObtenerUsuarioById( int id)
         {
             var usuario = await _context.Usuario.Where(usuario => usuario.Id == id).FirstOrDefaultAsync();
 
@@ -111,6 +111,19 @@ namespace grupo1GestorTickets.Server.Controllers
             }
 
             return Ok(usuario);
+        }
+
+        [HttpGet("usuarios/tipo/{id}")]
+        public async Task<IActionResult> ObtenerUsuarioByTipo(int id)
+        {
+            var usuarios = await _context.Usuario.Where(usuario => usuario.tipo_usuario == id && usuario.estado_cuenta == 1).ToListAsync();
+
+            if (usuarios == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuarios);
         }
 
     }

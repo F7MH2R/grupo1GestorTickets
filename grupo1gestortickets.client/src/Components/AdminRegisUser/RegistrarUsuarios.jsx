@@ -13,7 +13,8 @@ const RegistrarUsuarios = () => {
 
     return (
         <Container className="container-registrar mt-5 pt-5">
-            <h1 className="text-center mb-4">Registrar</h1>
+            <h2 className="text-center mb-4">Reg&iacute;strate</h2>
+            <h6 className="text-center mb-4">Elije un nuevo registro</h6>
             <Row className="justify-content-center">
                 <Col xs={12} md={6} lg={4} className="mb-4">
                     <Card className="text-center">

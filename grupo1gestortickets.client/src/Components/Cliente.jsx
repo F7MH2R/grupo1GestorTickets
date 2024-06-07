@@ -1,20 +1,20 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 //import CreateTicket from './Components/PantallaCliente/Agregar/CreateTicket';
-import TicketsTableClient from './PantallaCliente/InicioCliente/TicketsTable';
+import TicketsTableClient from "./PantallaCliente/InicioCliente/TicketsTable";
 const Cliente = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const goToDashboard = () => {
-        navigate('/dashboard');
-    };
+  const goToDashboard = () => {
+    navigate("/dashboard");
+  };
 
-    return (
-        <div>
-            <TicketsTableClient/>
-            <button onClick={goToDashboard}>Ir a Dashboard</button>
-        </div>
-    );
+  return (
+    <div>
+      <TicketsTableClient />
+      <button onClick={goToDashboard}>Mi información</button>
+    </div>
+  );
 };
 
 export default Cliente;
