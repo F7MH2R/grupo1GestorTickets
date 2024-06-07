@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Table, Button, Card } from "react-bootstrap";
 import {
   Chart as ChartJS,
@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import withLoader from "../../Load/withLoader ";
+import { cargos as cargosIniciales } from "../../Utilidades/constantes";
+
 // Register the necessary components with Chart.js
 ChartJS.register(
   CategoryScale,
@@ -27,6 +29,11 @@ ChartJS.register(
   Legend,
   ArcElement
 );
+
+const cargoMapping = cargosIniciales.reduce((acc, cargo) => {
+  acc[cargo.id] = cargo.nombre;
+  return acc;
+}, {});
 
 const TablaAdmin = () => {
   const [employees, setEmployees] = useState([]);
@@ -241,11 +248,11 @@ const TablaAdmin = () => {
               {employees.map((employee, index) => (
                 <tr key={index}>
                   <td>{employee.nombre}</td>
-                  <td>{employee.cargo}</td>
+                  <td>{cargoMapping[employee.cargo]}</td>
                   <td>
                     <Button
                       variant="warning"
-                      onClick={() => navigate(`/edit/${employee.id}`)}
+                      onClick={() => navigate(`/usuario/${employee.id}`)}
                     >
                       <FaEdit /> Editar
                     </Button>

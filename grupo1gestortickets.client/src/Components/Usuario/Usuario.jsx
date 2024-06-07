@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./Usuario.css";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Button, Col, Container, Form, Row, Modal } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
 import { cargos as cargosIniciales } from "../Utilidades/constantes";
 import { ejecutarGet, ejecutarPatch } from "../Utilidades/requests";
+import withLoader from "../Load/withLoader ";
+import { FaUserCheck } from "react-icons/fa";
 
 const Usuario = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [cargos, setCargos] = useState([]);
   const [nombre, setNombre] = useState("");
   const [cargoId, setCargo] = useState(0);
   const [tipoId, setTipo] = useState(0);
   const [password, setPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => setCargos(cargosIniciales), []);
   useEffect(() => {
@@ -27,13 +31,15 @@ const Usuario = () => {
   }, [id]);
 
   const handleClick = () => {
-    if (tipoId != 0 && cargoId != 0 && password.length > 0) {
+    if (tipoId !== 0 && cargoId !== 0 && password.length > 0) {
       ejecutarPatch(`/Auth/usuario/${id}`, {
         cargoId: cargoId,
-        tipoUsuario: tipoId,
+        TipoUsuarioId: tipoId,
         nuevoPassword: password,
       })
-        .then(window.alert("Usuario actualizado correctamente"))
+        .then(() => {
+          setShowModal(true);
+        })
         .catch((error) =>
           console.log("Ocurrio un error al actualizar: ", error)
         );
@@ -54,8 +60,14 @@ const Usuario = () => {
     setTipo(event.target.value);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate(-1);
+  };
+
   return (
     <>
+      <div style={{ marginTop: "15%" }}></div>
       <Container fluid className="usuario-container">
         <Row>
           <Col>
@@ -138,8 +150,23 @@ const Usuario = () => {
           </Col>
         </Row>
       </Container>
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Actualización exitosa</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <FaUserCheck size={80} color="green" />
+          <p>El usuario ha sido actualizado correctamente.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
 
-export default Usuario;
+export default withLoader(Usuario);
