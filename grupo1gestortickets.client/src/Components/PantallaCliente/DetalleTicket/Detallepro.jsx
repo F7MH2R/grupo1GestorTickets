@@ -11,7 +11,13 @@ import {
   Form,
   Modal,
 } from "react-bootstrap";
-import { FaFilePdf, FaFileAudio, FaCheckCircle } from "react-icons/fa";
+import {
+  FaFilePdf,
+  FaFileAudio,
+  FaCheckCircle,
+  FaVideo,
+  FaDatabase,
+} from "react-icons/fa";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
@@ -90,6 +96,10 @@ const Detallepro = () => {
       return <FaFilePdf size={50} />;
     } else if (file.tipo === ".mp3") {
       return <FaFileAudio size={50} />;
+    } else if (file.tipo == ".mp4") {
+      return <FaVideo size={50} />;
+    } else if (file.tipo == ".sql") {
+      return <FaDatabase size={50} />;
     } else {
       return <p>Preview not available</p>;
     }

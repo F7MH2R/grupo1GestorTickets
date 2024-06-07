@@ -13,7 +13,7 @@ const Empleado = () => {
     <div>
       <h2>Empleado Dashboard</h2>
       <TicketsTableEmployee />
-      <button onClick={goToDashboard}>Ir a Dashboard</button>
+      <button onClick={goToDashboard}>Mi información</button>
     </div>
   );
 };

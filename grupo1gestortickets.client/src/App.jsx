@@ -24,6 +24,7 @@ import TablaAdmin from "./Components/PantallaAdmin/tabla/TablaAdmin";
 import TicketsTableEmployee from "./Components/PantallaEmpleado/Tabla/TicketsTableEmployee";
 import DetalleProE from "./Components/PantallaEmpleado/DetalleEmple/DetalleProE";
 import TicketEmpleado from "./Components/TicketEmpleado/TicketEmpleado";
+import Footer from "./Components/Footer/Footer";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -81,9 +82,13 @@ const App = () => {
               <Route path="/detalleproe/:ticketId" element={<DetalleProE />} />
               <Route path="/mis-tickets" element={<TicketEmpleado />} />
             </Routes>
+            <Footer />
           </Router>
         </div>
       )}
+      <div className="d-flex flex-column min-vh-100 position-relative">
+        <Footer />
+      </div>
     </div>
   );
 };
