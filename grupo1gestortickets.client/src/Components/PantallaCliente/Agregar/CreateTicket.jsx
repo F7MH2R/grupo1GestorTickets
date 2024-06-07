@@ -12,7 +12,8 @@ import {
   CardGroup,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaFilePdf, FaFileAudio } from "react-icons/fa";
+import { FaFilePdf, FaFileAudio, FaVideo, FaDatabase } from "react-icons/fa";
+
 import withLoader from "../../Load/withLoader ";
 import { TrashFill } from "react-bootstrap-icons";
 import "./Agregar.css";
@@ -110,7 +111,7 @@ const CreateTicket = () => {
       descripcion,
       idArea: selectedArea,
       idUsuario: idUsuario, // Use the state variable
-      idEstado: 1, // Adjust according to your business logic
+      idEstado: 3, // Adjust according to your business logic
       prioridad,
     };
 
@@ -166,7 +167,7 @@ const CreateTicket = () => {
       setTimeout(() => {
         setShowModal(false);
         navigate("/ticketsTableClient");
-      }, 1000);
+      }, 2000);
     } catch (error) {
       console.error("Error creating ticket:", error);
       alert("Hubo un error al crear el ticket.");
@@ -188,6 +189,10 @@ const CreateTicket = () => {
           style={{ width: "100%", height: "200px" }}
         />
       );
+    } else if (file.type.startsWith("application/sql")) {
+      return <FaDatabase size={50} />;
+    } else if (file.type.startsWith("video/")) {
+      return <FaVideo size={50} />;
     } else {
       return <span>{file.name}</span>;
     }
@@ -196,11 +201,11 @@ const CreateTicket = () => {
   return (
     <>
       <div className="container-create-ticket min-vh-100 overflow-auto">
-        <div className="titulo-text">Nuevo ticket</div>
-        <Container className="custom-form">
+        <div className="titulo-text-create">Nuevo ticket</div>
+        <Container className="custom-form min-vh-100">
           <Form>
-            <Row>
-              <Col md={6}>
+            <Row className="align-items-start">
+              <Col md={6} className="form-fondo">
                 <Form.Group controlId="formNombre">
                   <Form.Label className="form-label-create-ticket">
                     Nombre
@@ -278,9 +283,16 @@ const CreateTicket = () => {
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Button variant="secondary" onClick={handleAddComment}>
-                  + Agregar Comentario
-                </Button>
+                <div className="btn-add-container">
+                  <Button
+                    variant="secondary"
+                    className="btn-add-comment"
+                    onClick={handleAddComment}
+                  >
+                    + Comentar
+                  </Button>
+                </div>
+                <div className="titulo-text-arch">Comentarios</div>
                 <div className="custom-form-comments-container">
                   {comentarios.map((comentario, index) => (
                     <Form.Group
@@ -313,37 +325,38 @@ const CreateTicket = () => {
                     </Form.Group>
                   ))}
                 </div>
-                <CardGroup>
-                  {files.map((file, index) => (
-                    <Card
-                      key={index}
-                      className="mb-3"
-                      style={{ width: "18rem" }}
-                    >
-                      <Card.Body>
-                        {renderFilePreview(file)}
-                        <Card.Text>{file.name}</Card.Text>
-                        <Button
-                          variant="danger"
-                          onClick={() => handleFileDelete(index)}
-                        >
-                          Eliminar
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </CardGroup>
               </Col>
             </Row>
             <Row>
               <Col md={12}>
-                <Button
-                  className="btnguardar"
-                  variant="primary"
-                  onClick={handleSubmit}
-                >
-                  Guardar Ticket
-                </Button>
+                <div className="titulo-text-arch">Archivos cargados</div>
+                <div className="custom-form-file-container">
+                  <CardGroup style={{ display: "flex", flexWrap: "wrap" }}>
+                    {files.map((file, index) => (
+                      <Card
+                        key={index}
+                        className="mb-3"
+                        style={{
+                          width: "10rem",
+                          flex: "0 0 auto",
+                          marginRight: "15px",
+                          marginBottom: "15px",
+                        }}
+                      >
+                        <Card.Body>
+                          {renderFilePreview(file)}
+                          <Card.Text>{file.name}</Card.Text>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleFileDelete(index)}
+                          >
+                            Eliminar
+                          </Button>
+                        </Card.Body>
+                      </Card>
+                    ))}
+                  </CardGroup>
+                </div>
               </Col>
             </Row>
           </Form>
@@ -352,10 +365,18 @@ const CreateTicket = () => {
               <Modal.Title>Ticket Creado</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              El ticket se ha creado con éxito. El ID de su ticket es {ticketId}
-              .
+              El ticket se ha creado con éxito. El N° Ticket es {ticketId}.
             </Modal.Body>
           </Modal>
+          <div className="align-items-start">
+            <Button
+              className="btnguardar"
+              variant="primary"
+              onClick={handleSubmit}
+            >
+              Guardar Ticket
+            </Button>
+          </div>
         </Container>
       </div>
     </>

@@ -126,6 +126,7 @@ namespace grupo1GestorTickets.Server.Controllers
                                        select new
                                        {
                                            Areas = ar.Nombre,
+                                           idArea = ar.Id,
                                            Ticket = t,
                                            User = u,
                                            State = es.Estado1,
@@ -285,9 +286,112 @@ namespace grupo1GestorTickets.Server.Controllers
 
         public class TrendData
         {
-            public string AreaName { get; set; }
+            public string? AreaName { get; set; }
             public DateTime Date { get; set; }
             public int Value { get; set; }
+        }
+
+
+        [HttpGet("tickets/{idUsuario}")]
+        public async Task<IActionResult> getTicketsById(int idUsuario)
+        {
+            var tickets = await (from t in _context.Tickets
+                                 join u in _context.Usuarios on t.IdUsuario equals u.Id
+                                 join ua in _context.Usuarios on t.IdUsuarioAsignado equals ua.Id into uas
+                                 from uasgroup in uas.DefaultIfEmpty()
+                                 join c in _context.Comentarios on t.Id equals c.IdTicket into cg
+                                 from subgroup2 in cg.DefaultIfEmpty()
+                                 where (t.IdUsuarioAsignado == idUsuario)
+                                 group subgroup2 by new
+                                 {
+                                     t.Id,
+                                     Creado = u.Nombre,
+                                     t.Prioridad,
+                                     t.FechaCreacion,
+                                     Asignado = uasgroup.Nombre,
+                                     idAsignado = uasgroup.Id,
+                                     Titulo = t.Nombre
+                                 } into g
+                                 select new
+                                 {
+                                     idTicket = g.Key.Id,
+                                     creadoPor = g.Key.Creado,
+                                     prioridad = g.Key.Prioridad,
+                                     fechaCreacion = g.Key.FechaCreacion.ToShortDateString(),
+                                     usuarioAsignado = g.Key.Asignado,
+                                     idUsuarioAsignado = g.Key.idAsignado,
+                                     accion = g.Key.Titulo,
+                                     comentarios = g.Where(c => c != null).ToList()
+                                 }).ToListAsync();
+
+            if(tickets == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(tickets);
+        }
+
+        [HttpPatch("ticket/{id}")]
+        public async Task<IActionResult> UpdateTicket([FromBody] DetalleTicketDTO ticketDTO, int id)
+        {
+            var ticket = await _context.Tickets.Where(t => t.Id == id).FirstOrDefaultAsync();
+            if(ticket == null)
+            {
+                return NotFound();
+            }
+
+            ticket.IdUsuarioAsignado = ticketDTO.IdResponsable;
+            ticket.IdEstado = ticketDTO.Estado;
+            ticket.Prioridad = ticketDTO.Prioridad;
+            
+            _context.Entry(ticket).State = EntityState.Modified;
+            _context.SaveChanges();
+            await _emailNotificationService.NotifyAssignedUser(id);
+            return Ok(ticket);
+        }
+    //Empleado
+        [HttpGet("empleado/{userId}")]
+        public async Task<IActionResult> obtenerTempleados(int userId)
+        {
+            var tickets = await (from t in _context.Tickets
+                                 join a in _context.Areas on t.IdArea equals a.Id
+                                 join es in _context.Estados on t.IdEstado equals es.Id
+                                 where t.IdUsuarioAsignado == userId
+                                 select new
+                                 {
+                                     id = t.Id,
+                                     nombre = t.Nombre,
+                                     fechaCreacion = t.FechaCreacion,
+                                     descripcion = t.Descripcion,
+                                     prioridad = t.Prioridad,
+                                     estado = es.Estado1,
+                                     area = a.Nombre,
+                                 }).ToListAsync();
+
+            return Ok(tickets);
+        }
+        [HttpPut("{ticketId}/estado")]
+        public async Task<IActionResult> UpdateTicketState(int ticketId, [FromBody] EstadoDTO estadoDTO)
+        {
+            var ticket = await _context.Tickets.FindAsync(ticketId);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            ticket.IdEstado = estadoDTO.IdEstado;
+            await _context.SaveChangesAsync();
+
+            await _emailNotificationService.NotifyUserOnStateChange(ticketId);
+            await _emailNotificationService.NotifyAdminsOnStateChange(ticketId);
+
+            return Ok();
+        }
+
+        public class EstadoDTO
+        {
+            public int IdEstado { get; set; }
         }
 
     }

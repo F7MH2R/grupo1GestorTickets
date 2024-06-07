@@ -41,5 +41,6 @@ public partial class Usuario
     public DateTime? FechaCreacion { get; set; }
 
     public string? nombreEmpresa { get; set; }
+    public string? imgurl { get; set; }
 
 }

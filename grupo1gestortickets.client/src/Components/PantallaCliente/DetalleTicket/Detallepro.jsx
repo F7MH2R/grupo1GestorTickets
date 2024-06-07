@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
@@ -9,20 +9,32 @@ import {
   Button,
   CardGroup,
   Form,
+  Modal,
 } from "react-bootstrap";
-import { FaFilePdf, FaFileAudio } from "react-icons/fa";
+import {
+  FaFilePdf,
+  FaFileAudio,
+  FaCheckCircle,
+  FaVideo,
+  FaDatabase,
+} from "react-icons/fa";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { toast, ToastContainer } from "react-toastify";
+import WithLoader from "../../Load/withLoader ";
+
 import "react-toastify/dist/ReactToastify.css";
 import ReactToPrint from "react-to-print";
 import "./DetalleTicket.css";
 
 const Detallepro = () => {
   const { ticketId } = useParams();
+  const navigate = useNavigate();
   const [ticketDetails, setTicketDetails] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const componentRef = useRef();
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const fetchTicketDetails = async () => {
@@ -32,6 +44,10 @@ const Detallepro = () => {
         );
         console.log(response.data); // Log the response data
         setTicketDetails(response.data);
+        if (response.data.state === "CERRADO") {
+          setShowModal(true);
+          playCelebrationSound();
+        }
       } catch (error) {
         console.error("Error fetching ticket details:", error);
       }
@@ -39,9 +55,30 @@ const Detallepro = () => {
 
     fetchTicketDetails();
   }, [ticketId]);
+  const audio = new Audio("../../../../public/Cliente.mp3");
+  const playCelebrationSound = () => {
+    audioRef.current = audio;
+    audio.play();
+  };
+
+  const stopCelebrationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    stopCelebrationSound();
+  };
 
   if (!ticketDetails) {
-    return <p>Loading...</p>;
+    return (
+      <div>
+        <WithLoader />
+      </div>
+    );
   }
 
   const { ticket, user, state, assignedUser, comments, files, areas } =
@@ -59,6 +96,10 @@ const Detallepro = () => {
       return <FaFilePdf size={50} />;
     } else if (file.tipo === ".mp3") {
       return <FaFileAudio size={50} />;
+    } else if (file.tipo == ".mp4") {
+      return <FaVideo size={50} />;
+    } else if (file.tipo == ".sql") {
+      return <FaDatabase size={50} />;
     } else {
       return <p>Preview not available</p>;
     }
@@ -107,122 +148,212 @@ const Detallepro = () => {
     }
   };
 
+  const isTicketClosed = state === "CERRADO";
+
   return (
-    <Container>
-      <h1>Detalles del Ticket</h1>
-      <ReactToPrint
-        trigger={() => <Button variant="secondary">Descargar PDF</Button>}
-        content={() => componentRef.current}
-      />
-      <div ref={componentRef}>
-        <Row className="mb-4">
-          <Col>
-            <h3>Información del Ticket</h3>
-            <p>
-              <strong>ID:</strong> {ticket?.id}
-            </p>
-            <p>
-              <strong>Nombre:</strong> {ticket?.nombre}
-            </p>
-            <p>
-              <strong>Fecha de Creación:</strong>{" "}
-              {ticket
-                ? new Date(ticket.fechaCreacion).toLocaleDateString()
-                : ""}
-            </p>
-            <p>
-              <strong>Descripción:</strong> {ticket?.descripcion}
-            </p>
-            <p>
-              <strong>Prioridad:</strong> {ticket?.prioridad}
-            </p>
-            <p>
-              <strong>Estado:</strong> {state}
-            </p>
-            <p>
-              <strong>Área:</strong> {areas}
-            </p>
-            <p>
-              <strong>Asignado a:</strong>{" "}
-              {assignedUser ? assignedUser.nombre : "No asignado"}
-            </p>
-            <p>
-              <strong>Correo del Asignado:</strong>{" "}
-              {assignedUser ? assignedUser.correo : "No asignado"}
-            </p>
-          </Col>
-        </Row>
-        <Row className="mb-4">
-          <Col>
-            <h3>Información del Usuario</h3>
-            <p>
-              <strong>Nombre:</strong> {user?.nombre}
-            </p>
-            <p>
-              <strong>Correo:</strong> {user?.correo}
-            </p>
-          </Col>
-        </Row>
-        <div className="no-print">
-          <Row className="mb-4">
-            <Col>
-              <h3>Comentarios</h3>
-              <div style={{ height: "300px", overflowY: "scroll" }}>
-                {comments?.map((comment, index) => (
-                  <MessageBox
-                    key={index}
-                    position={comment.user.id === user?.id ? "right" : "left"}
-                    type={"text"}
-                    text={comment.comentario1}
-                    title={comment.user.nombre}
-                    date={new Date(comment.fechaCreacion)}
-                  />
-                ))}
-              </div>
-              <Form className="mt-3">
-                <Form.Control
-                  type="text"
-                  placeholder="Escribe un comentario"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  className="mr-2"
-                />
-                <Button variant="primary" onClick={handleAddComment}>
-                  Añadir Comentario
-                </Button>
-              </Form>
-            </Col>
-          </Row>
-          <Row className="mb-4">
-            <Col>
-              <h3>Archivos</h3>
-              <CardGroup>
-                {files?.map((file) => (
-                  <Card
-                    key={file.id}
-                    style={{ margin: "10px", width: "18rem" }}
-                  >
-                    {renderFilePreview(file)}
+    <div className="container-detalle-primero">
+      <Container className="custom-ticket-container mt-4">
+        <h3 className="titulo-text-detalle text-center mb-4">
+          Detalles Ticket
+        </h3>
+        <ReactToPrint
+          trigger={() => (
+            <Button variant="secondary" className="custom-print-button mb-4">
+              Descargar PDF
+            </Button>
+          )}
+          content={() => componentRef.current}
+        />
+        <Button
+          variant="secondary"
+          className="custom-button mb-4"
+          onClick={() => navigate(-1)}
+        >
+          Regresar
+        </Button>
+        <Row md={12}>
+          <Col md={12}>
+            <div ref={componentRef} className="ticket-info-container">
+              <Row>
+                <Col>
+                  <Card className="ticket-card">
+                    <Card.Header className="card-header-uno">
+                      <h3 className="card-title">Detalles del Ticket</h3>
+                    </Card.Header>
                     <Card.Body>
-                      <Card.Title>{file.nombre}</Card.Title>
-                      <Button
-                        variant="primary"
-                        href={`data:${file.tipo};base64,${file.contenido}`}
-                        download={file.nombre}
-                      >
-                        Descargar
-                      </Button>
+                      <p className="info-line-e">
+                        <strong>N° Ticket:</strong> {ticket?.id}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Nombre:</strong> {ticket?.nombre}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Fecha de Creación:</strong>{" "}
+                        {ticket
+                          ? new Date(ticket.fechaCreacion).toLocaleDateString()
+                          : ""}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Descripción:</strong> {ticket?.descripcion}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Prioridad:</strong> {ticket?.prioridad}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Estado:</strong> {state}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Área:</strong> {areas}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Asignado a:</strong>{" "}
+                        {assignedUser ? assignedUser.nombre : "No asignado"}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Correo del Asignado:</strong>{" "}
+                        {assignedUser ? assignedUser.correo : "No asignado"}
+                      </p>
                     </Card.Body>
                   </Card>
-                ))}
-              </CardGroup>
-            </Col>
-          </Row>
-        </div>
-      </div>
-      <ToastContainer />
-    </Container>
+                </Col>
+                <Row>
+                  <Col>
+                    <Card className="user-info-card">
+                      <Card.Header className="card-header-uno">
+                        <h3 className="card-title">Detalles del Usuario</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <p className="info-line-e">
+                          <strong>Nombre:</strong> {user?.nombre}
+                        </p>
+                        <p className="info-line-e">
+                          <strong>Correo:</strong> {user?.correo}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+              </Row>
+            </div>
+          </Col>
+        </Row>
+        <Row md={12}>
+          <Col md={12}>
+            <div>
+              <Col className="custom-no-print">
+                <Card className="comments-style">
+                  <Card.Header>
+                    <h3 className="card-title-two">
+                      ¡Comparte tus Comentarios!
+                    </h3>
+                  </Card.Header>
+                  <Card.Body>
+                    <div
+                      className="custom-comments-box"
+                      style={{ height: "295px", overflowY: "scroll" }}
+                    >
+                      {comments?.map((comment, index) => (
+                        <MessageBox
+                          key={index}
+                          position={
+                            comment.user.id === user?.id ? "right" : "left"
+                          }
+                          type={"text"}
+                          text={comment.comentario1}
+                          title={comment.user.nombre}
+                          date={new Date(comment.fechaCreacion)}
+                        />
+                      ))}
+                    </div>
+                    <Form className="custom-comment-form mt-3">
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Escribe un comentario"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        className="custom-comment-input mr-2"
+                        disabled={isTicketClosed}
+                      />
+                      <Button
+                        variant="primary"
+                        onClick={handleAddComment}
+                        className="custom-comment-button mt-2"
+                        disabled={isTicketClosed}
+                      >
+                        Añadir Comentario
+                      </Button>
+                    </Form>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={8}>
+            <div>
+              <Col className="custom-no-print">
+                <Card className="file-style mb-4">
+                  <Card.Header>
+                    <h3 className="card-title-two">Archivos</h3>
+                  </Card.Header>
+                  <Card.Body>
+                    <div className="custom-scrollable-container">
+                      <CardGroup className="custom-card-group">
+                        {files?.map((file) => (
+                          <Card key={file.id} className="custom-file-card mb-4">
+                            {renderFilePreview(file)}
+                            <Card.Body className="custom-card-body">
+                              <Card className="custom-card-title-pdf">
+                                {file.nombre}
+                              </Card>
+                              <Button
+                                variant="primary"
+                                href={`data:${file.tipo};base64,${file.contenido}`}
+                                download={file.nombre}
+                                className="custom-download-button"
+                              >
+                                Descargar
+                              </Button>
+                            </Card.Body>
+                          </Card>
+                        ))}
+                      </CardGroup>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="text-center">
+            <Button variant="secondary" onClick={() => navigate(-1)}>
+              Regresar
+            </Button>
+          </Col>
+        </Row>
+        <ToastContainer />
+      </Container>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>¡Felicitaciones!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <FaCheckCircle size={80} color="green" />
+          <p>
+            ¡Felicidades su ticket a sido completado con éxito! ¡Gracias por
+            preferirnos!
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
-export default Detallepro;
+export default WithLoader(Detallepro);
