@@ -2,5 +2,8 @@
 {
     public class DetalleTicketDTO
     {
+        public int Estado {  get; set; }
+        public string Prioridad { get; set; }
+        public int IdResponsable { get; set; }
     }
 }

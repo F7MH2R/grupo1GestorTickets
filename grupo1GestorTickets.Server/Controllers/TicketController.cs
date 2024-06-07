@@ -331,6 +331,25 @@ namespace grupo1GestorTickets.Server.Controllers
 
             return Ok(tickets);
         }
+
+        [HttpPatch("ticket/{id}")]
+        public async Task<IActionResult> UpdateTicket([FromBody] DetalleTicketDTO ticketDTO, int id)
+        {
+            var ticket = await _context.Tickets.Where(t => t.Id == id).FirstOrDefaultAsync();
+            if(ticket == null)
+            {
+                return NotFound();
+            }
+
+            ticket.IdUsuarioAsignado = ticketDTO.IdResponsable;
+            ticket.IdEstado = ticketDTO.Estado;
+            ticket.Prioridad = ticketDTO.Prioridad;
+            
+            _context.Entry(ticket).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok(ticket);
+        }
    
     }
 }

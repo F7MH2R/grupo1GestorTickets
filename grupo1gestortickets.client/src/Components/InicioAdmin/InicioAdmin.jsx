@@ -20,14 +20,13 @@ const InicioAdmin = () => {
     const obtenerResponsables = (tickets) => {
       return tickets.reduce((resultado, ticket) => {
         if (
-          !resultado.includes({
-            id: ticket.idUsuarioAsignado,
-            nombre: ticket.usuarioAsignado,
-          })
+          !resultado.some(
+            (responsable) => responsable.id === ticket.idUsuarioAsignado
+          )
         ) {
           resultado.push({
             id: ticket.idUsuarioAsignado,
-            nombre: ticket.usuarioAsignado || `Sin asignar`,
+            nombre: ticket.usuarioAsignado || "Sin asignar",
           });
         }
         return resultado;
@@ -79,8 +78,8 @@ const InicioAdmin = () => {
   };
 
   return (
-      <>
-        <Container className="container-ticket">
+    <>
+      <Container className="container-ticket">
         <Row className="justify-content-end mt-5">
           <Col className="tickets-abiertos" xs={2}>
             <Row>
