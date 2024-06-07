@@ -15,6 +15,7 @@ import { Pie } from "react-chartjs-2";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
+
 import withLoader from "../../Load/withLoader ";
 import { cargos as cargosIniciales } from "../../Utilidades/constantes";
 
@@ -74,7 +75,7 @@ const TablaAdmin = () => {
     }
   };
 
-  const generateChartData = (label, data, useAreaName = true) => {
+  const generateChartData = (label, data, useAreaName = false) => {
     if (!Array.isArray(data)) {
       console.warn(`Data for ${label} is not an array.`, data);
       return {
@@ -83,35 +84,41 @@ const TablaAdmin = () => {
       };
     }
 
-    const labels = [
-      ...new Set(
-        data.map((d) => {
-          const date = new Date(d.date);
-          if (label === "Tareas por mes") {
-            return date.toLocaleString("es-ES", { month: "long" });
-          } else {
-            return `${date.getDate()} ${date.toLocaleString("es-ES", {
-              month: "long",
-            })}`;
-          }
-        })
-      ),
-    ];
+    const labels = useAreaName
+      ? [...new Set(data.map((d) => d.areaName))]
+      : [
+          ...new Set(
+            data.map((d) => {
+              const date = new Date(d.date);
+              if (label === "Tareas por mes") {
+                return date.toLocaleString("es-ES", { month: "long" });
+              } else {
+                return `${date.getDate()} ${date.toLocaleString("es-ES", {
+                  month: "long",
+                })}`;
+              }
+            })
+          ),
+        ];
 
     const aggregatedData = labels.map((labelText) => {
       return data
         .filter((d) => {
-          const date = new Date(d.date);
-          if (label === "Tareas por mes") {
-            return (
-              date.toLocaleString("es-ES", { month: "long" }) === labelText
-            );
+          if (useAreaName) {
+            return d.areaName === labelText;
           } else {
-            return (
-              `${date.getDate()} ${date.toLocaleString("es-ES", {
-                month: "long",
-              })}` === labelText
-            );
+            const date = new Date(d.date);
+            if (label === "Tareas por mes") {
+              return (
+                date.toLocaleString("es-ES", { month: "long" }) === labelText
+              );
+            } else {
+              return (
+                `${date.getDate()} ${date.toLocaleString("es-ES", {
+                  month: "long",
+                })}` === labelText
+              );
+            }
           }
         })
         .reduce((acc, d) => acc + d.value, 0);
@@ -189,11 +196,12 @@ const TablaAdmin = () => {
         <Col md={6}>
           <Card>
             <Card.Body>
-              <Card.Title>Tendencia de tareas</Card.Title>
+              <Card.Title>Tendencia de tareas por área</Card.Title>
               <Pie
                 data={generateChartData(
-                  "Tendencia de tareas",
-                  ticketData.trend
+                  "Tendencia de tareas por área",
+                  ticketData.trend,
+                  true // Use area name
                 )}
                 options={chartOptions}
               />
