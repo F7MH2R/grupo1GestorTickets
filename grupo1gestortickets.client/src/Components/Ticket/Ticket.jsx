@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./Ticket.css";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Button,
   Card,
@@ -10,15 +8,27 @@ import {
   Container,
   Form,
   Row,
+  Modal,
 } from "react-bootstrap";
 import {
   ejecutarGet,
   ejecutarPatch,
   ejecutarPost,
 } from "../Utilidades/requests";
-import { FaFileAudio, FaFilePdf } from "react-icons/fa";
+import {
+  FaFileAudio,
+  FaFilePdf,
+  FaCheckCircle,
+  FaVideo,
+  FaDatabase,
+} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import { MessageBox } from "react-chat-elements";
+import "react-chat-elements/dist/main.css";
+import "react-toastify/dist/ReactToastify.css";
+import ReactToPrint from "react-to-print";
+import "./Ticket.css";
+import withLoader from "../Load/withLoader ";
 
 const Ticket = () => {
   const { id } = useParams();
@@ -33,6 +43,9 @@ const Ticket = () => {
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const componentRef = useRef();
+  const audioRef = useRef(null);
 
   useEffect(() => {
     ejecutarGet(`/Auth/usuarios/tipo/2`)
@@ -51,6 +64,10 @@ const Ticket = () => {
         setPrioridad(response.data?.ticket?.prioridad);
         setComments(response.data?.comments);
         setUser(response.data?.user);
+        if (response.data.state === "CERRADO") {
+          setShowModal(true);
+          playCelebrationSound();
+        }
       })
       .catch((error) =>
         console.log("Error al obtener los detalles del ticket: ", error)
@@ -64,6 +81,24 @@ const Ticket = () => {
         console.log("Error al obtener los estados del ticket: ", error)
       );
   }, [id]);
+
+  const audio = new Audio("../../../../public/Cliente.mp3");
+  const playCelebrationSound = () => {
+    audioRef.current = audio;
+    audio.play();
+  };
+
+  const stopCelebrationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    stopCelebrationSound();
+  };
 
   const handleBack = () => {
     navigate(-1);
@@ -145,6 +180,10 @@ const Ticket = () => {
       return <FaFilePdf size={50} />;
     } else if (file.tipo === ".mp3") {
       return <FaFileAudio size={50} />;
+    } else if (file.tipo === ".mp4") {
+      return <FaVideo size={50} />;
+    } else if (file.tipo === ".sql") {
+      return <FaDatabase size={50} />;
     } else {
       return <p>Preview not available</p>;
     }
@@ -160,121 +199,148 @@ const Ticket = () => {
     return fecha.toLocaleDateString("es-ES", options);
   }
 
+  if (!detalles) {
+    return (
+      <div>
+        <withLoader />
+      </div>
+    );
+  }
+
   return (
-    <>
-      <Container>
-        <Row>
-          <Col>
-            <Form>
+    <div className="container-detalle-primero">
+      <Container className="custom-ticket-container mt-4">
+        <h3 className="titulo-text-detalle text-center mb-4">
+          Detalles Ticket
+        </h3>
+        <ReactToPrint
+          trigger={() => (
+            <Button variant="secondary" className="custom-print-button mb-4">
+              Descargar PDF
+            </Button>
+          )}
+          content={() => componentRef.current}
+        />
+        <Button
+          variant="secondary"
+          className="custom-button mb-4"
+          onClick={handleBack}
+        >
+          Regresar
+        </Button>
+        <Row md={12}>
+          <Col md={12}>
+            <div ref={componentRef} className="ticket-info-container">
               <Row>
                 <Col>
-                  <h2>Detalle Ticket</h2>
+                  <Card className="ticket-card">
+                    <Card.Header className="card-header-uno">
+                      <h3 className="card-title">Detalles del Ticket</h3>
+                    </Card.Header>
+                    <Card.Body>
+                      <p className="info-line-e">
+                        <strong>N° Ticket:</strong> {detalles?.ticket?.id}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Nombre:</strong> {detalles?.ticket?.nombre}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Fecha de Creación:</strong>{" "}
+                        {detalles?.ticket?.fechaCreacion
+                          ? new Date(
+                              detalles.ticket.fechaCreacion
+                            ).toLocaleDateString()
+                          : ""}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Descripción:</strong>{" "}
+                        {detalles?.ticket?.descripcion}
+                      </p>
+                      <p className="info-line-e">
+                        <strong>Prioridad:</strong>{" "}
+                        {detalles?.ticket?.prioridad}
+                      </p>
+                      <Form.Group controlId="estado">
+                        <Form.Label className="info-line-e">
+                          <strong>Estado:</strong>
+                        </Form.Label>
+                        <Form.Select
+                          onChange={handleEstadoChange}
+                          value={estadoId}
+                        >
+                          {estados.length > 0
+                            ? estados.map((estado) => (
+                                <option key={estado.id} value={estado.id}>
+                                  {estado.estado1}
+                                </option>
+                              ))
+                            : null}
+                        </Form.Select>
+                      </Form.Group>
+                      <Form.Group controlId="prioridad">
+                        <Form.Label className="info-line-e">
+                          <strong>Prioridad:</strong>
+                        </Form.Label>
+                        <Form.Select
+                          onChange={handlePrioridadChange}
+                          value={prioridad}
+                        >
+                          <option value={"Baja"}>Baja</option>
+                          <option value={"Media"}>Media</option>
+                          <option value={"Alta"}>Alta</option>
+                        </Form.Select>
+                      </Form.Group>
+                      <Row>
+                        <Col>
+                          <Form.Group controlId="responsable">
+                            <Form.Label className="info-line-e">
+                              <strong>Responsable:</strong>
+                            </Form.Label>
+                            <Form.Select
+                              value={usuarioAsignadoId}
+                              onChange={handleResponsableChange}
+                            >
+                              <option value={0}>Seleccione</option>
+                              {responsables.length > 0
+                                ? responsables.map((responsable) => (
+                                    <option
+                                      key={responsable.id}
+                                      value={responsable.id}
+                                    >
+                                      {responsable.nombre}
+                                    </option>
+                                  ))
+                                : null}
+                            </Form.Select>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
                 </Col>
+                <Row>
+                  <Col>
+                    <Card className="user-info-card">
+                      <Card.Header className="card-header-uno">
+                        <h3 className="card-title">Detalles del Usuario</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <p className="info-line-e">
+                          <strong>Nombre:</strong> {detalles?.user?.nombre}
+                        </p>
+                        <p className="info-line-e">
+                          <strong>Correo:</strong> {detalles?.user?.correo}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
               </Row>
-              <Row className="mt-2">
-                <Col>
-                  <Form.Group controlId="titulo">
-                    <Form.Label>Titulo del ticket</Form.Label>
-                    <Form.Control
-                      disabled
-                      defaultValue={detalles?.ticket?.nombre}
-                    ></Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId="descripcion">
-                    <Form.Label>Descripci&oacute;n del problema</Form.Label>
-                    <Form.Control
-                      disabled
-                      defaultValue={detalles?.ticket?.descripcion}
-                      as="textarea"
-                    ></Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId="correo">
-                    <Form.Label>Correo de contacto</Form.Label>
-                    <Form.Control
-                      disabled
-                      defaultValue={detalles?.user?.correo}
-                      type="email"
-                    ></Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId="telefono">
-                    <Form.Label>Tel&eacute;fono de contacto</Form.Label>
-                    <Form.Control
-                      disabled
-                      defaultValue={detalles?.user?.telefono}
-                      type="text"
-                    ></Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="fecha">
-                    <Form.Label>Fecha de creaci&oacute;n</Form.Label>
-                    <Form.Control
-                      disabled
-                      defaultValue={fechaCreacion}
-                      type="text"
-                      className="text-center"
-                    ></Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId="estado">
-                    <Form.Label>Estado</Form.Label>
-                    <Form.Select onChange={handleEstadoChange} value={estadoId}>
-                      {estados.length > 0
-                        ? estados.map((estado) => (
-                            <option key={estado.id} value={estado.id}>
-                              {estado.estado1}
-                            </option>
-                          ))
-                        : null}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group controlId="prioridad">
-                    <Form.Label>Prioridad</Form.Label>
-                    <Form.Select
-                      onChange={handlePrioridadChange}
-                      value={prioridad}
-                    >
-                      <option value={"Baja"}>Baja</option>
-                      <option value={"Media"}>Media</option>
-                      <option value={"Alta"}>Alta</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="responsable">
-                    <Form.Label>Responsable</Form.Label>
-                    <Form.Select
-                      value={usuarioAsignadoId}
-                      onChange={handleResponsableChange}
-                    >
-                      <option value={0}>Seleccione</option>
-                      {responsables.length > 0
-                        ? responsables.map((responsable) => (
-                            <option key={responsable.id} value={responsable.id}>
-                              {responsable.nombre}
-                            </option>
-                          ))
-                        : null}
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row className="mt-3">
-                <Col className="text-end">
-                  <Button variant="warning" onClick={handleGuardar}>
-                    Guardar
-                  </Button>
-                </Col>
-                <Col>
-                  <Button variant="secondary" onClick={handleBack}>
-                    Volver
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+            </div>
           </Col>
         </Row>
-        <Row className="mt-3">
-          <Col md={6}>
+        <Row md={12}>
+          <Col md={12}>
             <div>
               <Col className="custom-no-print">
                 <Card className="comments-style">
@@ -286,7 +352,7 @@ const Ticket = () => {
                   <Card.Body>
                     <div
                       className="custom-comments-box"
-                      style={{ height: "300px", overflowY: "scroll" }}
+                      style={{ height: "295px", overflowY: "scroll" }}
                     >
                       {comments?.map((comment, index) => (
                         <MessageBox
@@ -303,7 +369,7 @@ const Ticket = () => {
                     </div>
                     <Form className="custom-comment-form mt-3">
                       <Form.Control
-                        type="text"
+                        as="textarea"
                         placeholder="Escribe un comentario"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
@@ -322,7 +388,9 @@ const Ticket = () => {
               </Col>
             </div>
           </Col>
-          <Col md={6}>
+        </Row>
+        <Row>
+          <Col md={8}>
             <div>
               <Col className="custom-no-print">
                 <Card className="file-style mb-4">
@@ -358,10 +426,37 @@ const Ticket = () => {
             </div>
           </Col>
         </Row>
+        <Row>
+          <Col md={12} className="text-center">
+            <Button variant="secondary" onClick={handleBack}>
+              Regresar
+            </Button>
+            <Button variant="warning" onClick={handleGuardar} className="ms-2">
+              Actualizar
+            </Button>
+          </Col>
+        </Row>
         <ToastContainer />
       </Container>
-    </>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>¡Felicitaciones!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <FaCheckCircle size={80} color="green" />
+          <p>
+            ¡Felicidades su ticket a sido completado con éxito! ¡Gracias por
+            preferirnos!
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
-export default Ticket;
+export default withLoader(Ticket);

@@ -191,7 +191,9 @@ const InicioAdmin = () => {
         <Row className="ticket-left ">
           <Col>
             <Form.Group controlId="ticket">
-              <Form.Label>Filtar por t&iacute;tulo del ticket</Form.Label>
+              <Form.Label style={{ fontSize: "15px" }}>
+                Filtar por t&iacute;tulo del ticket
+              </Form.Label>
               <Form.Control
                 type="text"
                 size="sm"
@@ -202,13 +204,17 @@ const InicioAdmin = () => {
           </Col>
           <Col>
             <Form.Group controlId="responsable">
-              <Form.Label>Filtrar por responsable</Form.Label>
+              <Form.Label style={{ fontSize: "15px" }}>
+                Filtrar por responsable
+              </Form.Label>
               <Form.Control
                 as={"select"}
                 value={idResponsable}
                 onChange={(evento) => setIdResponsable(evento.target.value)}
               >
-                <option value={-1}>Seleccione un valor para filtar</option>
+                <option style={{ fontSize: "15px" }} value={-1}>
+                  Seleccione un valor para filtar
+                </option>
                 {responsables.length > 0 ? (
                   responsables.map((item) => (
                     <option key={item.id} value={item.id}>

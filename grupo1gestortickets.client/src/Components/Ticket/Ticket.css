@@ -1,12 +1,87 @@
-:root {
-  --bs-secondary-bg: #e9ece;
+/* Ticket.css */
+
+.container-detalle-primero {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
 }
 
-textarea.form-control {
-  min-height: 120px;
+.custom-ticket-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.form-label {
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+.titulo-text-detalle {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.custom-print-button {
+  margin-bottom: 10px;
+}
+
+.ticket-info-container {
+  margin-bottom: 20px;
+}
+
+.ticket-card,
+.user-info-card,
+.comments-style,
+.file-style {
+  margin-bottom: 20px;
+}
+
+.card-header-uno,
+.card-title-two {
+  color: rgb(0, 0, 0);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.custom-no-print {
+  display: block;
+}
+
+.info-line-e {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.custom-comments-box {
+  height: 295px;
+  overflow-y: scroll;
+}
+
+.custom-comment-input {
+  margin-right: 10px;
+}
+
+.custom-comment-button {
+  margin-top: 10px;
+}
+
+.custom-scrollable-container {
+  overflow-x: auto;
+}
+
+.custom-card-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.custom-file-card {
+  margin: 10px;
+}
+
+.custom-download-button {
+  margin-top: 10px;
+}
+
+.text-center {
+  text-align: center;
 }

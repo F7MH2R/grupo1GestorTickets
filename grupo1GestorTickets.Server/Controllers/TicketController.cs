@@ -347,7 +347,7 @@ namespace grupo1GestorTickets.Server.Controllers
             
             _context.Entry(ticket).State = EntityState.Modified;
             _context.SaveChanges();
-
+            await _emailNotificationService.NotifyAssignedUser(id);
             return Ok(ticket);
         }
     //Empleado
