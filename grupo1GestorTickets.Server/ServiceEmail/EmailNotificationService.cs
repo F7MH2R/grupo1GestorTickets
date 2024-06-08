@@ -134,7 +134,7 @@ namespace grupo1GestorTickets.Server.ServiceEmail
                 message.Subject = "Nuevo Ticket Sin Asignar";
 
                 var bodyBuilder = new BodyBuilder();
-                var assignUrl = $"https://yourapplication.com/assign-ticket/{ticketId}";
+                var assignUrl = $"https://localhost:5173/login";
                 bodyBuilder.HtmlBody = $@"
         <html>
         <head>
